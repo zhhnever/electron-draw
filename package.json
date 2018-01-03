@@ -1,0 +1,21 @@
+{
+  "name": "electron-draw",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "packager": "electron-packager ./ eqDraw --win --out ./OutApp --arch=x64 --version 1.7.5 --overwrite --icon=icon2.ico --ignore=node_modules"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "draw",
+    "jointjs"
+  ],
+  "author": "zhh",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  }
+}
