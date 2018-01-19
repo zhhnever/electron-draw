@@ -1,26 +1,30 @@
 <template>
   <div>
     <div id="toolbar"></div>
-    <div id="element-icon" class="wrap">
-      <ul class="list">
-        <li class="active" v-on:click="changeTab" name="1"></li>
-        <li  v-on:click="changeTab" name="2"></li>
-        <li  v-on:click="changeTab" name="3"></li>
-        <li  v-on:click="changeTab" name="4"></li>
-      </ul>
-      <div class="contain">
-        <div v-if="tabShow" class="content">
-          <!-- <h1> 123123</h1> -->
-          <div id="bianya"></div>
-        </div>
-        <div v-if="!tabShow" class="content">2</div>
-        <div v-if="!tabShow" class="content">3</div>
-        <div v-if="!tabShow" class="content">4</div>
-      </div>
-    </div>
+	<div class="list">
+		<ul>
+			<li class="selected"><img src="../../assets/images/icon.png" alt=""><span>项目#</span></li>
+			<li><img src="../../assets/images/icon.png" alt=""><span>项目！</span></li>
+			<li><img src="../../assets/images/icon.png" alt=""><span>项目……</span></li>
+			<li><img src="../../assets/images/icon.png" alt=""><span>项目￥</span></li>
+			<li><img src="../../assets/images/icon.png" alt=""><span>项目&</span></li>
+			<li><img src="../../assets/images/icon.png" alt=""><span>项目#</span></li>
+		</ul>
+	</div>
+	<div class="content">
+		<ul>
+			<li><div id="bianya"></div></li>
+			<li>2222222222</li>
+			<li>3333333333</li>
+			<li>4444444444</li>
+			<li>5555555555</li>
+			<li>6666666666</li>
+		</ul>
+	</div>
     <div class="main">
       <div id="configuration" class="configuration">
-        <div></div>
+        <div id="config" class="config"></div>
+        <div id="table" class="table"></div>        
       </div>
       <div id="paperScroller"></div>
     </div>
@@ -104,12 +108,6 @@ export default {
       tabShow: true
     }
   },
-  // mounted: function () {
-  //   // let MyToolbarComponent = Vue.extend({
-  //   //   template: temp
-  //   // })
-  //   // new MyToolbarComponent().$mount('#ato')
-  // },
   mounted: function () {
     // 新增paper
     let graph = this.graph = new joint.dia.Graph()
@@ -141,6 +139,7 @@ export default {
       autoResizePaper: true,
       padding: 50
     })
+    // 绑定事件
     paper.on('blank:pointerdown', paperScroller.startPanning)
     paper.on('element:pointerup', this.cellPulgin)
     _('#paperScroller').append(paperScroller.el)
@@ -150,19 +149,6 @@ export default {
       paper: paper
     })
     snaplines.startListening()
-
-    // let r = new joint.shapes.basic.Rect({
-    //   position: { x: 30, y: 40 },
-    //   size: { width: 120, height: 80 },
-    //   attrs: { text: { text: 'Rect' } }
-    // })
-    // graph.addCell(r)
-
-    // let c = new joint.shapes.basic.Circle({
-    //   position: { x: 40, y: 70 },
-    //   attrs: { text: { text: 'Circle' } }
-    // })
-    // graph.addCell(c)
     this.newStencil()
   },
   methods: {
@@ -217,12 +203,6 @@ export default {
       // this.paperScroller.append(halo.el)
     },
     changeTab: function (event) {
-      let target = event.target
-      let targetIndex = event.target.attributes.name.value
-      console.log(targetIndex)
-      target.className = 'active'
-      let isShow = this.tabShowIndex[targetIndex - 1]
-      console.log(isShow)
     }
   }
 }
@@ -235,12 +215,15 @@ export default {
   /* margin-top: 200px; */
 }
 #paperScroller {
-  position: relative;
-  width: 1400px;
-  height: 800px;
+  position: absolute;
+  /* width: 100%; */
+  /* height: 800px; */
   /* padding: 100px; */
   /* margin-left: 100px; */
-  float: right;
+  right: 0;
+  left: 300px;
+  top: 168px;
+  bottom: 0;
   border: 1px solid rgb(240, 240, 240);
 }
 /* #paperScroller {
@@ -251,52 +234,51 @@ export default {
   height: 200px;
 } */
 #configuration {
-  position: relative;
-  width: 200px;
+  position: absolute;
+  width: 300px;
   height: 100%;
-  float: left;
+  /* float: left; */
+  left: 0;
+  /* bottom: 0; */
+  top: 168;
+  border: 1px solid #cdcdcd
 }
 #bianya {
-  height: 200px;
+  height: 80px;
+  /* margin-top: 20px */
 }
-.wrap {
-  height: 150px;
-  width: 100%;
-  box-sizing: border-box;
-}
-.wrap ul{
-  list-style: none;
-  overflow: hidden;
-}
-.wrap ul li{
-  box-sizing: border-box;
-  height: 30px;
-  width: 90px;
-  float: left;
-  line-height: 30px;
-  text-align: center;
-  border: 1px solid rgb(240, 240, 240)
-}
-.contain{
-  position: relative;
-  height: 100px;
 
+.list{
+	width: 100%;height: 30px;
 }
-.contain .content{
-  box-sizing: border-box;
-  position: absolute;
-  top: -1px;
-  height: 100px;
-  width: 100%;
-  border: 1px solid rgb(240, 240, 240);
-  /* z-index: -1; */
-  padding: 5px;
+
+.list ul{
+	padding: 0;margin: 0;width: 100%;height: 100%;background-color: #cdcdcd;user-select: none;
 }
-.active{
-  background-color: aqua;
-  border-bottom: none;
+
+.list ul li{
+	display: inline-block;padding: 0 5px;margin: 0;
 }
-.actived {
-  display: block;
+.list ul .selected{
+	background-color: #fcfcfc;
+}
+.list ul li img{
+	width: 20px;vertical-align: middle;margin-bottom: 3px;
+}
+.list ul li span{
+	font-size: 12px;line-height: 30px;
+}
+
+.content{
+	width: 100%;height: 100px;background-color: #fcfcfc;
+}
+.content ul{
+	padding: 0;margin: 0;width: 100%;height: 100%;
+}
+.content ul li{
+	padding: 0;margin: 0;width: 100%;height: 100%;display: none;
+}
+.content ul li:first-child{
+	display: block;
 }
 </style>

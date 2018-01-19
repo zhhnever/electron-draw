@@ -7741,7 +7741,9 @@ button.joint-widget.joint-theme-default {
 }
 
 .joint-widget.joint-theme-default .joint-select-button-group {
-  font-size: 16px
+  font-size: 16px;
+  overflow: hidden;
+  width: 128px;
 }
 
 .joint-widget.joint-theme-default[data-type=toggle]>span,

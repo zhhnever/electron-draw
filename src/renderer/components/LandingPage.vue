@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ToolBar from './LandingPage/ToolBar'
+import ToolBar from './LandingPage/Main'
 
 export default {
   name: 'landing-page',
