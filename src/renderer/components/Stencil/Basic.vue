@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+  <div id="basicStencil"></div>
 </template>
 
 <script>
 import joint from '../../assets/libs/rappid.min.js'
+import _ from 'jquery'
 export default {
+  name: 'basic-stencil',
   data: function () {
     return {
       config: [{
@@ -35,24 +37,7 @@ export default {
     }
   },
   mounted: function () {
-    // let stencil = new joint.ui.Stencil({
-    //   paper: this.paperScroller,
-    //   snaplines: this.snaplines,
-    //   width: 400,
-    //   height: 200,
-    //   // search: { '*': ['type'] },
-    //   dropAnimation: { duration: 100, easing: 'swing' }
-    // })
-    // let r = new joint.shapes.basic.Rect({ position: { x: 10, y: 10 }, size: { width: 20, height: 20 } })
-    // let c = new joint.shapes.basic.Circle({ position: { x: 50, y: 10 }, size: { width: 20, height: 20 } })
-    // let t = new joint.shapes.basic.Text({
-    //   position: { x: 130, y: 10 },
-    //   size: { width: 20, height: 30 },
-    //   attrs: { text: { text: 'Text', fill: '#7cbd31' } }
-    // })
-    // // stencil.load([r, c, t])
-    // _('#bianya').append(stencil.render().el)
-    // stencil.load([r, c, t])
+
   }
 }
 </script>

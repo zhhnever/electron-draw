@@ -13,7 +13,7 @@
 	</div>
 	<div class="content">
 		<ul>
-			<li><div id="bianya"></div></li>
+			<li><div id="basicStencil"></div></li>
 			<li>2222222222</li>
 			<li>3333333333</li>
 			<li>4444444444</li>
@@ -34,73 +34,108 @@
 
 <script>
 import joint from '../../assets/libs/rappid.min.js'
+import '../../assets/libs/joint.shapes.eqelement.js'
+import inspectorConfig from '../../assets/libs/inspector.js'
 import Vue from 'vue'
 import _ from 'jquery'
+import BasicStencil from '../Stencil/Basic'
 export default {
   data: function () {
     return {
-      tools: [
-        {
-          type: 'zoom-out',
-          name: 'zoom-out'
-        },
-        {
-          type: 'zoom-in',
-          name: 'zoom-in'
-        },
-        {
-          type: 'zoom-to-fit',
-          name: 'zoom-to-fit'
-        },
-        { type: 'undo' },
-        { type: 'redo' },
-        {
-          type: 'zoom-slider',
-          name: 'zoom-slider'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          type: 'select-button-group',
-          name: 'aaaaa',
-          multi: true,
-          selected: [1, 3],
-          options: [
-            {
-              value: 'line-through',
-              content: '<span style="text-decoration: line-through">S</span>',
-              attrs: {
-                '.select-button-group-button': { 'data-tooltip': 'My tooltip' }
+      config: {
+        tools: [
+          {
+            type: 'zoom-out',
+            name: 'zoom-out'
+          },
+          {
+            type: 'zoom-in',
+            name: 'zoom-in'
+          },
+          {
+            type: 'zoom-to-fit',
+            name: 'zoom-to-fit'
+          },
+          { type: 'undo' },
+          { type: 'redo' },
+          {
+            type: 'zoom-slider',
+            name: 'zoom-slider'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            type: 'select-button-group',
+            name: 'aaaaa',
+            multi: true,
+            selected: [1, 3],
+            options: [
+              {
+                value: 'line-through',
+                content: '<span style="text-decoration: line-through">S</span>',
+                attrs: {
+                  '.select-button-group-button': { 'data-tooltip': 'My tooltip' }
+                }
+              },
+              {
+                value: 'underline',
+                content: '<span style="text-decoration: underline">U</span>'
+              },
+              {
+                value: 'italic',
+                content: '<span style="font-style: italic">I</span>'
+              },
+              {
+                value: 'bold',
+                content: '<span style="font-weight: bold">B</span>'
               }
+            ]
+          },
+          {
+            type: 'select-box',
+            name: 'selectfont',
+            width: 200,
+            options: [
+              { content: 'Arial' },
+              { content: 'Helvetica' },
+              { content: 'Times New Roman' },
+              { content: 'Courier New' }
+            ],
+            defaultValue: 'Courier New'
+          }
+        ],
+        stencil: [{
+          type: 'eqelement.station',
+          size: { width: 90, height: 40 },
+          outPorts: [],
+          attrs: {
+            '.': {
+              'data-tooltip': 'Substation',
+              'data-tooltip-position': 'left',
+              'data-tooltip-position-selector': '.joint-stencil'
             },
-            {
-              value: 'underline',
-              content: '<span style="text-decoration: underline">U</span>'
+            rect: {
+              rx: 2,
+              ry: 2,
+              width: 50,
+              height: 30,
+              fill: 'transparent',
+              stroke: '#31d0c6',
+              'stroke-width': 2,
+              'stroke-dasharray': '0'
             },
-            {
-              value: 'italic',
-              content: '<span style="font-style: italic">I</span>'
-            },
-            {
-              value: 'bold',
-              content: '<span style="font-weight: bold">B</span>'
+            text: {
+              text: 'Substation',
+              fill: '#c6c7e2',
+              'font-family': 'Roboto Condensed',
+              'font-weight': 'Normal',
+              'font-size': 11,
+              'stroke-width': 0
             }
-          ]
-        },
-        {
-          type: 'select-box',
-          name: 'selectfont',
-          width: 200,
-          options: [
-            { content: 'Arial' },
-            { content: 'Helvetica' },
-            { content: 'Times New Roman' },
-            { content: 'Courier New' }
-          ],
-          defaultValue: 'Courier New'
-        }
-      ],
+          }
+        }]
+      },
       paper: '',
       graph: '',
       commandManager: '',
@@ -108,73 +143,34 @@ export default {
       tabShow: true
     }
   },
+  components: {
+    'basic-stencil': BasicStencil
+  },
   mounted: function () {
-    // 新增paper
-    let graph = this.graph = new joint.dia.Graph()
-    let paper = this.paper = new joint.dia.Paper({
-      width: 1600,
-      height: 900,
-      gridSize: 10,
-      model: graph })
-    paper.drawGrid()
-    let commandManager = this.commandManager = new joint.dia.CommandManager({ graph: graph })
-    // 新增工具栏
+    const _this = this
+    this.$store.commit('init', _('#paperScroller')) // 初始化paper
+    this.$store.commit('initStencil', _('#basicStencil')) // 初始化工具栏
+    this.$store.commit('stencilLoadConfig', this.config.stencil) // 加载工具栏config
+
+    let paper = this.paper = this.$store.state.paper.paper
+    let graph = this.graph = this.$store.state.paper.graph
+    let commandManager = this.commandManager = this.$store.state.paper.commandManager
+    let paperScroller = this.paperScroller = this.$store.state.paper.paperScroller
+    paper.on('element:pointerup link:options', cell => {
+      _this.cellPulgin(cell)
+      _this.createInspector(cell.model)
+    })
     let toolbar = new joint.ui.Toolbar({
       references: {
-        paperScroller: {
-          options: {
-            paper: { on: function () { } }
-          },
-          zoom: function () { },
-          zoomToFit: function () { }
-        },
+        paperScroller: this.paperScroller,
         commandManager: this.commandManager
       },
-      tools: this.tools
-    }).render().el
-    _('#toolbar').append(toolbar)
-
-    let paperScroller = this.paperScroller = new joint.ui.PaperScroller({
-      paper: paper,
-      autoResizePaper: true,
-      padding: 50
-    })
-    // 绑定事件
-    paper.on('blank:pointerdown', paperScroller.startPanning)
-    paper.on('element:pointerup', this.cellPulgin)
-    _('#paperScroller').append(paperScroller.el)
-    paperScroller.render().center()
-
-    let snaplines = new joint.ui.Snaplines({
-      paper: paper
-    })
-    snaplines.startListening()
-    this.newStencil()
+      tools: this.config.tools
+    }).render()
+    _('#toolbar').append(toolbar.el)
   },
   methods: {
-    click: function () {
-    },
-    newStencil: function () {
-      let stencil = new joint.ui.Stencil({
-        paper: this.paperScroller,
-        width: 400,
-        height: 200,
-        // search: { '*': ['type'] },
-        dropAnimation: { duration: 100, easing: 'swing' }
-      })
-      let r = new joint.shapes.basic.Rect({ position: { x: 10, y: 10 }, size: { width: 20, height: 20 } })
-      let c = new joint.shapes.basic.Circle({ position: { x: 50, y: 10 }, size: { width: 20, height: 20 } })
-      let t = new joint.shapes.basic.Text({
-        position: { x: 130, y: 10 },
-        size: { width: 20, height: 30 },
-        attrs: { text: { text: 'Text', fill: '#7cbd31' } }
-      })
-      // stencil.load([r, c, t])
-      _('#bianya').append(stencil.render().el)
-      stencil.load([r, c, t])
-    },
     cellPulgin: function (cellView) {
-      console.log(cellView)
       let cell = cellView.model
       if (cell.isLink()) return
       let options = {
@@ -202,7 +198,10 @@ export default {
       halo.render()
       // this.paperScroller.append(halo.el)
     },
-    changeTab: function (event) {
+    createInspector: function (cell) {
+      joint.ui.Inspector.create('#config', _.extend({
+        cell: cell
+      }, inspectorConfig.inspectorConfig['basic.Rect']))
     }
   }
 }
@@ -216,23 +215,12 @@ export default {
 }
 #paperScroller {
   position: absolute;
-  /* width: 100%; */
-  /* height: 800px; */
-  /* padding: 100px; */
-  /* margin-left: 100px; */
   right: 0;
   left: 300px;
-  top: 168px;
+  top: 128px;
   bottom: 0;
   border: 1px solid rgb(240, 240, 240);
 }
-/* #paperScroller {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 200px;
-  height: 200px;
-} */
 #configuration {
   position: absolute;
   width: 300px;
@@ -241,44 +229,64 @@ export default {
   left: 0;
   /* bottom: 0; */
   top: 168;
-  border: 1px solid #cdcdcd
+  border: 1px solid #cdcdcd;
 }
 #bianya {
   height: 80px;
   /* margin-top: 20px */
 }
 
-.list{
-	width: 100%;height: 30px;
+.list {
+  width: 100%;
+  height: 30px;
 }
 
-.list ul{
-	padding: 0;margin: 0;width: 100%;height: 100%;background-color: #cdcdcd;user-select: none;
+.list ul {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #cdcdcd;
+  user-select: none;
 }
 
-.list ul li{
-	display: inline-block;padding: 0 5px;margin: 0;
+.list ul li {
+  display: inline-block;
+  padding: 0 5px;
+  margin: 0;
 }
-.list ul .selected{
-	background-color: #fcfcfc;
+.list ul .selected {
+  background-color: #fcfcfc;
 }
-.list ul li img{
-	width: 20px;vertical-align: middle;margin-bottom: 3px;
+.list ul li img {
+  width: 20px;
+  vertical-align: middle;
+  margin-bottom: 3px;
 }
-.list ul li span{
-	font-size: 12px;line-height: 30px;
+.list ul li span {
+  font-size: 12px;
+  line-height: 30px;
 }
 
-.content{
-	width: 100%;height: 100px;background-color: #fcfcfc;
+.content {
+  width: 100%;
+  height: 100px;
+  background-color: #fcfcfc;
 }
-.content ul{
-	padding: 0;margin: 0;width: 100%;height: 100%;
+.content ul {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
-.content ul li{
-	padding: 0;margin: 0;width: 100%;height: 100%;display: none;
+.content ul li {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
-.content ul li:first-child{
-	display: block;
+.content ul li:first-child {
+  display: block;
 }
 </style>
