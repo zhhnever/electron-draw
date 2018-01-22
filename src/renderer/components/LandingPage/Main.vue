@@ -33,13 +33,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import joint from '../../assets/libs/rappid.min.js'
 import '../../assets/libs/joint.shapes.eqelement.js'
 import inspectorConfig from '../../assets/libs/inspector.js'
-=======
-
->>>>>>> cf859e13d98f6746507ccd6a30bf7d03b0167845
 import Vue from 'vue'
 import _ from 'jquery'
 import BasicStencil from '../Stencil/Basic'
@@ -109,16 +105,11 @@ export default {
             defaultValue: 'Courier New'
           }
         ],
-<<<<<<< HEAD
         stencil: [{
-=======
-        stencil: {
->>>>>>> cf859e13d98f6746507ccd6a30bf7d03b0167845
-          type: 'eqelement.station',
+          type: 'basic.Rect',
           size: { width: 90, height: 40 },
           outPorts: [],
           attrs: {
-<<<<<<< HEAD
             '.': {
               'data-tooltip': 'Substation',
               'data-tooltip-position': 'left',
@@ -136,20 +127,6 @@ export default {
             },
             text: {
               text: 'Substation',
-=======
-            rect: {
-              rx: 2,
-              ry: 2,
-              width: 50,
-              height: 30,
-              fill: 'transparent',
-              stroke: '#31d0c6',
-              'stroke-width': 2,
-              'stroke-dasharray': '0'
-            },
-            text: {
-              text: 'test',
->>>>>>> cf859e13d98f6746507ccd6a30bf7d03b0167845
               fill: '#c6c7e2',
               'font-family': 'Roboto Condensed',
               'font-weight': 'Normal',
@@ -157,11 +134,7 @@ export default {
               'stroke-width': 0
             }
           }
-<<<<<<< HEAD
         }]
-=======
-        }
->>>>>>> cf859e13d98f6746507ccd6a30bf7d03b0167845
       },
       paper: '',
       graph: '',
@@ -174,19 +147,23 @@ export default {
     'basic-stencil': BasicStencil
   },
   mounted: function () {
-<<<<<<< HEAD
     const _this = this
     this.$store.commit('init', _('#paperScroller')) // 初始化paper
     this.$store.commit('initStencil', _('#basicStencil')) // 初始化工具栏
     this.$store.commit('stencilLoadConfig', this.config.stencil) // 加载工具栏config
 
+    this.$store.commit('initializeKeyboardShortcuts') // 加载工具栏config
     let paper = this.paper = this.$store.state.paper.paper
     let graph = this.graph = this.$store.state.paper.graph
     let commandManager = this.commandManager = this.$store.state.paper.commandManager
     let paperScroller = this.paperScroller = this.$store.state.paper.paperScroller
-    paper.on('element:pointerup link:options', cell => {
-      _this.cellPulgin(cell)
-      _this.createInspector(cell.model)
+    paper.on('element:pointerup link:options', cellView => {
+      // console.log(cellView)
+      let cell = cellView.model
+      _this.cellPulgin(cellView)
+      _this.createInspector(cell)
+
+      console.log(cell.get('type'))
     })
     let toolbar = new joint.ui.Toolbar({
       references: {
@@ -198,30 +175,6 @@ export default {
     _('#toolbar').append(toolbar.el)
   },
   methods: {
-=======
-    this.$store.commit('init', _('#paperScroller'))
-    this.$store.commit('initStencil', _('#basicStencil'))
-
-    this.$store.state.paper.stencil.basic.render().load(this.config.stencil)
-    console.log()
-  },
-  methods: {
-    click: function () {
-    },
-    newStencil: function () {
-      // let stencil = new joint.ui.Stencil({
-      //   paper: this.paperScroller,
-      //   width: 400,
-      //   height: 200,
-      //   // search: { '*': ['type'] },
-      //   dropAnimation: { duration: 100, easing: 'swing' }
-      // })
-
-      // // stencil.load([r, c, t])
-      // _('#bianya').append(stencil.render().el)
-      // stencil.load([r, c, t])
-    },
->>>>>>> cf859e13d98f6746507ccd6a30bf7d03b0167845
     cellPulgin: function (cellView) {
       let cell = cellView.model
       if (cell.isLink()) return
@@ -253,7 +206,7 @@ export default {
     createInspector: function (cell) {
       joint.ui.Inspector.create('#config', _.extend({
         cell: cell
-      }, inspectorConfig.inspectorConfig['basic.Rect']))
+      }, inspectorConfig.inspectorConfig[cell.get('type')]))
     }
   }
 }
@@ -308,7 +261,7 @@ export default {
   margin: 0;
 }
 .list ul .selected {
-  background-color: #fcfcfc;
+  background-color: rgb(240, 240, 240);
 }
 .list ul li img {
   width: 20px;
@@ -323,7 +276,7 @@ export default {
 .content {
   width: 100%;
   height: 100px;
-  background-color: #fcfcfc;
+  background-color:rgb(240, 240, 240);
 }
 .content ul {
   padding: 0;

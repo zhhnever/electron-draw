@@ -59,5 +59,7 @@ module.exports = {
     'linebreak-style': [0,'windows'],
     'no-unused-vars': 0,
     'no-undef':0,
+    'new-parens':0,
+    'no-new':0
   }
 }
