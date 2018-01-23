@@ -386,7 +386,8 @@ App.config = App.config || {};
             options: options.router,
             group: 'connection',
             label: 'Connection type',
-            index: 1
+            index: 1,
+            defaultValue: options.router['orthogonal']
           },
           args: {
             side: {
@@ -490,52 +491,14 @@ App.config = App.config || {};
           text: {
             text: {
               type: 'content-editable',
-              label: 'Text',
+              label: 'Name',
               group: 'text',
               index: 1
-            },
-            'font-size': {
-              type: 'range',
-              min: 5,
-              max: 80,
-              unit: 'px',
-              label: 'Font size',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 2
-            },
-            'font-family': {
-              type: 'select-box',
-              options: options.fontFamily,
-              label: 'Font family',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 3
-            },
-            'font-weight': {
-              type: 'select-box',
-              options: options.fontWeight,
-              label: 'Font thickness',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 4
             },
             fill: {
               type: 'color-palette',
               options: options.colorPalette,
-              label: 'Fill',
+              label: '颜色',
               group: 'text',
               when: {
                 ne: {
@@ -543,20 +506,26 @@ App.config = App.config || {};
                 }
               },
               index: 5
-            }
+            },
+            'attrs': {
+              type: 'number',
+              label: '功率',
+              group: 'text',
+              index: 1
+            },
           },
           rect: {
             fill: {
               type: 'color-palette',
               options: options.colorPalette,
-              label: 'Fill',
+              label: '填充',
               group: 'presentation',
               index: 1
             },
             stroke: {
               type: 'color-palette',
               options: options.colorPalette,
-              label: 'Outline',
+              label: '边框',
               group: 'presentation',
               index: 2
             },
@@ -567,7 +536,7 @@ App.config = App.config || {};
               step: 1,
               defaultValue: 1,
               unit: 'px',
-              label: 'Outline thickness',
+              label: '边框宽度',
               group: 'presentation',
               when: {
                 ne: {
@@ -579,7 +548,7 @@ App.config = App.config || {};
             'stroke-dasharray': {
               type: 'select-box',
               options: options.strokeStyle,
-              label: 'Outline style',
+              label: '边框样式',
               group: 'presentation',
               when: {
                 and: [{
@@ -596,16 +565,16 @@ App.config = App.config || {};
               },
               index: 4
             }
-          }
+          },
         }
       },
       groups: {
         presentation: {
-          label: 'Presentation',
+          label: '样式',
           index: 1
         },
         text: {
-          label: 'Text',
+          label: '属性',
           index: 2
         }
       }

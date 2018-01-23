@@ -107,13 +107,16 @@ export default {
         ],
         stencil: [{
           type: 'basic.Rect',
-          size: { width: 90, height: 40 },
+          size: { width: 90, height: 50 },
+          position: { x: 10, y: 20 },
           outPorts: [],
           attrs: {
             '.': {
               'data-tooltip': 'Substation',
-              'data-tooltip-position': 'left',
-              'data-tooltip-position-selector': '.joint-stencil'
+              'data-tooltip-position': 'middle',
+              'data-tooltip-position-selector': '.joint-stencil',
+              'name': 'Substation',
+              'data-element-code': ''
             },
             rect: {
               rx: 2,
@@ -127,6 +130,35 @@ export default {
             },
             text: {
               text: 'Substation',
+              fill: '#c6c7e2',
+              'font-family': 'Roboto Condensed',
+              'font-weight': 'Normal',
+              'font-size': 11,
+              'stroke-width': 0,
+              'y-alignment': 'middle'
+            }
+          }
+        },
+        {
+          type: 'basic.Circle',
+          size: { width: 50, height: 50 },
+          position: { x: 140, y: 20 },
+          attrs: {
+            '.': {
+              'data-tooltip': 'Ellipse',
+              'data-tooltip-position': 'left',
+              'data-tooltip-position-selector': '.joint-stencil'
+            },
+            circle: {
+              width: 50,
+              height: 30,
+              fill: 'transparent',
+              stroke: '#31d0c6',
+              'stroke-width': 2,
+              'stroke-dasharray': '0'
+            },
+            text: {
+              text: 'ellipse',
               fill: '#c6c7e2',
               'font-family': 'Roboto Condensed',
               'font-weight': 'Normal',
@@ -148,6 +180,7 @@ export default {
   },
   mounted: function () {
     const _this = this
+    joint.setTheme('modern')
     this.$store.commit('init', _('#paperScroller')) // 初始化paper
     this.$store.commit('initStencil', _('#basicStencil')) // 初始化工具栏
     this.$store.commit('stencilLoadConfig', this.config.stencil) // 加载工具栏config
@@ -202,6 +235,7 @@ export default {
       let halo = new joint.ui.Halo(options)
       halo.render()
       // this.paperScroller.append(halo.el)
+      console.log(this.graph.getCells())
     },
     createInspector: function (cell) {
       joint.ui.Inspector.create('#config', _.extend({
@@ -222,7 +256,7 @@ export default {
   position: absolute;
   right: 0;
   left: 300px;
-  top: 128px;
+  top: 188px;
   bottom: 0;
   border: 1px solid rgb(240, 240, 240);
 }
@@ -230,10 +264,8 @@ export default {
   position: absolute;
   width: 300px;
   height: 100%;
-  /* float: left; */
   left: 0;
-  /* bottom: 0; */
-  top: 168;
+  top: 188px;
   border: 1px solid #cdcdcd;
 }
 #bianya {
@@ -276,7 +308,7 @@ export default {
 .content {
   width: 100%;
   height: 100px;
-  background-color:rgb(240, 240, 240);
+  background-color: rgb(240, 240, 240);
 }
 .content ul {
   padding: 0;

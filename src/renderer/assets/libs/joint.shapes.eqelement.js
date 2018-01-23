@@ -186,7 +186,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
           groups: {
               'out': {
                   attrs: {
-                      '.port-body':{d: 'M0 0 0 10 -10 10 -10 20 10 20 0 20 0 30 -5 30 0 38 5 30 0 30 0 20 10 20 10 10 0 10 0 0 Z',stroke: '#000',fill: 'transparent'},
+                      '.port-body':{ d: 'M0 0 0 10 -10 10 -10 20 10 20 0 20 0 30 -5 30 0 38 5 30 0 30 0 20 10 20 10 10 0 10 0 0 Z',stroke: '#000',fill: 'transparent'},
                       '.port-label': {
                           fontSize: 9,
                           fill: '#000',
