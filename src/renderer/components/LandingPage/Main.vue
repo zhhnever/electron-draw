@@ -1,30 +1,57 @@
 <template>
   <div>
     <div id="toolbar"></div>
-	<div class="list">
-		<ul>
-			<li class="selected"><img src="../../assets/images/icon.png" alt=""><span>项目#</span></li>
-			<li><img src="../../assets/images/icon.png" alt=""><span>项目！</span></li>
-			<li><img src="../../assets/images/icon.png" alt=""><span>项目……</span></li>
-			<li><img src="../../assets/images/icon.png" alt=""><span>项目￥</span></li>
-			<li><img src="../../assets/images/icon.png" alt=""><span>项目&</span></li>
-			<li><img src="../../assets/images/icon.png" alt=""><span>项目#</span></li>
-		</ul>
-	</div>
-	<div class="content">
-		<ul>
-			<li><div id="basicStencil"></div></li>
-			<li>2222222222</li>
-			<li>3333333333</li>
-			<li>4444444444</li>
-			<li>5555555555</li>
-			<li>6666666666</li>
-		</ul>
-	</div>
+    <div class="list">
+      <ul>
+        <li class="selected"><img src="../../assets/images/icon.png" alt="">
+          <span>项目#</span>
+        </li>
+        <li><img src="../../assets/images/icon.png" alt="">
+          <span>项目！</span>
+        </li>
+        <li><img src="../../assets/images/icon.png" alt="">
+          <span>项目……</span>
+        </li>
+        <li><img src="../../assets/images/icon.png" alt="">
+          <span>项目￥</span>
+        </li>
+        <li><img src="../../assets/images/icon.png" alt="">
+          <span>项目&</span>
+        </li>
+        <li><img src="../../assets/images/icon.png" alt="">
+          <span>项目#</span>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <ul>
+        <li>
+          <div id="basicStencil"></div>
+        </li>
+        <li>2222222222</li>
+        <li>3333333333</li>
+        <li>4444444444</li>
+        <li>5555555555</li>
+        <li>6666666666</li>
+      </ul>
+    </div>
     <div class="main">
       <div id="configuration" class="configuration">
         <div id="config" class="config"></div>
-        <div id="table" class="table"></div>        
+        <div id="table" class="table">
+          <table class="table-pane">
+            <tbody>
+              <tr>
+                <td>January</td>
+                <td>$100</td>
+              </tr>
+              <tr>
+                <td>February</td>
+                <td>$80</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div id="paperScroller"></div>
     </div>
@@ -43,66 +70,193 @@ export default {
   data: function () {
     return {
       config: {
+        groups: {
+          'undo-redo': { index: 1 },
+          'clear': { index: 2 },
+          'export': { index: 3 },
+          'print': { index: 4 },
+          'fullscreen': { index: 5 },
+          'order': { index: 6 },
+          'layout': { index: 7 },
+          'zoom': { index: 8 },
+          'grid': { index: 9 },
+          'snapline': { index: 10 }
+        },
         tools: [
           {
-            type: 'zoom-out',
-            name: 'zoom-out'
+            type: 'undo',
+            name: 'undo',
+            attrs: {
+              button: {
+                'data-tooltip': 'Undo',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'redo',
+            name: 'redo',
+            attrs: {
+              button: {
+                'data-tooltip': 'Redo',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'clear',
+            group: 'clear',
+            text: '清除画板',
+            attrs: {
+              button: {
+                id: 'btn-clear',
+                'data-tooltip': 'Clear Paper',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'png',
+            group: 'export',
+            text: '导出PNG',
+            attrs: {
+              button: {
+                id: 'btn-png',
+                'data-tooltip': 'Open as PNG in a pop-up',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'print',
+            group: 'print',
+            text: '打印',
+            attrs: {
+              button: {
+                id: 'btn-print',
+                'data-tooltip': 'Open a Print Dialog',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'to-front',
+            group: 'order',
+            text: '上一层',
+            attrs: {
+              button: {
+                id: 'btn-to-front',
+                'data-tooltip': 'Bring Object to Front',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'to-back',
+            group: 'order',
+            text: '下一层',
+            attrs: {
+              button: {
+                id: 'btn-to-back',
+                'data-tooltip': 'Send Object to Back',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'label',
+            name: 'zoom-slider-label',
+            group: 'zoom',
+            text: '缩放:'
+          },
+          {
+            type: 'zoom-slider',
+            name: 'zoom-slider',
+            group: 'zoom'
           },
           {
             type: 'zoom-in',
-            name: 'zoom-in'
-          },
-          {
-            type: 'zoom-to-fit',
-            name: 'zoom-to-fit'
-          },
-          { type: 'undo' },
-          { type: 'redo' },
-          {
-            type: 'zoom-slider',
-            name: 'zoom-slider'
-          },
-          {
-            type: 'separator'
-          },
-          {
-            type: 'select-button-group',
-            name: 'aaaaa',
-            multi: true,
-            selected: [1, 3],
-            options: [
-              {
-                value: 'line-through',
-                content: '<span style="text-decoration: line-through">S</span>',
-                attrs: {
-                  '.select-button-group-button': { 'data-tooltip': 'My tooltip' }
-                }
-              },
-              {
-                value: 'underline',
-                content: '<span style="text-decoration: underline">U</span>'
-              },
-              {
-                value: 'italic',
-                content: '<span style="font-style: italic">I</span>'
-              },
-              {
-                value: 'bold',
-                content: '<span style="font-weight: bold">B</span>'
+            name: 'zoom-in',
+            group: 'zoom',
+            attrs: {
+              button: {
+                'data-tooltip': 'Zoom In',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
               }
-            ]
+            }
           },
           {
-            type: 'select-box',
-            name: 'selectfont',
-            width: 200,
-            options: [
-              { content: 'Arial' },
-              { content: 'Helvetica' },
-              { content: 'Times New Roman' },
-              { content: 'Courier New' }
-            ],
-            defaultValue: 'Courier New'
+            type: 'separator',
+            group: 'grid'
+          },
+          {
+            type: 'label',
+            name: 'grid-size-label',
+            group: 'grid',
+            text: 'Grid size:',
+            attrs: {
+              label: {
+                'data-tooltip': 'Change Grid Size',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'range',
+            name: 'grid-size',
+            group: 'grid',
+            text: 'Grid size:',
+            min: 1,
+            max: 50,
+            step: 1,
+            value: 10
+          },
+          {
+            type: 'separator',
+            group: 'snapline'
+          },
+          {
+            type: 'checkbox',
+            name: 'snapline',
+            group: 'snapline',
+            label: 'Snaplines:',
+            value: true,
+            attrs: {
+              input: {
+                id: 'snapline-switch'
+              },
+              label: {
+                'data-tooltip': 'Enable/Disable Snaplines',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'fullscreen',
+            name: 'fullscreen',
+            group: 'fullscreen',
+            attrs: {
+              button: {
+                'data-tooltip': 'Toggle Fullscreen Mode',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
           }
         ],
         stencil: [{
@@ -130,10 +284,10 @@ export default {
             },
             text: {
               text: 'Substation',
-              fill: '#c6c7e2',
+              fill: '#000',
               'font-family': 'Roboto Condensed',
-              'font-weight': 'Normal',
-              'font-size': 11,
+              'font-weight': 'bold',
+              'font-size': 14,
               'stroke-width': 0,
               'y-alignment': 'middle'
             }
@@ -146,7 +300,7 @@ export default {
           attrs: {
             '.': {
               'data-tooltip': 'Ellipse',
-              'data-tooltip-position': 'left',
+              'data-tooltip-position': 'top',
               'data-tooltip-position-selector': '.joint-stencil'
             },
             circle: {
@@ -263,10 +417,32 @@ export default {
 #configuration {
   position: absolute;
   width: 300px;
-  height: 100%;
+  /* height: 100%; */
+  bottom: 0px;
   left: 0;
   top: 188px;
   border: 1px solid #cdcdcd;
+}
+.config {
+  position: absolute;
+  width: 100%;
+  bottom: 300px;
+  left: 0;
+  top: 0;
+}
+.table {
+  position: absolute;
+  width: 300px;
+  bottom: 0px;
+  left: 0;
+  height: 300px;
+  padding: 20px;
+}
+.table-pane{
+  border: 1px solid #000000;
+}
+.table-pane td{
+  border: 1px solid #000000;
 }
 #bianya {
   height: 80px;

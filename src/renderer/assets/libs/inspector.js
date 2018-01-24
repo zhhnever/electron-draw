@@ -495,18 +495,6 @@ App.config = App.config || {};
               group: 'text',
               index: 1
             },
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: '颜色',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 5
-            },
             'attrs': {
               type: 'number',
               label: '功率',
