@@ -36,11 +36,14 @@
       <div id="configuration" class="configuration">
         <div id="config" class="config"></div>
         <div id="table" class="table">
-          <table class="altrowstable" :click="con">
+          <table class="altrowstable">
             <tbody>
               <tr>
                 <td>January</td>
                 <td>$100</td>
+                <td>
+                  <button v-on:click="con">123</button>
+                </td>
               </tr>
               <tr>
                 <td>February</td>
@@ -325,7 +328,8 @@ export default {
       table: {},
       selection: '',
       stencil: '',
-      snaplines: ''
+      snaplines: '',
+      elementIdArrary: []
     }
   },
   components: {
@@ -351,8 +355,6 @@ export default {
       let cell = cellView.model
       _this.cellPulgin(cellView)
       _this.createInspector(cell)
-
-      console.log(cell.get('type'))
     })
     let toolbar = new joint.ui.Toolbar({
       references: {
@@ -376,14 +378,42 @@ export default {
       },
       'grid-size:change': _.bind(this.paper.setGridSize, this.paper)
     })
-    console.log(toolbar)
-    // toolbar.el.appendTo('#toolbar')
     $('#toolbar').append(toolbar.el)
     toolbar.render()
+    graph.on('add', cell => {
+      let type = cell.get('type')
+      if (type === 'basic.switch') {
+        cell.on('change:attrs', (element, newAttrs, opt) => {
+          let allCells = _this.graph.getCells()
+          allCells.map(value => {
+            if (value.isLink()) {
+              console.log(value.getSourceElement())
+            }
+          })
+          switch (opt.propertyValue) {
+            case '#FFFFFF':
+              break
+          }
+        })
+      } else if (type === 'app.Link') {
+        if (cell.getSourceElement() && cell.getTargetElement()) {
+          let resourceCellId = cell.getSourceElement().id
+          let targetCellId = cell.getTargetElement().id
+          _this.elementIdArrary.push({ 'id': targetCellId, 'parentId': resourceCellId })
+        } else if (cell.getSourceElement()) {
+          cell.on('transition:end', (element, target) => {
+            console.log(target)
+          })
+        }
+      }
+    })
+    // console.log(joint.shapes.devs)
+    // joint.shapes.basic.switch.on('change:position', (element, newPosition, opt) => { console.log(123) })
   },
   methods: {
     cellPulgin: function (cellView) {
       let cell = cellView.model
+      console.log(cell)
       if (cell.isLink()) return
       let options = {
         graph: this.graph,
@@ -419,7 +449,6 @@ export default {
         this.snaplines.startListening()
         this.stencil.options.snaplines = this.snaplines
       } else {
-        console.log(this.stencil)
         this.snaplines.stopListening()
         this.stencil.options.snaplines = null
       }
@@ -436,8 +465,8 @@ export default {
         stylesheet: this.exportStylesheet
       })
     },
-    con:function(){
-      
+    con: function () {
+      console.log(this.elementIdArrary)
     }
   }
 }

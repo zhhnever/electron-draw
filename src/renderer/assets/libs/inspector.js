@@ -104,10 +104,6 @@ App.config = App.config || {};
         content: 'Solid'
       },
       {
-        value: '2,5',
-        content: 'Dotted'
-      },
-      {
         value: '10,5',
         content: 'Dashed'
       }
