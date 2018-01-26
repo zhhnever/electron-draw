@@ -99,7 +99,6 @@ const mutations = {
         // Copy all selected elements and their associated links.
         clipboard.copyElements(selection.collection, state.graph)
       },
-
       'ctrl+v': function () {
         let pastedCells = clipboard.pasteCells(state.graph, {
           translate: { dx: 20, dy: 20 },
@@ -114,7 +113,6 @@ const mutations = {
         // the user can immediately manipulate the pasted elements.
         selection.collection.reset(elements)
       },
-
       'ctrl+x shift+delete': function () {
         clipboard.cutElements(selection.collection, state.graph)
       },

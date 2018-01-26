@@ -4,22 +4,19 @@
     <div class="list">
       <ul>
         <li class="selected"><img src="../../assets/images/icon.png" alt="">
-          <span>项目#</span>
+          <span>基础</span>
         </li>
         <li><img src="../../assets/images/icon.png" alt="">
-          <span>项目！</span>
+          <span>环网柜</span>
         </li>
         <li><img src="../../assets/images/icon.png" alt="">
-          <span>项目……</span>
+          <span>架空线路设备</span>
         </li>
         <li><img src="../../assets/images/icon.png" alt="">
-          <span>项目￥</span>
+          <span>用电设备</span>
         </li>
         <li><img src="../../assets/images/icon.png" alt="">
-          <span>项目&</span>
-        </li>
-        <li><img src="../../assets/images/icon.png" alt="">
-          <span>项目#</span>
+          <span>公共设备</span>
         </li>
       </ul>
     </div>
@@ -39,7 +36,7 @@
       <div id="configuration" class="configuration">
         <div id="config" class="config"></div>
         <div id="table" class="table">
-          <table class="table-pane">
+          <table class="altrowstable" :click="con">
             <tbody>
               <tr>
                 <td>January</td>
@@ -64,7 +61,8 @@ import joint from '../../assets/libs/rappid.min.js'
 import '../../assets/libs/joint.shapes.eqelement.js'
 import inspectorConfig from '../../assets/libs/inspector.js'
 import Vue from 'vue'
-import _ from 'jquery'
+import $ from 'jquery'
+import _ from 'lodash'
 import BasicStencil from '../Stencil/Basic'
 export default {
   data: function () {
@@ -245,18 +243,6 @@ export default {
                 'data-tooltip-position-selector': '.toolbar-container'
               }
             }
-          },
-          {
-            type: 'fullscreen',
-            name: 'fullscreen',
-            group: 'fullscreen',
-            attrs: {
-              button: {
-                'data-tooltip': 'Toggle Fullscreen Mode',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
           }
         ],
         stencil: [{
@@ -320,13 +306,26 @@ export default {
               'stroke-width': 0
             }
           }
+        }, {
+          type: 'basic.switch',
+          size: { width: 35, height: 10 },
+          position: { x: 270, y: 40 },
+          attrs: {
+            path: {
+              d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5', stroke: '#31d0c6', 'stroke-width': 2, fill: '#000'
+            }
+          }
         }]
       },
       paper: '',
       graph: '',
       commandManager: '',
       paperScroller: '',
-      tabShow: true
+      tabShow: true,
+      table: {},
+      selection: '',
+      stencil: '',
+      snaplines: ''
     }
   },
   components: {
@@ -335,8 +334,8 @@ export default {
   mounted: function () {
     const _this = this
     joint.setTheme('modern')
-    this.$store.commit('init', _('#paperScroller')) // 初始化paper
-    this.$store.commit('initStencil', _('#basicStencil')) // 初始化工具栏
+    this.$store.commit('init', $('#paperScroller')) // 初始化paper
+    this.$store.commit('initStencil', $('#basicStencil')) // 初始化工具栏
     this.$store.commit('stencilLoadConfig', this.config.stencil) // 加载工具栏config
 
     this.$store.commit('initializeKeyboardShortcuts') // 加载工具栏config
@@ -344,6 +343,9 @@ export default {
     let graph = this.graph = this.$store.state.paper.graph
     let commandManager = this.commandManager = this.$store.state.paper.commandManager
     let paperScroller = this.paperScroller = this.$store.state.paper.paperScroller
+    let selection = this.selection = this.$store.state.paper.selection
+    let snaplines = this.snaplines = this.$store.state.paper.snaplines
+    let stencil = this.stencil = this.$store.state.paper.stencil.basic
     paper.on('element:pointerup link:options', cellView => {
       // console.log(cellView)
       let cell = cellView.model
@@ -358,8 +360,26 @@ export default {
         commandManager: this.commandManager
       },
       tools: this.config.tools
-    }).render()
-    _('#toolbar').append(toolbar.el)
+    })
+    // 绑定事件
+    toolbar.on({
+      'png:pointerclick': function () { _this.openAsPNG() },
+      'to-front:pointerclick': _.bind(this.selection.collection.invoke, this.selection.collection, 'toFront'),
+      'to-back:pointerclick': _.bind(this.selection.collection.invoke, this.selection.collection, 'toBack'),
+      'snapline:change': _.bind(this.changeSnapLines, this),
+      'clear:pointerclick': function () {
+        _this.graph.clear()
+      },
+      'print:pointerclick': function () {
+        console.log(_this.paper)
+        _this.paper.print()
+      },
+      'grid-size:change': _.bind(this.paper.setGridSize, this.paper)
+    })
+    console.log(toolbar)
+    // toolbar.el.appendTo('#toolbar')
+    $('#toolbar').append(toolbar.el)
+    toolbar.render()
   },
   methods: {
     cellPulgin: function (cellView) {
@@ -388,13 +408,36 @@ export default {
       }
       let halo = new joint.ui.Halo(options)
       halo.render()
-      // this.paperScroller.append(halo.el)
-      console.log(this.graph.getCells())
     },
     createInspector: function (cell) {
       joint.ui.Inspector.create('#config', _.extend({
         cell: cell
       }, inspectorConfig.inspectorConfig[cell.get('type')]))
+    },
+    changeSnapLines: function (checked) {
+      if (checked) {
+        this.snaplines.startListening()
+        this.stencil.options.snaplines = this.snaplines
+      } else {
+        console.log(this.stencil)
+        this.snaplines.stopListening()
+        this.stencil.options.snaplines = null
+      }
+    },
+    openAsPNG: function () {
+      this.paper.toPNG(function (dataURL) {
+        new joint.ui.Lightbox({
+          title: '(右键另存为即可保存图片)',
+          image: dataURL
+        }).open()
+      }, {
+        padding: 10,
+        useComputedStyles: false,
+        stylesheet: this.exportStylesheet
+      })
+    },
+    con:function(){
+      
     }
   }
 }
@@ -437,12 +480,35 @@ export default {
   left: 0;
   height: 300px;
   padding: 20px;
+  border-top: #333333 solid 1px;
+  background-color: rgb(240, 240, 240);
 }
-.table-pane{
-  border: 1px solid #000000;
+
+table.altrowstable {
+  /* font-family: verdana, arial, sans-serif; */
+  font-size: 11px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #a9c6c9;
+  border-collapse: collapse;
 }
-.table-pane td{
-  border: 1px solid #000000;
+table.altrowstable th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+table.altrowstable td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #a9c6c9;
+}
+.oddrowcolor {
+  background-color: #d4e3e5;
+}
+.evenrowcolor {
+  background-color: #c3dde0;
 }
 #bianya {
   height: 80px;

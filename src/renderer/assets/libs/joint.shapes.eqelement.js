@@ -11,7 +11,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
  or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
 
  import joint from './rappid.min.js'
-
+ import _ from 'lodash'
  (function(joint) {
     
   'use strict';
@@ -353,3 +353,16 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
   });
 
 })(joint);
+
+joint.shapes.basic.switch = joint.shapes.basic.Generic.extend({
+    markup: '<g class="rotatable" ><g></g><path/></g>',
+
+    defaults: _.defaultsDeep({
+        type: 'basic.switch',
+        size: { width: 35, height: 10 },
+        attrs: {
+            'path': { d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5' ,stroke:'black'}
+        }
+
+    }, joint.shapes.basic.Generic.prototype.defaults)
+})
