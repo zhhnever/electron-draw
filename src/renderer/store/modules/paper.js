@@ -1,6 +1,7 @@
 // joint paper module
-import joint from '../../assets/libs/rappid.min.js'
+import joint, { layout } from '../../assets/libs/rappid.min.js'
 import '../../assets/libs/joint.shapes.eqelement.js'
+import _ from 'lodash'
 const state = {
   paper: null,
   snaplines: null,
@@ -59,7 +60,7 @@ const mutations = {
     let stencil = new joint.ui.Stencil({
       paper: state.paper,
       snaplines: state.snaplines,
-      width: 400,
+      width: 1000,
       height: 200,
       // search: { '*': ['type'] },
       dropAnimation: {

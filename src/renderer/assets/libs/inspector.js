@@ -101,11 +101,11 @@ App.config = App.config || {};
 
     strokeStyle: [{
         value: '0',
-        content: 'Solid'
+        content: '架空线'
       },
       {
         value: '10,5',
-        content: 'Dashed'
+        content: '地下电缆'
       }
     ],
 
@@ -332,13 +332,6 @@ App.config = App.config || {};
                 }
               },
               index: 5
-            },
-            stroke: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              group: 'connection',
-              label: 'Color',
-              index: 6
             }
           },
           '.marker-source': {
@@ -700,13 +693,21 @@ App.config = App.config || {};
     'basic.switch': {
       inputs: {
         attrs: {
+          '.': {
+            name:{
+              type:'content-editable',
+              label:'编号',
+              group: 'presentation',
+              index: 1
+            }
+          },
           path:{
             fill: {
               type: 'select',
               options: options.switchState,
               label: '开关状态',
               group: 'presentation',
-              index: 1
+              index: 2
             }
           }
         }
@@ -714,6 +715,48 @@ App.config = App.config || {};
       groups: {
         presentation: {
           label: '状态',
+          index: 1
+        }
+      }
+    },
+    'basic.Substation': {
+      inputs: {
+        attrs: {
+          '.': {
+            number: {
+              type:'list',
+              group: 'presentation',
+              label: '数量',
+              item:{
+                type:'object',
+                properties:{
+                  attrs: {
+                    text: {
+                      text: {
+                        type: 'text',
+                        label: '编号',
+                        defaultValue: '',
+                        index: 1,
+                      }
+                    }
+                  }
+                }
+              }
+            },
+          },
+          '.one text':{
+            text: {
+              type: 'text',
+              label: '名称',
+              group: 'presentation',
+              index: 2
+            }
+          }
+        },
+      },
+      groups: {
+        presentation: {
+          label: '属性',
           index: 1
         }
       }

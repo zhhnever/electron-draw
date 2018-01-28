@@ -363,6 +363,43 @@ joint.shapes.basic.switch = joint.shapes.basic.Generic.extend({
         attrs: {
             'path': { d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5' ,stroke:'black'}
         }
-
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
+
+
+joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
+
+    markup: [
+        '<g class="rotatable">',
+        '<g class="scalable">',
+        '<path/>',
+        '</g>',
+        '<g class="one">',
+        '<g class="one-circle"><circle/><text/></g>',
+        '</g>',
+        '<g class="two">',
+        '<g class="two-circle"><circle/><text/></g>',
+        '</g>',
+        '<g class="three">',
+        '<g class="three-circle"><circle/><text/></g>',
+        '</g>',
+        '<g class="four">',
+        '<g class="four-circle"><circle/><text/></g>',
+        '</g>',
+        '',
+        '</g>'
+    ].join(''),
+
+    defaults: _.defaultsDeep({
+
+        type: 'basic.Substation',
+        size: { width: 100, height: 50 },
+        attrs: {
+            'path': {  d: 'M0 0 V40' ,stroke:'#31d0c6' },
+            '.one circle' : { r: 20,
+                stroke: '#31d0c6',refX2: 20, refY2: 25 ,fill: "transparent" ,strokeWidth: 2},
+            '.one text': { 'font-size': 14, text: '公变', refX2: 20, refY2: 25, 'y-alignment': 'middle', 'x-alignment': 'middle', fill: 'black' }
+        }
+
+    }, joint.shapes.basic.Generic.prototype.defaults)
+});
