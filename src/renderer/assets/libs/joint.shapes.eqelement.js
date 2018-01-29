@@ -15,7 +15,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
  (function(joint) {
     
   'use strict';
-  joint.shapes.basic.Generic.define('devs.eqelement', {
+  joint.shapes.basic.Generic.define('devs.SwitchingRoom', {
       inPorts: [],
       outPorts: [],
       attrs: {
@@ -165,7 +165,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
       }
   });
   // 变电站
-  joint.shapes.devs.eqelement.define('eqelement.station', {
+  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.station', {
       size: { width: 100, height: 40 },
       attrs: {
           '.body': { x: 0, y: 0, width: 90, height:40, stroke: '#33334e', 'stroke-width': 2,fill: 'transparent'},
@@ -207,7 +207,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
       }
   });
   // 环网柜
-  joint.shapes.devs.eqelement.define('eqelement.PowerRingnetcabinet', {
+  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.PowerRingnetcabinet', {
       size: { width: 90, height: 40 },
       attrs: {
           '.body': { x: 0, y: 0, width: 90, height: 40, stroke: '#33334e', 'stroke-width': 2,fill:'transparent'},
@@ -267,7 +267,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
       }
   });
   // 路灯变压器
-  joint.shapes.devs.eqelement.define('eqelement.LampTransformer', {
+  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.LampTransformer', {
       size: { width: 40, height: 40 },
       markup: '<g class="rotatable"><g class="body"><rect class="body-r"/><circle class="body-C"/></g><text class="label"/></g>',
       attrs: {
@@ -354,9 +354,9 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
 
 })(joint);
 
+// 开关
 joint.shapes.basic.switch = joint.shapes.basic.Generic.extend({
     markup: '<g class="rotatable" ><g></g><path/></g>',
-
     defaults: _.defaultsDeep({
         type: 'basic.switch',
         size: { width: 35, height: 10 },
@@ -368,7 +368,6 @@ joint.shapes.basic.switch = joint.shapes.basic.Generic.extend({
 
 
 joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
-
     markup: [
         '<g class="rotatable">',
         '<g class="scalable">',
@@ -403,3 +402,19 @@ joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
 
     }, joint.shapes.basic.Generic.prototype.defaults)
 });
+
+// 隔离开关
+joint.shapes.basic.isolationSwitch = joint.shapes.basic.Generic.extend({
+    markup: '<g class="rotatable"><rect/><g class="scalable"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.isolationSwitch',
+        size: { width: 35, height: 10 },
+        attrs: {
+            rect:{stroke:'black',width: 11.78, height: 43.23,'stroke-opacity':"0"},
+            '.line1': {x1:"6.2",x2:"6.2",y1:"0.35",y2:"14.26",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
+            '.line2': {x1:"6.2",x2:"6.2",y1:"26.54",y2:"43.23",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
+            '.line3': {x1:"6.2",x2:"0.35",y1:"26.26",y2:"13.65",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
+            '.line4': {x1:"0.72",x2:"11.78",y1:"14.3",y2:"14.3",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'}
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+})
