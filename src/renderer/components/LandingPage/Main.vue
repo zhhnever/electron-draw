@@ -30,7 +30,9 @@
         <li>
           <div id="basicStencil"></div>
         </li>
-        <li><div id=""></div></li>
+        <li>
+          <div id=""></div>
+        </li>
         <li>3333333333</li>
         <li>4444444444</li>
         <li>5555555555</li>
@@ -292,8 +294,8 @@ export default {
               width: 50,
               height: 30,
               fill: 'transparent',
-              stroke: '#31d0c6',
-              'stroke-width': 2,
+              stroke: 'black',
+              'stroke-width': 1,
               'stroke-dasharray': '0'
             },
             text: {
@@ -327,8 +329,8 @@ export default {
               width: 50,
               height: 30,
               fill: 'transparent',
-              stroke: '#31d0c6',
-              'stroke-width': 2,
+              stroke: 'black',
+              'stroke-width': 1,
               'stroke-dasharray': '0'
             },
             text: {
@@ -353,7 +355,7 @@ export default {
           attrs: {
             path: {
               d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5',
-              stroke: '#31d0c6',
+              stroke: 'black',
               'stroke-width': 1,
               fill: '#000'
             }
@@ -366,6 +368,28 @@ export default {
           },
           position: {
             x: 370,
+            y: 20
+          }
+        },
+        {
+          type: 'basic.isolationSwitch',
+          size: {
+            width: 15,
+            height: 44
+          },
+          position: {
+            x: 470,
+            y: 20
+          }
+        },
+        {
+          type: 'basic.loadSwitch',
+          size: {
+            width: 15,
+            height: 44
+          },
+          position: {
+            x: 570,
             y: 20
           }
         }
@@ -469,6 +493,9 @@ export default {
                 break
             }
           })
+          break
+        case 'isolationSwitch':
+          
           break
       }
     })

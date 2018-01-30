@@ -295,11 +295,11 @@ App.config = App.config || {};
       }
     ],
     switchState:[{
-      value:'#000000',
+      value:true,
       content:'开'
     },
     {
-      value:'#FFFFFF',
+      value:false,
       content:'关'
     }]
   };
@@ -611,35 +611,9 @@ App.config = App.config || {};
                 }
               },
               index: 4
-            },
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: 'Fill',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 5
             }
           },
           circle: {
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: 'Fill',
-              group: 'presentation',
-              index: 1
-            },
-            stroke: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: 'Outline',
-              group: 'presentation',
-              index: 2
-            },
             'stroke-width': {
               type: 'range',
               min: 0,
@@ -647,7 +621,7 @@ App.config = App.config || {};
               step: 1,
               defaultValue: 1,
               unit: 'px',
-              label: 'Outline thickness',
+              label: '变宽宽度',
               group: 'presentation',
               when: {
                 ne: {
@@ -659,7 +633,7 @@ App.config = App.config || {};
             'stroke-dasharray': {
               type: 'select-box',
               options: options.strokeStyle,
-              label: 'Outline style',
+              label: '边框样式',
               group: 'presentation',
               when: {
                 and: [{
@@ -760,7 +734,69 @@ App.config = App.config || {};
           index: 1
         }
       }
-    }
+    },
+    // 隔离开关配置
+    'basic.isolationSwitch': {
+      inputs: {
+        attrs: {
+          text: {
+            text: {
+              type:'content-editable',
+              label:'编号',
+              group: 'presentation',            
+              index: 1 
+            }
+          },
+          '.line4': {
+            x1:{
+              type: 'select',
+              options: options.isolationSwitchState,
+              label: '开关状态',
+              group: 'presentation',
+              index: 2
+            }
+          }
+        }
+      },
+      groups: {
+        presentation: {
+          label: '状态',
+          index: 1
+        }
+      },
+
+    },
+    // 负荷开关配置
+    'basic.loadSwitch': {
+      inputs: {
+        attrs: {
+          '.':{
+            state:{
+              type: 'select',
+              options: options.switchState,
+              label: '开关状态',
+              group: 'presentation',
+              index: 2
+            }
+          },
+          text: {
+            text: {
+              type:'content-editable',
+              label:'编号',
+              group: 'presentation',            
+              index: 1 
+            }
+          },
+        }
+      },
+      groups: {
+        presentation: {
+          label: '状态',
+          index: 1
+        }
+      },
+
+    },
   };
 
 })();

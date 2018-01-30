@@ -390,13 +390,12 @@ joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
     ].join(''),
 
     defaults: _.defaultsDeep({
-
         type: 'basic.Substation',
         size: { width: 100, height: 50 },
         attrs: {
-            'path': {  d: 'M0 0 V40' ,stroke:'#31d0c6' },
+            'path': {  d: 'M0 0 V40' ,stroke:'black' },
             '.one circle' : { r: 20,
-                stroke: '#31d0c6',refX2: 20, refY2: 25 ,fill: "transparent" ,strokeWidth: 2},
+                stroke: 'black',refX2: 20, refY2: 25 ,fill: "transparent" ,strokeWidth: 1},
             '.one text': { 'font-size': 14, text: '公变', refX2: 20, refY2: 25, 'y-alignment': 'middle', 'x-alignment': 'middle', fill: 'black' }
         }
 
@@ -405,16 +404,112 @@ joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
 
 // 隔离开关
 joint.shapes.basic.isolationSwitch = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable"><rect/><g class="scalable"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g><text/></g>',
     defaults: _.defaultsDeep({
         type: 'basic.isolationSwitch',
         size: { width: 35, height: 10 },
         attrs: {
-            rect:{stroke:'black',width: 11.78, height: 43.23,'stroke-opacity':"0"},
+            rect:{stroke:'black',width: 11.78, height: 43.23,'stroke-opacity':"0",fill:'none'},
             '.line1': {x1:"6.2",x2:"6.2",y1:"0.35",y2:"14.26",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
             '.line2': {x1:"6.2",x2:"6.2",y1:"26.54",y2:"43.23",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
             '.line3': {x1:"6.2",x2:"0.35",y1:"26.26",y2:"13.65",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
-            '.line4': {x1:"0.72",x2:"11.78",y1:"14.3",y2:"14.3",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'}
+            '.line4': {x1:"0.72",x2:"11.78",y1:"14.3",y2:"14.3",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
+            text: {'font-size': 14, text: '隔离开关',  'y-alignment': 'middle', 'x-alignment': 'middle', fill: 'black','ref':'rect','refX':1,'refY':0.5,'refX2':-10,transform:'rotate(-90)'}
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 负荷开关
+joint.shapes.basic.loadSwitch = joint.shapes.basic.Generic.extend({
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text/></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.loadSwitch',
+        size: {
+            width: 35,
+            height: 10
+        },
+        attrs: {
+            rect: {
+                stroke: 'black',
+                width: 11.78,
+                height: 43.23,
+                'stroke-opacity': "0",
+                fill:'none'
+            },
+            '.line1': {
+                x1: "5.62",
+                x2: "5.62",
+                y1: "0.35",
+                y2: "14.28",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line2': {
+                x1: "5.62",
+                x2: "5.62",
+                y1: "42.43",
+                y2: "31.28",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line3': {
+                x1: "5.62",
+                x2: "1.36",
+                y1: "31.18",
+                y2: "15.03",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line4': {
+                x1: "11.05",
+                x2: "0.35",
+                y1: "14.59",
+                y2: "14.59",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.ell1': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'none',
+            },
+            '.ell2': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'none',
+                stroke: 'black',                
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            text: {
+                'font-size': 14,
+                text: '负荷开关',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                'ref': 'rect',
+                'refX': 1,
+                'refY': 0.5,
+                'refX2': -10,
+                transform: 'rotate(-90)'
+            }
         }
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
