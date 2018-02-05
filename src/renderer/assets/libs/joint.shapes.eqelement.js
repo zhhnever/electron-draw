@@ -41,6 +41,21 @@ import _ from 'lodash'
             })
           }
     });
+    // 定义设备基类
+    joint.shapes.basic.Generic.define('devs.Equipment',{
+        devsInfomation: {
+            name:'',
+            code:'',
+            num:1,
+            power:'',
+        },
+    },{
+        initialize: function () {
+            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+            this.on('change:devsInfomation', this.devsInfomation, this); // 添加 监听状态改变的方法
+        }
+    })
+    
     joint.dia.Link.define('app.Link', {
         router: {
             name: 'normal'
