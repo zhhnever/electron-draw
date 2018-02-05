@@ -10,363 +10,95 @@ This Source Code Form is subject to the terms of the Rappid Trial License
 file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
  or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
 
- import joint from './rappid.min.js'
- import _ from 'lodash'
- (function(joint) {
-    
-  'use strict';
-  joint.shapes.basic.Generic.define('devs.SwitchingRoom', {
-      inPorts: [],
-      outPorts: [],
-      attrs: {
-          '.': {
-              magnet: false
-          },
-          '.label': {
-              text: 'Model',
-              'ref-x': .5,
-              'ref-y': 10,
-              'font-size': 18,
-              'text-anchor': 'middle',
-              fill: '#000'
-          },
-          '.body': {
-              'ref-width': '100%',
-              'ref-height': '100%',
-              stroke: '#000'
-          }
-      },
-      ports: {
-          groups: {
-              'in': {
-                  position: {
-                      name: 'top'
-                  },
-                  attrs: {
-                      '.port-label': {
-                          fill: '#000'
-                      },
-                      '.port-body': {
-                          fill: '#fff',
-                          stroke: '#300',
-                          r: 10,
-                          magnet: 'passive'
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'top',
-                          args: {
-                              y: 10
-                          }
-                      }
+import joint from './rappid.min.js'
+import _ from 'lodash'
+(function (joint) {
+    // 定义开关基类,初始化监听状态改变,
+    // 状态改变之后 改变线路颜色
+    'use strict';
+    joint.shapes.basic.Generic.define('devs.Switch', {
+        devsInfomation: {
+        },
+        state: 0//开关状态,0是关,1是开
+    }, {
+        initialize: function () {
+            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+            this.on('change:state', this.updateSwitchState, this); // 添加 监听状态改变的方法
+        },
+        changeLinkColor: function (graph,element, color) {
+            let childCells = graph.getSuccessors(element)
+            childCells.map(child => {
+              let links = graph.getConnectedLinks(child, {
+                inbound: true
+              })
+              links.map(link => {
+                link.attr({
+                  '.connection': {
+                    stroke: color
                   }
-              },
-              'out': {
-                  position: {
-                      name: 'bottom'
-                  },
-                  attrs: {
-                      '.port-label': {
-                          fill: '#000'
-                      },
-                      '.port-body': {
-                          fill: '#fff',
-                          stroke: '#030',
-                          magnet: true
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'bottom',
-                          args: {
-                              y: 10
-                          }
-                      }
-                  }
-              }
+                })
+              })
+            })
           }
-      }
-  }, {
-      markup: '<g class="rotatable"><rect class="body"/><text class="label"/></g>',
-      portMarkup: '<path class="port-body"/>',
-      portLabelMarkup: '<text class="port-label"/>',
-      initialize: function() {
-          joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-          this.on('change:inPorts change:outPorts', this.updatePortItems, this);
-          this.updatePortItems();
-      },
-      updatePortItems: function(model, changed, opt) {
-          // Make sure all ports are unique.
-          var inPorts = joint.util.uniq(this.get('inPorts'));
-          var outPorts = joint.util.difference(joint.util.uniq(this.get('outPorts')), inPorts);
-          var inPortItems = this.createPortItems('in', inPorts);
-          var outPortItems = this.createPortItems('out', outPorts);
-          this.prop('ports/items', inPortItems.concat(outPortItems), joint.util.assign({ rewrite: true }, opt));
-      },
-      createPortItem: function(group, port) {
-          return {
-              id: port,
-              group: group,
-              attrs: {
-                  '.port-label': {
-                      text: port
-                  }
-              }
-          };
-      },
-      createPortItems: function(group, ports) {
-  
-          return joint.util.toArray(ports).map(this.createPortItem.bind(this, group));
-      },
-      _addGroupPort: function(port, group, opt) {
-  
-          var ports = this.get(group);
-          return this.set(group, Array.isArray(ports) ? ports.concat(port) : [port], opt);
-      },
-      addOutPort: function(port, opt) {
-  
-          return this._addGroupPort(port, 'outPorts', opt);
-      },
-  
-      addInPort: function(port, opt) {
-  
-          return this._addGroupPort(port, 'inPorts', opt);
-      },
-  
-      _removeGroupPort: function(port, group, opt) {
-  
-          return this.set(group, joint.util.without(this.get(group), port), opt);
-      },
-  
-      removeOutPort: function(port, opt) {
-  
-          return this._removeGroupPort(port, 'outPorts', opt);
-      },
-  
-      removeInPort: function(port, opt) {
-  
-          return this._removeGroupPort(port, 'inPorts', opt);
-      },
-  
-      _changeGroup: function(group, properties, opt) {
-  
-          return this.prop('ports/groups/' + group, joint.util.isObject(properties) ? properties : {}, opt);
-      },
-  
-      changeInGroup: function(properties, opt) {
-  
-          return this._changeGroup('in', properties, opt);
-      },
-  
-      changeOutGroup: function(properties, opt) {
-  
-          return this._changeGroup('out', properties, opt);
-      }
-  });
-  // 变电站
-  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.station', {
-      size: { width: 100, height: 40 },
-      attrs: {
-          '.body': { x: 0, y: 0, width: 90, height:40, stroke: '#33334e', 'stroke-width': 2,fill: 'transparent'},
-          '.label': {  
-              'text':'变电站',
-              'font-size': 14, 
-              'ref-x': 0.5, 
-              'ref-y': 0.5, 
-              ref: '.body', 
-              'x-alignment': 'middle', 
-              'y-alignment': 'middle', 
-              fill: '#000',
-              'font-family':'Alegreya Sans',
-              'font-weight':500
-           }
-      },
-      ports: {
-          groups: {
-              'out': {
-                  attrs: {
-                      '.port-body':{ d: 'M0 0 0 10 -10 10 -10 20 10 20 0 20 0 30 -5 30 0 38 5 30 0 30 0 20 10 20 10 10 0 10 0 0 Z',stroke: '#000',fill: 'transparent'},
-                      '.port-label': {
-                          fontSize: 9,
-                          fill: '#000',
-                          fontWeight: 600
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'bottom',
-                          args: {
-                              y: 12,
-                              x: 0
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  });
-  // 环网柜
-  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.PowerRingnetcabinet', {
-      size: { width: 90, height: 40 },
-      attrs: {
-          '.body': { x: 0, y: 0, width: 90, height: 40, stroke: '#33334e', 'stroke-width': 2,fill:'transparent'},
-          '.label':{
-              'text':'环网柜',
-              'ref-x': 0.5, 
-              'ref-y': 0.5, 
-              ref: '.body', 
-              'x-alignment': 'middle',
-              'font-size':12,
-              'font-family':'Alegreya Sans',
-              'font-weight':500,
-              'fill':'#000'
-          }
-      },
-      ports: {
-          groups: {
-              'in': {
-                  attrs: {
-                      '.port-body': {d: 'M0 0 0 -10 -10 -10 -10 -20 0 -20 0 -30 -5 -30 0 -38 5 -30 0 -30 0 -20 10 -20 10 -10 0 -10 0 0 Z',fill: 'transparent',stroke: '#000','stroke-width': 1},
-                      '.port-label': {
-                          fontSize: 9,
-                          fill: '#000',
-                          fontWeight: 600
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'top',
-                          args: {
-                              y: -12,
-                              x: 0
-                          }
-                      }
-                  }
-              },
-              'out': {
-                  attrs: {
-                      '.port-body': {d: 'M0 0 0 10 -10 10 -10 20 10 20 0 20 0 30 -5 30 0 38 5 30 0 30 0 20 10 20 10 10 0 10 0 0 Z',fill: 'transparent',stroke: '#000','stroke-width': 1},
-                      '.port-label': {
-                          fontSize: 9,
-                          fill: '#000',
-                          fontWeight: 600
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'bottom',
-                          args: {
-                              y: 12,
-                              x: 0
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  });
-  // 路灯变压器
-  joint.shapes.devs.SwitchingRoom.define('SwitchingRoom.LampTransformer', {
-      size: { width: 40, height: 40 },
-      markup: '<g class="rotatable"><g class="body"><rect class="body-r"/><circle class="body-C"/></g><text class="label"/></g>',
-      attrs: {
-          '.body':{ width: 40, height: 40 },
-         '.body-r':{x: 0, y: 0, width: 40, height:40, stroke: '#33334e', 'stroke-width': 2,strokeStyle:'10,5',fill:'transparent'},
-         '.body-C':{
-              cx:20,
-              cy:20,
-              r:18,
-              stroke:"#33334e",
-              'stroke-width':"2",
-              fill:"transparent"
-         },
-          '.label':{
-              'text':'路灯变',
-              'ref-x': 0.5, 'y': 48, ref: '.body', 'x-alignment': 'middle',
-              'font-size':12,
-              'font-family':'Alegreya Sans',
-              'font-weight':500,
-              'fill':'#000'
-          }
-      },
-      ports: {
-          groups: {
-              'in': {
-                  attrs: {
-                      '.port-body': {d: 'M0 0 0 -15 -5 -15 0 -23 5 -15 0 -15 0 0 Z',fill: 'transparent',stroke: '#000',ref: '.body-r',},
-                      '.port-label': {
-                          fontSize: 9,
-                          fill: '#000',
-                          fontWeight: 600
-                      }
-                  },
-                  label: {
-                      position: {
-                          name: 'top',
-                          args: {
-                              y: -6,
-                              x: 10
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  });
- 
-  joint.dia.Link.define('app.Link', {
-      router: {
-          name: 'normal'
-      },
-      connector: {
-          name: 'normal'
-      },
-      attrs: {
-          '.tool-options': {
-              'data-tooltip-class-name': 'small',
-              'data-tooltip': '点击设置线路属性',
-              'data-tooltip-position': 'left'
-          },
-          '.marker-source': {
-              d: 'M 10 0 L 0 5 L 10 10 z',
-              stroke: 'transparent',
-              fill: '#222138',
-              transform: 'scale(0.001)'
-          },
-          '.marker-target': {
-              d: 'M 10 0 L 0 5 L 10 10 z',
-              stroke: 'transparent',
-              fill: '#222138',
-              transform: 'scale(0.001)'
-          },
-          '.connection': {
-              stroke: '#222138',
-              strokeDasharray: '0',
-              strokeWidth: 1,
-              fill: 'none'
-          },
-          '.connection-wrap': {
-              fill: 'none'
-          }
-      }
-  });
+    });
+    joint.dia.Link.define('app.Link', {
+        router: {
+            name: 'normal'
+        },
+        connector: {
+            name: 'normal'
+        },
+        attrs: {
+            '.tool-options': {
+                'data-tooltip-class-name': 'small',
+                'data-tooltip': '点击设置线路属性',
+                'data-tooltip-position': 'left'
+            },
+            '.marker-source': {
+                d: 'M 10 0 L 0 5 L 10 10 z',
+                stroke: 'transparent',
+                fill: '#222138',
+                transform: 'scale(0.001)'
+            },
+            '.marker-target': {
+                d: 'M 10 0 L 0 5 L 10 10 z',
+                stroke: 'transparent',
+                fill: '#222138',
+                transform: 'scale(0.001)'
+            },
+            '.connection': {
+                stroke: '#222138',
+                strokeDasharray: '0',
+                strokeWidth: 1,
+                fill: 'none'
+            },
+            '.connection-wrap': {
+                fill: 'none'
+            }
+        }
+    });
 
 })(joint);
 
-// 开关
-joint.shapes.basic.switch = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable" ><g></g><path/></g>',
-    defaults: _.defaultsDeep({
-        type: 'basic.switch',
-        size: { width: 35, height: 10 },
-        attrs: {
-            'path': { d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5' ,stroke:'black'}
-        }
-    }, joint.shapes.basic.Generic.prototype.defaults)
-})
+// // 开关
+// joint.shapes.basic.switch = joint.shapes.devs.Switch.extend({
+//     markup: '<g class="rotatable" ><g></g><path/></g>',
+//     defaults: _.defaultsDeep({
+//         type: 'basic.switch',
+//         size: {
+//             width: 35,
+//             height: 10
+//         },
+//         attrs: {
+//             'path': {
+//                 d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5',
+//                 stroke: 'black'
+//             }
+//         }
+//     }, joint.shapes.basic.Generic.prototype.defaults)
+// })
 
-
+// console.log(joint.shapes.basic.Generic.prototype.defaults)
 joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
     markup: [
         '<g class="rotatable">',
@@ -391,36 +123,143 @@ joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
 
     defaults: _.defaultsDeep({
         type: 'basic.Substation',
-        size: { width: 100, height: 50 },
+        size: {
+            width: 100,
+            height: 50
+        },
         attrs: {
-            'path': {  d: 'M0 0 V40' ,stroke:'black' },
-            '.one circle' : { r: 20,
-                stroke: 'black',refX2: 20, refY2: 25 ,fill: "transparent" ,strokeWidth: 1},
-            '.one text': { 'font-size': 14, text: '公变', refX2: 20, refY2: 25, 'y-alignment': 'middle', 'x-alignment': 'middle', fill: 'black' }
+            'path': {
+                d: 'M0 0 V40',
+                stroke: 'black'
+            },
+            '.one circle': {
+                r: 20,
+                stroke: 'black',
+                refX2: 20,
+                refY2: 25,
+                fill: "transparent",
+                strokeWidth: 1
+            },
+            '.one text': {
+                'font-size': 14,
+                text: '公变',
+                refX2: 20,
+                refY2: 25,
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black'
+            }
         }
 
     }, joint.shapes.basic.Generic.prototype.defaults)
 });
 
 // 隔离开关
-joint.shapes.basic.isolationSwitch = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
     markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g><text/></g>',
     defaults: _.defaultsDeep({
         type: 'basic.isolationSwitch',
-        size: { width: 35, height: 10 },
+        size: {
+            width: 35,
+            height: 10
+        },
         attrs: {
-            rect:{stroke:'black',width: 11.78, height: 43.23,'stroke-opacity':"0",fill:'none'},
-            '.line1': {x1:"6.2",x2:"6.2",y1:"0.35",y2:"14.26",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
-            '.line2': {x1:"6.2",x2:"6.2",y1:"26.54",y2:"43.23",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
-            '.line3': {x1:"6.2",x2:"0.35",y1:"26.26",y2:"13.65",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
-            '.line4': {x1:"0.72",x2:"11.78",y1:"14.3",y2:"14.3",fill:'none',stroke:'black','stroke-linecap':'round','stroke-linejoin':'round','stroke-width':'1px'},
-            text: {'font-size': 14, text: '隔离开关',  'y-alignment': 'middle', 'x-alignment': 'middle', fill: 'black','ref':'rect','refX':1,'refY':0.5,'refX2':-10,transform:'rotate(-90)'}
+            rect: {
+                stroke: 'black',
+                width: 11.78,
+                height: 43.23,
+                'stroke-opacity': "0",
+                fill: 'none'
+            },
+            '.line1': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "0.35",
+                y2: "14.26",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line2': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "26.54",
+                y2: "43.23",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line3': {
+                x1: "6.2",
+                x2: "0.35",
+                y1: "26.26",
+                y2: "13.65",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line4': {
+                x1: "0.72",
+                x2: "11.78",
+                y1: "14.3",
+                y2: "14.3",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            text: {
+                'font-size': 14,
+                text: '隔离开关',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                'ref': 'rect',
+                'refX': 1,
+                'refY': 0.5,
+                'refX2': -10,
+                transform: 'rotate(-90)'
+            }
         }
-    }, joint.shapes.basic.Generic.prototype.defaults)
+    }),
+    updateSwitchState: (modal, change, opt) => {
+        // console.log(modal)
+        let graph = modal.graph        
+        if (change === '0') {
+            modal.attr({
+                '.line4': {
+                    x1: 3.72,
+                    x2: 8.78
+                },
+                '.line3': {
+                    y2: 15.65
+                }
+            })
+            modal.changeLinkColor(graph,modal,'red')
+        } else if (change === '1') {
+            modal.attr({
+                '.line4': {
+                    x1: 0.72,
+                    x2: 11.78
+                },
+                '.line3': {
+                    y2: 13.65
+                }
+            })
+            modal.changeLinkColor(graph,modal,'black')            
+        }
+    }
 })
 
 // 负荷开关
-joint.shapes.basic.loadSwitch = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
     markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text/></g>',
     defaults: _.defaultsDeep({
         type: 'basic.loadSwitch',
@@ -434,7 +273,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.basic.Generic.extend({
                 width: 11.78,
                 height: 43.23,
                 'stroke-opacity': "0",
-                fill:'none'
+                fill: 'none'
             },
             '.line1': {
                 x1: "5.62",
@@ -493,7 +332,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.basic.Generic.extend({
                 rx: '2.67',
                 ry: '2.79',
                 fill: 'none',
-                stroke: 'black',                
+                stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
                 'stroke-width': '1px'
@@ -511,5 +350,34 @@ joint.shapes.basic.loadSwitch = joint.shapes.basic.Generic.extend({
                 transform: 'rotate(-90)'
             }
         }
-    }, joint.shapes.basic.Generic.prototype.defaults)
+    }, joint.shapes.basic.Generic.prototype.defaults),
+    updateSwitchState: (modal, change, opt) => {
+        // console.log(modal)
+        let graph = modal.graph        
+        if (change === '0') {
+            modal.attr({
+                '.line4': {
+                    x2: 2.35,
+                    x1: 9.05
+                },
+                '.line3': {
+                    x2: -0.36,
+                    y2:17.03
+                }
+            })
+            modal.changeLinkColor(graph,modal,'red')
+        } else if (change === '1') {
+            modal.attr({
+                '.line4': {
+                    x1: 11.05,
+                    x2: 0.36
+                },
+                '.line3': {
+                    y2: 15.03,
+                    x2:0.36
+                }
+            })
+            modal.changeLinkColor(graph,modal,'black')            
+        }
+    }
 })

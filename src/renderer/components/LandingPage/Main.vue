@@ -269,130 +269,29 @@ export default {
           }
         }
         ],
-        stencil: [{
-          type: 'basic.Rect',
-          size: {
-            width: 90,
-            height: 50
-          },
-          position: {
-            x: 10,
-            y: 20
-          },
-          outPorts: [],
-          attrs: {
-            '.': {
-              'data-tooltip': 'Substation',
-              'data-tooltip-position': 'middle',
-              'data-tooltip-position-selector': '.joint-stencil',
-              'name': 'Substation',
-              'data-element-code': ''
+        stencil: [
+          {
+            type: 'basic.isolationSwitch',
+            size: {
+              width: 15,
+              height: 44
             },
-            rect: {
-              rx: 2,
-              ry: 2,
-              width: 50,
-              height: 30,
-              fill: 'transparent',
-              stroke: 'black',
-              'stroke-width': 1,
-              'stroke-dasharray': '0'
+            position: {
+              x: 470,
+              y: 20
+            }
+          },
+          {
+            type: 'basic.loadSwitch',
+            size: {
+              width: 15,
+              height: 44
             },
-            text: {
-              text: '箱式公变',
-              fill: '#000',
-              'font-family': 'Roboto Condensed',
-              'font-weight': 'bold',
-              'font-size': 14,
-              'stroke-width': 0,
-              'y-alignment': 'middle'
+            position: {
+              x: 570,
+              y: 20
             }
           }
-        },
-        {
-          type: 'basic.Circle',
-          size: {
-            width: 50,
-            height: 50
-          },
-          position: {
-            x: 140,
-            y: 20
-          },
-          attrs: {
-            '.': {
-              'data-tooltip': '专变',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.joint-stencil'
-            },
-            circle: {
-              width: 50,
-              height: 30,
-              fill: 'transparent',
-              stroke: 'black',
-              'stroke-width': 1,
-              'stroke-dasharray': '0'
-            },
-            text: {
-              text: '专变',
-              fill: 'black',
-              'font-family': 'Roboto Condensed',
-              'font-weight': 'bold',
-              'font-size': 14,
-              'stroke-width': 0
-            }
-          }
-        }, {
-          type: 'basic.switch',
-          size: {
-            width: 35,
-            height: 10
-          },
-          position: {
-            x: 270,
-            y: 40
-          },
-          attrs: {
-            path: {
-              d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5',
-              stroke: 'black',
-              'stroke-width': 1,
-              fill: '#000'
-            }
-          }
-        }, {
-          type: 'basic.Substation',
-          size: {
-            width: 35,
-            height: 50
-          },
-          position: {
-            x: 370,
-            y: 20
-          }
-        },
-        {
-          type: 'basic.isolationSwitch',
-          size: {
-            width: 15,
-            height: 44
-          },
-          position: {
-            x: 470,
-            y: 20
-          }
-        },
-        {
-          type: 'basic.loadSwitch',
-          size: {
-            width: 15,
-            height: 44
-          },
-          position: {
-            x: 570,
-            y: 20
-          }
-        }
         ]
       },
       paper: '',
@@ -469,36 +368,6 @@ export default {
 
     // 画板新增元素之后,统计栏数量+1
     // 开关新增之后,给开关绑定事件
-    graph.on('add', cell => {
-      let type = cell.get('type')
-      switch (type) {
-        case 'basic.Substation':
-          _this.elementCounts.substation += 1
-          break
-        case 'basic.Circle':
-          _this.elementCounts.circle += 1
-          break
-        case 'basic.Rect':
-          _this.elementCounts.rect += 1
-          break
-        case 'basic.switch':
-          _this.elementCounts.switch += 1
-          cell.on('change:attrs', (element, newAttrs, opt) => {
-            switch (opt.propertyValue) {
-              case '#FFFFFF':
-                _this.changeLinkColor(element, 'red')
-                break
-              case '#000000':
-                _this.changeLinkColor(element, '#000000')
-                break
-            }
-          })
-          break
-        case 'isolationSwitch':
-          
-          break
-      }
-    })
     graph.on('remove', cell => {
       let type = cell.get('type')
       switch (type) {
@@ -592,7 +461,7 @@ export default {
         links.map(link => {
           link.attr({
             '.connection': {
-              stroke: 'red'
+              stroke: color
             }
           })
         })

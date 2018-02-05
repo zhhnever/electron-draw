@@ -28,6 +28,9 @@ App.config = App.config || {};
         content: '#f6f6f6'
       },
       {
+        content: '#FFFFFF'
+      },
+      {
         content: '#dcd7d7'
       },
       {
@@ -294,14 +297,15 @@ App.config = App.config || {};
         content: 'Triangle'
       }
     ],
-    switchState:[{
-      value:true,
-      content:'开'
-    },
-    {
-      value:false,
-      content:'关'
-    }]
+    switchState: [{
+        value: '1',
+        content: '开'
+      },
+      {
+        value: '0',
+        content: '关'
+      }
+    ]
   };
 
   App.config.inspector = {
@@ -482,280 +486,26 @@ App.config = App.config || {};
         }
       }
     },
-    'basic.Rect': {
-      inputs: {
-        attrs: {
-          text: {
-            text: {
-              type: 'content-editable',
-              label: 'Name',
-              group: 'text',
-              index: 1
-            },
-            'attrs': {
-              type: 'number',
-              label: '功率',
-              group: 'text',
-              index: 1
-            },
-          },
-          rect: {
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: '填充',
-              group: 'presentation',
-              index: 1
-            },
-            stroke: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              label: '边框',
-              group: 'presentation',
-              index: 2
-            },
-            'stroke-width': {
-              type: 'range',
-              min: 0,
-              max: 30,
-              step: 1,
-              defaultValue: 1,
-              unit: 'px',
-              label: '边框宽度',
-              group: 'presentation',
-              when: {
-                ne: {
-                  'attrs/rect/stroke': 'transparent'
-                }
-              },
-              index: 3
-            },
-            'stroke-dasharray': {
-              type: 'select-box',
-              options: options.strokeStyle,
-              label: '边框样式',
-              group: 'presentation',
-              when: {
-                and: [{
-                    ne: {
-                      'attrs/rect/stroke': 'transparent'
-                    }
-                  },
-                  {
-                    ne: {
-                      'attrs/rect/stroke-width': 0
-                    }
-                  }
-                ]
-              },
-              index: 4
-            }
-          },
-        }
-      },
-      groups: {
-        presentation: {
-          label: '样式',
-          index: 1
-        },
-        text: {
-          label: '属性',
-          index: 2
-        }
-      }
-    },
-    'basic.Circle': {
-      inputs: {
-        attrs: {
-          text: {
-            text: {
-              type: 'content-editable',
-              label: 'Text',
-              group: 'text',
-              index: 1
-            },
-            'font-size': {
-              type: 'range',
-              min: 5,
-              max: 80,
-              unit: 'px',
-              label: 'Font size',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 2
-            },
-            'font-family': {
-              type: 'select-box',
-              options: options.fontFamily,
-              label: 'Font family',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 3
-            },
-            'font-weight': {
-              type: 'select-box',
-              options: options.fontWeight,
-              label: 'Font thickness',
-              group: 'text',
-              when: {
-                ne: {
-                  'attrs/text/text': ''
-                }
-              },
-              index: 4
-            }
-          },
-          circle: {
-            'stroke-width': {
-              type: 'range',
-              min: 0,
-              max: 30,
-              step: 1,
-              defaultValue: 1,
-              unit: 'px',
-              label: '变宽宽度',
-              group: 'presentation',
-              when: {
-                ne: {
-                  'attrs/circle/stroke': 'transparent'
-                }
-              },
-              index: 3
-            },
-            'stroke-dasharray': {
-              type: 'select-box',
-              options: options.strokeStyle,
-              label: '边框样式',
-              group: 'presentation',
-              when: {
-                and: [{
-                    ne: {
-                      'attrs/circle/stroke': 'transparent'
-                    }
-                  },
-                  {
-                    ne: {
-                      'attrs/circle/stroke-width': 0
-                    }
-                  }
-                ]
-              },
-              index: 4
-            }
-          }
-        }
-      },
-      groups: {
-        presentation: {
-          label: 'Presentation',
-          index: 1
-        },
-        text: {
-          label: 'Text',
-          index: 2
-        }
-      }
-    },
-    'basic.switch': {
-      inputs: {
-        attrs: {
-          '.': {
-            name:{
-              type:'content-editable',
-              label:'编号',
-              group: 'presentation',
-              index: 1
-            }
-          },
-          path:{
-            fill: {
-              type: 'select',
-              options: options.switchState,
-              label: '开关状态',
-              group: 'presentation',
-              index: 2
-            }
-          }
-        }
-      },
-      groups: {
-        presentation: {
-          label: '状态',
-          index: 1
-        }
-      }
-    },
-    'basic.Substation': {
-      inputs: {
-        attrs: {
-          '.': {
-            number: {
-              type:'list',
-              group: 'presentation',
-              label: '数量',
-              item:{
-                type:'object',
-                properties:{
-                  attrs: {
-                    text: {
-                      text: {
-                        type: 'text',
-                        label: '编号',
-                        defaultValue: '',
-                        index: 1,
-                      }
-                    }
-                  }
-                }
-              }
-            },
-          },
-          '.one text':{
-            text: {
-              type: 'text',
-              label: '名称',
-              group: 'presentation',
-              index: 2
-            }
-          }
-        },
-      },
-      groups: {
-        presentation: {
-          label: '属性',
-          index: 1
-        }
-      }
-    },
     // 隔离开关配置
     'basic.isolationSwitch': {
       inputs: {
         attrs: {
           text: {
             text: {
-              type:'content-editable',
-              label:'编号',
-              group: 'presentation',            
-              index: 1 
+              type: 'content-editable',
+              label: '编号',
+              group: 'presentation',
+              index: 1
             }
           },
-          '.line4': {
-            x1:{
-              type: 'select',
-              options: options.isolationSwitchState,
-              label: '开关状态',
-              group: 'presentation',
-              index: 2
-            }
-          }
+        },
+        state: {
+          type: 'select',
+          options: options.switchState,
+          defaultValue:'1',          
+          label: '开关状态',
+          group: 'presentation',
+          index: 2
         }
       },
       groups: {
@@ -770,23 +520,22 @@ App.config = App.config || {};
     'basic.loadSwitch': {
       inputs: {
         attrs: {
-          '.':{
-            state:{
-              type: 'select',
-              options: options.switchState,
-              label: '开关状态',
-              group: 'presentation',
-              index: 2
-            }
-          },
           text: {
             text: {
-              type:'content-editable',
-              label:'编号',
-              group: 'presentation',            
-              index: 1 
+              type: 'content-editable',
+              label: '编号',
+              group: 'presentation',
+              index: 1
             }
           },
+        },
+        state: {
+          type: 'select',
+          options: options.switchState,
+          defaultValue:'1',
+          label: '开关状态',
+          group: 'presentation',
+          index: 2
         }
       },
       groups: {
