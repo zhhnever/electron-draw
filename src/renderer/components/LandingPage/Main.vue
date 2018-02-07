@@ -144,130 +144,131 @@ export default {
             index: 10
           }
         },
-        tools: [{
-          type: 'undo',
-          name: 'undo',
-          attrs: {
-            button: {
-              'data-tooltip': 'Undo',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
+        tools: [
+          {
+            type: 'undo',
+            name: 'undo',
+            attrs: {
+              button: {
+                'data-tooltip': 'Undo',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'redo',
+            name: 'redo',
+            attrs: {
+              button: {
+                'data-tooltip': 'Redo',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'clear',
+            group: 'clear',
+            text: '清除画板',
+            attrs: {
+              button: {
+                id: 'btn-clear',
+                'data-tooltip': 'Clear Paper',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          // {
+          //   type: 'button',
+          //   name: 'png',
+          //   group: 'export',
+          //   text: '导出PNG',
+          //   attrs: {
+          //     button: {
+          //       id: 'btn-png',
+          //       'data-tooltip': 'Open as PNG in a pop-up',
+          //       'data-tooltip-position': 'top',
+          //       'data-tooltip-position-selector': '.toolbar-container'
+          //     }
+          //   }
+          // },
+          {
+            type: 'button',
+            name: 'print',
+            group: 'print',
+            text: '打印',
+            attrs: {
+              button: {
+                id: 'btn-print',
+                'data-tooltip': 'Open a Print Dialog',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'to-front',
+            group: 'order',
+            text: '上一层',
+            attrs: {
+              button: {
+                id: 'btn-to-front',
+                'data-tooltip': 'Bring Object to Front',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'to-back',
+            group: 'order',
+            text: '下一层',
+            attrs: {
+              button: {
+                id: 'btn-to-back',
+                'data-tooltip': 'Send Object to Back',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'label',
+            name: 'zoom-slider-label',
+            group: 'zoom',
+            text: '缩放:'
+          },
+          {
+            type: 'zoom-slider',
+            name: 'zoom-slider',
+            group: 'zoom'
+          },
+          {
+            type: 'separator',
+            group: 'snapline'
+          },
+          {
+            type: 'checkbox',
+            name: 'snapline',
+            group: 'snapline',
+            label: 'Snaplines:',
+            value: true,
+            attrs: {
+              input: {
+                id: 'snapline-switch'
+              },
+              label: {
+                'data-tooltip': 'Enable/Disable Snaplines',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
             }
           }
-        },
-        {
-          type: 'redo',
-          name: 'redo',
-          attrs: {
-            button: {
-              'data-tooltip': 'Redo',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        },
-        {
-          type: 'button',
-          name: 'clear',
-          group: 'clear',
-          text: '清除画板',
-          attrs: {
-            button: {
-              id: 'btn-clear',
-              'data-tooltip': 'Clear Paper',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        },
-        // {
-        //   type: 'button',
-        //   name: 'png',
-        //   group: 'export',
-        //   text: '导出PNG',
-        //   attrs: {
-        //     button: {
-        //       id: 'btn-png',
-        //       'data-tooltip': 'Open as PNG in a pop-up',
-        //       'data-tooltip-position': 'top',
-        //       'data-tooltip-position-selector': '.toolbar-container'
-        //     }
-        //   }
-        // },
-        {
-          type: 'button',
-          name: 'print',
-          group: 'print',
-          text: '打印',
-          attrs: {
-            button: {
-              id: 'btn-print',
-              'data-tooltip': 'Open a Print Dialog',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        },
-        {
-          type: 'button',
-          name: 'to-front',
-          group: 'order',
-          text: '上一层',
-          attrs: {
-            button: {
-              id: 'btn-to-front',
-              'data-tooltip': 'Bring Object to Front',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        },
-        {
-          type: 'button',
-          name: 'to-back',
-          group: 'order',
-          text: '下一层',
-          attrs: {
-            button: {
-              id: 'btn-to-back',
-              'data-tooltip': 'Send Object to Back',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        },
-        {
-          type: 'label',
-          name: 'zoom-slider-label',
-          group: 'zoom',
-          text: '缩放:'
-        },
-        {
-          type: 'zoom-slider',
-          name: 'zoom-slider',
-          group: 'zoom'
-        },
-        {
-          type: 'separator',
-          group: 'snapline'
-        },
-        {
-          type: 'checkbox',
-          name: 'snapline',
-          group: 'snapline',
-          label: 'Snaplines:',
-          value: true,
-          attrs: {
-            input: {
-              id: 'snapline-switch'
-            },
-            label: {
-              'data-tooltip': 'Enable/Disable Snaplines',
-              'data-tooltip-position': 'top',
-              'data-tooltip-position-selector': '.toolbar-container'
-            }
-          }
-        }
         ],
         stencil: [
           {
@@ -289,6 +290,117 @@ export default {
             },
             position: {
               x: 570,
+              y: 20
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 70,
+              y: 20
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 170,
+              y: 20
+            },
+            attrs: {
+              text: {
+                text: 'PD'
+              },
+              '.label': {
+                text: '配电站'
+              }
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 370,
+              y: 20
+            },
+            attrs: {
+              text: {
+                text: 'XB'
+              },
+              '.label': {
+                text: '箱式变'
+              }
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 270,
+              y: 20
+            },
+            attrs: {
+              text: {
+                text: 'HW'
+              },
+              '.label': {
+                text: '环网柜'
+              }
+            }
+          },
+          {
+            type: 'basic.poleTypeTransformerPublic',
+            size: {
+              width: 20,
+              height: 44
+            },
+            position: {
+              x: 670,
+              y: 20
+            },
+            attrs: {
+              text: {
+                text: '柱上变压'
+              }
+            }
+          },
+          {
+            type: 'basic.poleTypeTransformer',
+            size: {
+              width: 20,
+              height: 44
+            },
+            position: {
+              x: 770,
+              y: 20
+            },
+            attrs: {
+              text: {
+                text: '柱上变压'
+              }
+            }
+          },
+          {
+            type: 'basic.circuitBreaker',
+            size: {
+              width: 10.2,
+              height: 44
+            },
+            position: {
+              x: 870,
               y: 20
             }
           }

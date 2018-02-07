@@ -305,6 +305,21 @@ App.config = App.config || {};
         value: '0',
         content: '关'
       }
+    ],
+    stationLabePostion:[
+      {
+        value:'bottom',
+        content:'下方'
+      },{
+        value:'top',
+        content:'上方'
+      },{
+        value:'left',
+        content:'左边'
+      },{
+        value:'right',
+        content:'右边'
+      },
     ]
   };
 
@@ -502,7 +517,7 @@ App.config = App.config || {};
         state: {
           type: 'select',
           options: options.switchState,
-          defaultValue:'1',          
+          defaultValue: '1',
           label: '开关状态',
           group: 'presentation',
           index: 2
@@ -532,7 +547,7 @@ App.config = App.config || {};
         state: {
           type: 'select',
           options: options.switchState,
-          defaultValue:'1',
+          defaultValue: '1',
           label: '开关状态',
           group: 'presentation',
           index: 2
@@ -544,8 +559,59 @@ App.config = App.config || {};
           index: 1
         }
       },
-
     },
+    'basic.KGStation': {
+      inputs: {
+        attrs: {
+          '.label': {
+            text: {
+              type: 'content-editable',
+              label: '名称',
+              group: 'presentation',
+              index: 1
+            }
+          },
+        },
+        devsInfomation: {
+            code: {
+              type: 'content-editable',
+              label: '编码',
+              group: 'property',
+              index: 3
+            },
+            num: {
+              type: 'content-editable',
+              label: '数量',
+              group: 'property',
+              index: 4
+            },
+            power: {
+              type: 'content-editable',
+              label: '功率',
+              group: 'property',
+              index: 5
+            },
+        },
+        lablePostion:{
+          type: 'select',
+          options: options.stationLabePostion,
+          defaultValue: '1',
+          label: '名称位置',
+          group: 'presentation',
+          index: 2
+        }
+      },
+      groups: {
+        presentation: {
+          label: '基础',
+          index: 1
+        },
+        property: {
+          label: '属性',
+          index: 1
+        }
+      },
+    }
   };
 
 })();

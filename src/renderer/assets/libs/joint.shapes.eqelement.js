@@ -17,45 +17,89 @@ import _ from 'lodash'
     // 状态改变之后 改变线路颜色
     'use strict';
     joint.shapes.basic.Generic.define('devs.Switch', {
-        devsInfomation: {
-        },
-        state: 0//开关状态,0是关,1是开
+        devsInfomation: {},
+        state: 0 //开关状态,0是关,1是开
     }, {
         initialize: function () {
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
             this.on('change:state', this.updateSwitchState, this); // 添加 监听状态改变的方法
         },
-        changeLinkColor: function (graph,element, color) {
+        changeLinkColor: function (graph, element, color) {
             let childCells = graph.getSuccessors(element)
             childCells.map(child => {
-              let links = graph.getConnectedLinks(child, {
-                inbound: true
-              })
-              links.map(link => {
-                link.attr({
-                  '.connection': {
-                    stroke: color
-                  }
+                let links = graph.getConnectedLinks(child, {
+                    inbound: true
                 })
-              })
+                links.map(link => {
+                    link.attr({
+                        '.connection': {
+                            stroke: color
+                        }
+                    })
+                })
             })
-          }
+        }
     });
     // 定义设备基类
-    joint.shapes.basic.Generic.define('devs.Equipment',{
+    joint.shapes.basic.Generic.define('devs.Equipment', {
         devsInfomation: {
-            name:'',
-            code:'',
-            num:1,
-            power:'',
+            name: '',
+            code: '',
+            num: 1,
+            power: '',
         },
-    },{
+        lablePostion: 'bottom'
+    }, {
         initialize: function () {
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-            this.on('change:devsInfomation', this.devsInfomation, this); // 添加 监听状态改变的方法
+            this.on('change:devsInfomation', this.updateDevsInfomation, this); // 添加 监听状态改变的方法
+            this.on('change:lablePostion', this.changeLabelPosstion, this); // 添加 监听状态改变的方法          
+        },
+        changeLabelPosstion: (modal, change, opt) => {
+            switch (change) {
+                case 'bottom':
+                    modal.attr({
+                        '.label': {
+                            'refY2': 35,
+                            'refX2': 0,
+                            transform: 'rotate(0)'
+                        }
+                    })
+                    break;
+                case 'top':
+                    modal.attr({
+                        '.label': {
+                            'refY2': -35,
+                            'refX2': 0,
+                            transform: 'rotate(0)'
+                        }
+                    })
+                    break;
+                case 'left':
+                    modal.attr({
+                        '.label': {
+                            'refY2': 0,
+                            'refX2': -35,
+                            transform: 'rotate(90)'
+                        }
+                    })
+                    break;
+                case 'right':
+                    modal.attr({
+                        '.label': {
+                            'refY2': 0,
+                            'refX2': 35,
+                            transform: 'rotate(90)'
+                        }
+                    })
+                    break;
+
+                default:
+                    break;
+            }
         }
     })
-    
+
     joint.dia.Link.define('app.Link', {
         router: {
             name: 'normal'
@@ -246,7 +290,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
     }),
     updateSwitchState: (modal, change, opt) => {
         // console.log(modal)
-        let graph = modal.graph        
+        let graph = modal.graph
         if (change === '0') {
             modal.attr({
                 '.line4': {
@@ -257,7 +301,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                     y2: 15.65
                 }
             })
-            modal.changeLinkColor(graph,modal,'red')
+            modal.changeLinkColor(graph, modal, 'red')
         } else if (change === '1') {
             modal.attr({
                 '.line4': {
@@ -268,7 +312,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                     y2: 13.65
                 }
             })
-            modal.changeLinkColor(graph,modal,'black')            
+            modal.changeLinkColor(graph, modal, 'black')
         }
     }
 })
@@ -368,7 +412,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
     }, joint.shapes.basic.Generic.prototype.defaults),
     updateSwitchState: (modal, change, opt) => {
         // console.log(modal)
-        let graph = modal.graph        
+        let graph = modal.graph
         if (change === '0') {
             modal.attr({
                 '.line4': {
@@ -377,10 +421,10 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 },
                 '.line3': {
                     x2: -0.36,
-                    y2:17.03
+                    y2: 17.03
                 }
             })
-            modal.changeLinkColor(graph,modal,'red')
+            modal.changeLinkColor(graph, modal, 'red')
         } else if (change === '1') {
             modal.attr({
                 '.line4': {
@@ -389,10 +433,226 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 },
                 '.line3': {
                     y2: 15.03,
-                    x2:0.36
+                    x2: 0.36
                 }
             })
-            modal.changeLinkColor(graph,modal,'black')            
+            modal.changeLinkColor(graph, modal, 'black')
         }
     }
+})
+
+joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
+    markup: '<g class="rotatable"><g class="scalable"><rect/><text/></g><g><text class="label"/></g></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.KGStation',
+        size: {
+            width: 35,
+            height: 35
+        },
+        attrs: {
+            rect: {
+                stroke: 'black',
+                width: 40,
+                height: 40,
+                fill: 'none'
+            },
+            text: {
+                'font-size': 14,
+                text: 'KG',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                'ref': 'rect',
+                'refX': 0.5,
+                'refY': 0.5,
+            },
+            '.label': {
+                'font-size': 14,
+                text: '开关站',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                'ref': 'rect',
+                'refX': 0.5,
+                'refY': 0.5,
+                'refY2': 35
+            }
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults),
+    updateDevsInfomation: (modal, change, opt) => {
+
+    }
+})
+
+// 柱上变压器(共)
+
+joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
+    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.poleTypeTransformerPublic',
+        size: {
+            width: 20,
+            height: 44
+        },
+        attrs: {
+            '.p1': {
+                d: 'M11.75,22.71a11.38,11.38,0,0,0-.47,22.74,11.38,11.38,0,0,0,.47-22.74Z',
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1: "11.6",
+                x2: "11.6",
+                y1: "4.67",
+                y2: "0.3",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1: "11.59",
+                x2: "11.59",
+                y1: "45.52",
+                y2: "49.89",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.p2': {
+                d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
+                fill: 'silver',
+                'fill-rule': 'evenodd',
+                stroke: 'black',
+            },
+            'p3': {
+                d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            text: {
+                'font-size': 12,
+                text: '柱上变压器',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                ref: '.p2',
+                'refX': 1,
+                'refY': 18,
+                'refX2': -10,
+                transform: 'rotate(-90)'
+            },
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 柱上变压器(专)
+
+joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
+    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.poleTypeTransformer',
+        size: {
+            width: 20,
+            height: 44
+        },
+        attrs: {
+            '.p1': {
+                d: 'M11.75,22.71a11.38,11.38,0,0,0-.47,22.74,11.38,11.38,0,0,0,.47-22.74Z',
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1: "11.6",
+                x2: "11.6",
+                y1: "4.67",
+                y2: "0.3",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1: "11.59",
+                x2: "11.59",
+                y1: "45.52",
+                y2: "49.89",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.p2': {
+                d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            'p3': {
+                d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            text: {
+                'font-size': 12,
+                text: '柱上变压器',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                ref: '.p2',
+                'refX': 1,
+                'refY': 18,
+                'refX2': -10,
+                transform: 'rotate(-90)'
+            },
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 断合器
+joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.circuitBreaker',
+        size: {
+            width: 10.2,
+            height: 44
+        },
+        attrs: {
+            rect: {
+                width: "7.89",
+                height: "22.41",
+                x: "0.34",
+                y: "6.23",
+                fill: '#8c8c8c',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1:"4.38",x2:"4.38",y1:"0.34",y2:"5.95",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1:"4.38",x2:"4.38",y1:"34.24",y2:"28.64",
+                fill: 'none',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            text: {
+                'font-size': 12,
+                text: '断合器',
+                'y-alignment': 'middle',
+                'x-alignment': 'middle',
+                fill: 'black',
+                ref: 'rect',
+                'refX': 1,
+                'refY': 0.5,
+                'refX2': -10,
+                'refY2': -10,                
+                transform: 'rotate(-90)'
+            },
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
 })
