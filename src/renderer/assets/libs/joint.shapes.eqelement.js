@@ -129,10 +129,10 @@ import _ from 'lodash'
                 stroke: '#222138',
                 strokeDasharray: '0',
                 strokeWidth: 1,
-                fill: 'none'
+                fill: 'transparent'
             },
             '.connection-wrap': {
-                fill: 'none'
+                fill: 'transparent'
             }
         }
     });
@@ -228,14 +228,14 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                 width: 11.78,
                 height: 43.23,
                 'stroke-opacity': "0",
-                fill: 'none'
+                fill: 'transparent'
             },
             '.line1': {
                 x1: "6.2",
                 x2: "6.2",
                 y1: "0.35",
                 y2: "14.26",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -246,7 +246,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                 x2: "6.2",
                 y1: "26.54",
                 y2: "43.23",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -257,7 +257,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                 x2: "0.35",
                 y1: "26.26",
                 y2: "13.65",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -268,7 +268,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                 x2: "11.78",
                 y1: "14.3",
                 y2: "14.3",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -332,14 +332,14 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 width: 11.78,
                 height: 43.23,
                 'stroke-opacity': "0",
-                fill: 'none'
+                fill: 'transparent'
             },
             '.line1': {
                 x1: "5.62",
                 x2: "5.62",
                 y1: "0.35",
                 y2: "14.28",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -350,7 +350,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 x2: "5.62",
                 y1: "42.43",
                 y2: "31.28",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -361,7 +361,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 x2: "1.36",
                 y1: "31.18",
                 y2: "15.03",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -372,7 +372,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 x2: "0.35",
                 y1: "14.59",
                 y2: "14.59",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -383,14 +383,14 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 cy: '17.99',
                 rx: '2.67',
                 ry: '2.79',
-                fill: 'none',
+                fill: 'transparent',
             },
             '.ell2': {
                 cx: '5.61',
                 cy: '17.99',
                 rx: '2.67',
                 ry: '2.79',
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-linecap': 'round',
                 'stroke-linejoin': 'round',
@@ -454,7 +454,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
                 stroke: 'black',
                 width: 40,
                 height: 40,
-                fill: 'none'
+                fill: 'transparent'
             },
             text: {
                 'font-size': 14,
@@ -479,7 +479,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
         }
     }, joint.shapes.basic.Generic.prototype.defaults),
     updateDevsInfomation: (modal, change, opt) => {
-
+        // todo 更新信息
     }
 })
 
@@ -496,7 +496,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
         attrs: {
             '.p1': {
                 d: 'M11.75,22.71a11.38,11.38,0,0,0-.47,22.74,11.38,11.38,0,0,0,.47-22.74Z',
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -505,7 +505,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
                 x2: "11.6",
                 y1: "4.67",
                 y2: "0.3",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -514,7 +514,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
                 x2: "11.59",
                 y1: "45.52",
                 y2: "49.89",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -526,7 +526,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
             },
             'p3': {
                 d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -559,7 +559,7 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
         attrs: {
             '.p1': {
                 d: 'M11.75,22.71a11.38,11.38,0,0,0-.47,22.74,11.38,11.38,0,0,0,.47-22.74Z',
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -568,7 +568,7 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
                 x2: "11.6",
                 y1: "4.67",
                 y2: "0.3",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -577,19 +577,19 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
                 x2: "11.59",
                 y1: "45.52",
                 y2: "49.89",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
             '.p2': {
                 d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
             'p3': {
                 d: "M11.75,4.59a11.37,11.37,0,0,0-.47,22.74,11.37,11.37,0,0,0,.47-22.74Z",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
@@ -630,13 +630,13 @@ joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
             },
             '.l1': {
                 x1:"4.38",x2:"4.38",y1:"0.34",y2:"5.95",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },
             '.l2': {
                 x1:"4.38",x2:"4.38",y1:"34.24",y2:"28.64",
-                fill: 'none',
+                fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
             },

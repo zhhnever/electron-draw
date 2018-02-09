@@ -1,7 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, Menu, Tray, ipcMain } from 'electron'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -46,6 +45,43 @@ app.on('activate', () => {
   }
 })
 
+const menuTemplate = [
+  {
+    label: '文件',
+    submenu: [
+      {
+        label: '打开',
+        click () {
+          mainWindow.webContents.send('action', 'open')
+        },
+        accelerator: 'CmdOrCtrl+O'
+      },
+      {
+        label: '保存',
+        role: 'save'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: '关闭',
+        role: 'close',
+        accelerator: 'CmdOrCtrl+X'
+      }
+    ]
+  },
+  {
+    label: '帮助',
+    submenu: [
+      {
+        role: '关于我们'
+      }
+    ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
 /**
  * Auto Updater
  *

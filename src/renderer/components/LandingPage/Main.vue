@@ -4,24 +4,16 @@
     <div class="list">
       <ul>
         <li class="selected">
-          <img src="../../assets/images/icon.png" alt="">
           <span>基础</span>
         </li>
         <li>
-          <img src="../../assets/images/icon.png" alt="">
-          <span>架空线路设备</span>
+          <span>配电设备</span>
         </li>
         <li>
-          <img src="../../assets/images/icon.png" alt="">
-          <span>厂站</span>
+          <span>开断设备</span>
         </li>
         <li>
-          <img src="../../assets/images/icon.png" alt="">
-          <span>用电设备</span>
-        </li>
-        <li>
-          <img src="../../assets/images/icon.png" alt="">
-          <span>公共设备</span>
+          <span>其他</span>
         </li>
       </ul>
     </div>
@@ -33,50 +25,60 @@
         <li>
           <div id=""></div>
         </li>
-        <li>3333333333</li>
-        <li>4444444444</li>
-        <li>5555555555</li>
-        <li>6666666666</li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
       </ul>
     </div>
     <div class="main">
-      <div id="configuration" class="configuration">
-        <div id="config" class="config"></div>
-        <div id="table" class="table">
-          <table class="altrowstable">
-            <tbody>
-              <tr>
-                <td colspan="2">线路名称</td>
-                <td>XXX线路</td>
-              </tr>
-              <tr>
-                <td rowspan="7">户台KVA</td>
-              </tr>
-              <tr>
-                <td>杆上公变</td>
-                <td>{{ elementCounts.rect }}</td>
-              </tr>
-              <tr>
-                <td>箱式公变</td>
-                <td>{{ elementCounts.substation }}</td>
-              </tr>
-              <tr>
-                <td>室内公变</td>
-                <td>0</td>
-              </tr>
-              <tr>
-                <td>专变</td>
-                <td>{{ elementCounts.circle }}</td>
-              </tr>
-              <tr>
-                <td>开关</td>
-                <td>{{ elementCounts.switch }}</td>
-              </tr>
-              <!-- <tr>
+      <div id="configuration" class="contentLeft">
+        <div class="attrSetting">
+          <div class="attrSettingHead">
+            属性设置
+          </div>
+          <div id="config" class="attrSettingContent">
+          </div>
+        </div>
+        <div class="deviceStatistics">
+          <div class="deviceStatisticsHead">
+            设备统计
+          </div>
+          <div id="table" class="deviceStatisticsContent">
+            <table class="altrowstable">
+              <tbody>
+                <tr>
+                  <td colspan="2">线路名称</td>
+                  <td>XXX线路</td>
+                </tr>
+                <tr>
+                  <td rowspan="7">户台KVA</td>
+                </tr>
+                <tr>
+                  <td>杆上公变</td>
+                  <td>{{ elementCounts.rect }}</td>
+                </tr>
+                <tr>
+                  <td>箱式公变</td>
+                  <td>{{ elementCounts.substation }}</td>
+                </tr>
+                <tr>
+                  <td>室内公变</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>专变</td>
+                  <td>{{ elementCounts.circle }}</td>
+                </tr>
+                <tr>
+                  <td>开关</td>
+                  <td>{{ elementCounts.switch }}</td>
+                </tr>
+                <!-- <tr>
                 <td>双电源</td>
                 <td>2</td>
               </tr> -->
-              <!-- <tr>
+                <!-- <tr>
                 <td rowspan="10">线路</td>
               </tr>
               <tr>
@@ -91,8 +93,9 @@
                 <td>双电源</td>
                 <td>2</td>
               </tr> -->
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div id="paperScroller"></div>
@@ -211,27 +214,13 @@ export default {
           },
           {
             type: 'button',
-            name: 'to-front',
-            group: 'order',
-            text: '上一层',
+            name: 'tuopu',
+            group: 'print',
+            text: '拓扑图',
             attrs: {
               button: {
-                id: 'btn-to-front',
-                'data-tooltip': 'Bring Object to Front',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'button',
-            name: 'to-back',
-            group: 'order',
-            text: '下一层',
-            attrs: {
-              button: {
-                id: 'btn-to-back',
-                'data-tooltip': 'Send Object to Back',
+                id: 'btn-topu',
+                'data-tooltip': 'Open a Print Dialog',
                 'data-tooltip-position': 'top',
                 'data-tooltip-position-selector': '.toolbar-container'
               }
@@ -462,8 +451,6 @@ export default {
       'png:pointerclick': function () {
         _this.openAsPNG()
       },
-      'to-front:pointerclick': _.bind(this.selection.collection.invoke, this.selection.collection, 'toFront'),
-      'to-back:pointerclick': _.bind(this.selection.collection.invoke, this.selection.collection, 'toBack'),
       'snapline:change': _.bind(this.changeSnapLines, this),
       'clear:pointerclick': function () {
         _this.graph.clear()
@@ -472,6 +459,13 @@ export default {
       'print:pointerclick': function () {
         console.log(_this.paper)
         _this.paper.print()
+      },
+      'tuopu:pointerclick': function () {
+        // 生成拓扑图
+        let sources = _this.graph.getSources()
+        sources.map(rootNode => {
+          let childNode = _this.graph.getSuccessors(rootNode, { breadthFirst: true })
+        })
       },
       'grid-size:change': _.bind(this.paper.setGridSize, this.paper)
     })
@@ -536,6 +530,7 @@ export default {
         ]
       }
       let halo = new joint.ui.Halo(options)
+      halo.removeHandle('resize')
       halo.render()
     },
     createInspector: function (cell) {
@@ -593,6 +588,7 @@ export default {
 </script>
 <style scoped>
 @import url("../../assets/libs/rappid.min.css");
+@import url("../../assets/css/style.css");
 .main {
   width: 100%;
   height: 100%;
@@ -609,16 +605,10 @@ export default {
 }
 
 #configuration {
-  position: absolute;
-  width: 300px;
-  /* height: 100%; */
-  bottom: 0px;
-  left: 0;
-  top: 188px;
-  border: 1px solid #cdcdcd;
+
 }
 
-.config {
+/* .config {
   position: absolute;
   width: 100%;
   bottom: 300px;
@@ -637,7 +627,7 @@ export default {
   background-color: rgb(240, 240, 240);
   overflow: scroll;
   overflow-x: hidden;
-}
+} */
 
 table.altrowstable {
   /* font-family: verdana, arial, sans-serif; */
@@ -685,18 +675,24 @@ table.altrowstable td {
   margin: 0;
   width: 100%;
   height: 100%;
-  background-color: #cdcdcd;
+  background-color: white;
+  border-bottom: 1px solid #37ACCB;
   user-select: none;
 }
 
 .list ul li {
-  display: inline-block;
-  padding: 0 5px;
-  margin: 0;
+  /* display: inline-block; */
+  float: left;
+  position: relative;
+  /* padding: 0px 10px; */
+  background-color: #37ACCB;
+  border-right: 1px solid #37ACCB;
+  width: 100px;
+  text-align: center
 }
 
 .list ul .selected {
-  background-color: rgb(240, 240, 240);
+  background-color: white;
 }
 
 .list ul li img {

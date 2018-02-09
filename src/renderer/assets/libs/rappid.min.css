@@ -2940,7 +2940,7 @@ joint-halo.joint-theme-material.surrounding.tiny .handle.w {
 }
 
 .joint-inspector .hidden {
-  display: none!important
+  /* display: none!important */
 }
 
 .joint-inspector .joint-select-box {
@@ -7181,9 +7181,10 @@ div.joint-toolbar button.joint-widget {
 }
 
 .joint-toolbar.joint-theme-modern {
-  background: #f6f6f6;
+  background: white;
   padding: 10px;
-  box-sizing: border-box
+  box-sizing: border-box;
+  border-bottom: 1px solid #37ACCB;
 }
 
 .joint-widget[data-type=zoomSlider] output,
