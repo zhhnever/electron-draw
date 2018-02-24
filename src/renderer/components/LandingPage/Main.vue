@@ -111,6 +111,7 @@ import inspectorConfig from '../../assets/libs/inspector.js'
 import $ from 'jquery'
 import _ from 'lodash'
 import BasicStencil from '../Stencil/Basic'
+import fs from 'fs'
 export default {
   data: function () {
     return {
@@ -149,6 +150,30 @@ export default {
         },
         tools: [
           {
+            type: 'button',
+            name: 'save',
+            text: '保存',
+            attrs: {
+              button: {
+                'data-tooltip': '保存',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
+            type: 'button',
+            name: 'open',
+            text: '打开',
+            attrs: {
+              button: {
+                'data-tooltip': '打开',
+                'data-tooltip-position': 'top',
+                'data-tooltip-position-selector': '.toolbar-container'
+              }
+            }
+          },
+          {
             type: 'undo',
             name: 'undo',
             attrs: {
@@ -184,20 +209,6 @@ export default {
               }
             }
           },
-          // {
-          //   type: 'button',
-          //   name: 'png',
-          //   group: 'export',
-          //   text: '导出PNG',
-          //   attrs: {
-          //     button: {
-          //       id: 'btn-png',
-          //       'data-tooltip': 'Open as PNG in a pop-up',
-          //       'data-tooltip-position': 'top',
-          //       'data-tooltip-position-selector': '.toolbar-container'
-          //     }
-          //   }
-          // },
           {
             type: 'button',
             name: 'print',
@@ -418,6 +429,7 @@ export default {
   },
   mounted: function () {
     const _this = this
+    const ipcRenderer = this.$electron.ipcRenderer
     this.tabChangeJQuery() // 标签页切换
     joint.setTheme('modern') // 主题风格
     this.$store.commit('init', $('#paperScroller')) // 初始化paper
@@ -432,6 +444,30 @@ export default {
     let selection = this.selection = this.$store.state.paper.selection
     let snaplines = this.snaplines = this.$store.state.paper.snaplines
     let stencil = this.stencil = this.$store.state.paper.stencil.basic
+    ipcRenderer.on('selected-file', function (event, path) {
+      if (path) {
+        fs.readFile(path[0], {encoding: 'utf-8'}, (err, data) => {
+          if (err) {
+            console.log(err)
+          }
+          if (data) {
+            console.log(data)
+            let graphData = JSON.parse(data)
+            graph.fromJSON(graphData)
+          }
+        })
+      }
+    })
+    ipcRenderer.on('saved-file', function (event, path) {
+      if (path) {
+        let data = JSON.stringify(graph.toJSON())
+        fs.writeFile(path, data, {encoding: 'utf-8'}, function (err) {
+          if (err) {
+            console.log('写入失败')
+          }
+        })
+      }
+    })
     // 监听元素点击事件
     paper.on('element:pointerup link:options', cellView => {
       // console.log(cellView)
@@ -467,7 +503,13 @@ export default {
           let childNode = _this.graph.getSuccessors(rootNode, { breadthFirst: true })
         })
       },
-      'grid-size:change': _.bind(this.paper.setGridSize, this.paper)
+      'grid-size:change': _.bind(this.paper.setGridSize, this.paper),
+      'open:pointerclick': function () {
+        ipcRenderer.send('open-file-dialog')
+      },
+      'save:pointerclick': function () {
+        ipcRenderer.send('save-file-dialog')
+      }
     })
     $('#toolbar').append(toolbar.el)
     toolbar.render()
@@ -495,7 +537,6 @@ export default {
   methods: {
     cellPulgin: function (cellView) {
       let cell = cellView.model
-      console.log(cell)
       if (cell.isLink()) return
       let options = {
         graph: this.graph,
@@ -605,7 +646,6 @@ export default {
 }
 
 #configuration {
-
 }
 
 /* .config {
@@ -676,7 +716,7 @@ table.altrowstable td {
   width: 100%;
   height: 100%;
   background-color: white;
-  border-bottom: 1px solid #37ACCB;
+  border-bottom: 1px solid #37accb;
   user-select: none;
 }
 
@@ -685,10 +725,10 @@ table.altrowstable td {
   float: left;
   position: relative;
   /* padding: 0px 10px; */
-  background-color: #37ACCB;
-  border-right: 1px solid #37ACCB;
+  background-color: #37accb;
+  border-right: 1px solid #37accb;
   width: 100px;
-  text-align: center
+  text-align: center;
 }
 
 .list ul .selected {

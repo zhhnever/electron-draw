@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, Tray, ipcMain } from 'electron'
+import { app, BrowserWindow, Menu, Tray, ipcMain, dialog } from 'electron'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -52,13 +52,30 @@ const menuTemplate = [
       {
         label: '打开',
         click () {
-          mainWindow.webContents.send('action', 'open')
+          dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [{name: '数图文件', extensions: ['json']}]
+          }, function (file) {
+            if (file) mainWindow.webContents.send('selected-file', file)
+          })
         },
         accelerator: 'CmdOrCtrl+O'
       },
       {
         label: '保存',
-        role: 'save'
+        role: 'save',
+        accelerator: 'CmdOrCtrl+S',
+        click () {
+          const options = {
+            title: '保存文件',
+            filters: [
+              { name: '数图文件', extensions: ['json'] }
+            ]
+          }
+          dialog.showSaveDialog(options, function (filename) {
+            mainWindow.webContents.send('saved-file', filename)
+          })
+        }
       },
       {
         type: 'separator'
@@ -101,3 +118,22 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
  */
+ipcMain.on('open-file-dialog', function (event) {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [{name: '数图文件', extensions: ['json']}]
+  }, function (file) {
+    if (file) event.sender.send('selected-file', file)
+  })
+})
+ipcMain.on('save-file-dialog', function (event) {
+  const options = {
+    title: '保存文件',
+    filters: [
+      { name: '数图文件', extensions: ['json'] }
+    ]
+  }
+  dialog.showSaveDialog(options, function (filename) {
+    event.sender.send('saved-file', filename)
+  })
+})
