@@ -611,6 +611,25 @@ App.config = App.config || {};
           index: 1
         }
       },
+    },
+    'basic.textBox': {
+      inputs:{
+        attrs: {
+          
+        },
+        content:{
+          type: 'textarea',
+          label: '文本',
+          group: 'presentation',
+          index: 1
+        }
+      },
+      groups: {
+        presentation: {
+          label: '基础',
+          index: 1
+        }
+      },
     }
   };
 

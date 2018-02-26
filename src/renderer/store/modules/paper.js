@@ -60,7 +60,7 @@ const mutations = {
     let stencil = new joint.ui.Stencil({
       paper: state.paper,
       snaplines: state.snaplines,
-      width: 1000,
+      width: 1920,
       height: 200,
       // search: { '*': ['type'] },
       dropAnimation: {
@@ -86,6 +86,7 @@ const mutations = {
       if ((evt.ctrlKey || evt.metaKey) && !(cellView.model instanceof joint.dia.Link)) {
         selection.collection.add(cellView.model)
       }
+      console.log(selection.collection)
     })
 
     selection.on('selection-box:pointerdown', function (cellView, evt) {

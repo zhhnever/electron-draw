@@ -403,6 +403,29 @@ export default {
               x: 870,
               y: 20
             }
+          },
+          {
+            type: 'basic.cabinet',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 940,
+              y: 20
+            }
+          },
+          {
+            type: 'basic.textBox',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 1040,
+              y: 20
+            },
+            content: '11231232312'
           }
         ]
       },
@@ -539,39 +562,12 @@ export default {
       let cell = cellView.model
       if (cell.isLink()) return
       let options = {
-        graph: this.graph,
-        paper: this.paper,
-        cellView: cellView,
-        rotateAngleGrid: 2,
-        type: 'surrounding',
-        clone: function (cell, opt) {
-          let clone = cell.clone().unset('z')
-          if (opt.fork) clone.translate(cell.get('size').width + 20, 0)
-          if (opt.clone) clone.translate(20, 20)
-          return clone
-        }
-      }
-      if (cell.get('multiplePieToggleButtons')) {
-        options.pieToggles = [{
-          name: 'left',
-          position: 'w'
-        },
-        {
-          name: 'right',
-          position: 'e'
-        },
-        {
-          name: 'top',
-          position: 'n'
-        },
-        {
-          name: 'bottom',
-          position: 's'
-        }
-        ]
+        cellView: cellView
       }
       let halo = new joint.ui.Halo(options)
-      halo.removeHandle('resize')
+      if (cell.get('type') !== 'basic.cabinet') {
+        // halo.removeHandle('resize')
+      }
       halo.render()
     },
     createInspector: function (cell) {
@@ -648,26 +644,6 @@ export default {
 #configuration {
 }
 
-/* .config {
-  position: absolute;
-  width: 100%;
-  bottom: 300px;
-  left: 0;
-  top: 0;
-}
-
-.table {
-  position: absolute;
-  width: 300px;
-  bottom: 0px;
-  left: 0;
-  height: 300px;
-  padding: 20px;
-  border-top: #333333 solid 1px;
-  background-color: rgb(240, 240, 240);
-  overflow: scroll;
-  overflow-x: hidden;
-} */
 
 table.altrowstable {
   /* font-family: verdana, arial, sans-serif; */

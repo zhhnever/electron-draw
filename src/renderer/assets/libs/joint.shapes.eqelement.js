@@ -3,8 +3,6 @@
 Copyright (c) 2015 client IO
 
  2017-11-20 
-
-
 This Source Code Form is subject to the terms of the Rappid Trial License
 , v. 2.0. If a copy of the Rappid License was not distributed with this
 file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
@@ -52,8 +50,8 @@ import _ from 'lodash'
     }, {
         initialize: function () {
             joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
-            this.on('change:devsInfomation', this.updateDevsInfomation, this); // 添加 监听状态改变的方法
-            this.on('change:lablePostion', this.changeLabelPosstion, this); // 添加 监听状态改变的方法          
+            this.on('change:devsInfomation', this.updateDevsInfomation, this); // 添加 监听信息改变的方法
+            this.on('change:lablePostion', this.changeLabelPosstion, this); // 添加 监听文本位置改变的方法          
         },
         changeLabelPosstion: (modal, change, opt) => {
             switch (change) {
@@ -139,83 +137,11 @@ import _ from 'lodash'
 
 })(joint);
 
-// // 开关
-// joint.shapes.basic.switch = joint.shapes.devs.Switch.extend({
-//     markup: '<g class="rotatable" ><g></g><path/></g>',
-//     defaults: _.defaultsDeep({
-//         type: 'basic.switch',
-//         size: {
-//             width: 35,
-//             height: 10
-//         },
-//         attrs: {
-//             'path': {
-//                 d: 'M0 0 H 20 V 10 H 0 Z M20 5 L35 5',
-//                 stroke: 'black'
-//             }
-//         }
-//     }, joint.shapes.basic.Generic.prototype.defaults)
-// })
-
-// console.log(joint.shapes.basic.Generic.prototype.defaults)
-joint.shapes.basic.Substation = joint.shapes.basic.Generic.extend({
-    markup: [
-        '<g class="rotatable">',
-        '<g class="scalable">',
-        '<path/>',
-        '</g>',
-        '<g class="one">',
-        '<g class="one-circle"><circle/><text/></g>',
-        '</g>',
-        '<g class="two">',
-        '<g class="two-circle"><circle/><text/></g>',
-        '</g>',
-        '<g class="three">',
-        '<g class="three-circle"><circle/><text/></g>',
-        '</g>',
-        '<g class="four">',
-        '<g class="four-circle"><circle/><text/></g>',
-        '</g>',
-        '',
-        '</g>'
-    ].join(''),
-
-    defaults: _.defaultsDeep({
-        type: 'basic.Substation',
-        size: {
-            width: 100,
-            height: 50
-        },
-        attrs: {
-            'path': {
-                d: 'M0 0 V40',
-                stroke: 'black'
-            },
-            '.one circle': {
-                r: 20,
-                stroke: 'black',
-                refX2: 20,
-                refY2: 25,
-                fill: "transparent",
-                strokeWidth: 1
-            },
-            '.one text': {
-                'font-size': 14,
-                text: '公变',
-                refX2: 20,
-                refY2: 25,
-                'y-alignment': 'middle',
-                'x-alignment': 'middle',
-                fill: 'black'
-            }
-        }
-
-    }, joint.shapes.basic.Generic.prototype.defaults)
-});
+// 
 
 // 隔离开关
 joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
-    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g><text/>',
     defaults: _.defaultsDeep({
         type: 'basic.isolationSwitch',
         size: {
@@ -233,7 +159,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
             '.line1': {
                 x1: "6.2",
                 x2: "6.2",
-                y1: "0.35",
+                y1: "0",
                 y2: "14.26",
                 fill: 'transparent',
                 stroke: 'black',
@@ -287,7 +213,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
                 transform: 'rotate(-90)'
             }
         }
-    }),
+    },joint.shapes.basic.Generic.prototype.defaults),
     updateSwitchState: (modal, change, opt) => {
         // console.log(modal)
         let graph = modal.graph
@@ -319,7 +245,7 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
 
 // 负荷开关
 joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
-    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.loadSwitch',
         size: {
@@ -547,7 +473,6 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
 })
 
 // 柱上变压器(专)
-
 joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
     markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
     defaults: _.defaultsDeep({
@@ -656,3 +581,111 @@ joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
         }
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
+// 柜体---->开关站柜体,变电柜柜体
+joint.shapes.basic.cabinet = joint.shapes.basic.Generic.extend({
+    markup:'<g class="rotatable"><g class="scalable"><rect/><line/></g></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.cabinet',
+        size: {
+            width: 44,
+            height: 44
+        },
+        attrs: {
+            rect: {
+                width:44,
+                height:44,
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            line:{
+                x1:'5',
+                y1:'5',
+                x2:'39',
+                y2:'5',
+                stroke: 'black',
+                'stroke-width': '3px'
+            }
+        },
+   
+    },joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 文本框
+joint.shapes.basic.Generic.define('basic.textBox', {
+    // see joint.css for more element styles
+    attrs: {
+        '.content': {
+            text: '',
+            style:'font-size:12px;margin:0;text-align:center'
+        },        
+        rect: {
+            fill: 'transparent',
+            stroke: '#000000',
+            width: 80,
+            height: 100
+        },
+    },
+    content: ''
+}, {
+    markup: [
+        '<g class="rotatable">',
+        // '<g class="scalable"><rect/></g>',
+        '<foreignObject class="fobj"><body xmlns="http://www.w3.org/1999/xhtml"><p class="content"/></body></foreignObject>',
+        '</g>'
+    ].join(''),
+
+    initialize: function() {
+
+        this.listenTo(this, 'change:size', this.updateSize);
+        this.listenTo(this, 'change:content', this.updateContent);
+        this.updateSize(this, this.get('size'));
+        this.updateContent(this, this.get('content'));
+        joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+    },
+
+    updateSize: function(cell, size) {
+
+        // Selector `foreignObject' doesn't work accross all browsers, we'r using class selector instead.
+        // We have to clone size as we don't want attributes.div.style to be same object as attributes.size.
+        this.attr({
+            '.fobj': joint.util.assign({}, size),
+            p: {
+                style:`font-size:12px;margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
+            }
+        });
+    },
+
+    updateContent: function(cell, content) {
+
+        if (joint.env.test('svgforeignobject')) {
+            // Content element is a <div> element.
+            this.attr({
+                '.content': {
+                    html: content
+                }
+            });
+
+        } else {
+            // Content element is a <text> element.
+            // SVG elements don't have innerHTML attribute.
+            this.attr({
+                '.content': {
+                    text: content
+                }
+            });
+        }
+    },
+
+    // Here for backwards compatibility:
+    setForeignObjectSize: function() {
+
+        this.updateSize.apply(this, arguments);
+    },
+
+    // Here for backwards compatibility:
+    setDivContent: function() {
+
+        this.updateContent.apply(this, arguments);
+    }
+});
