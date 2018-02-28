@@ -3932,7 +3932,7 @@ joint-halo.joint-theme-material.surrounding.tiny .handle.w {
 }
 
 .joint-inspector.joint-theme-modern select.select {
-  color: #ddd;
+  color: #000;
   -moz-appearance: none
 }
 

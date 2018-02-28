@@ -114,19 +114,19 @@ App.config = App.config || {};
 
     side: [{
         value: 'top',
-        content: 'Top Side'
+        content: '上方'
       },
       {
         value: 'right',
-        content: 'Right Side'
+        content: '右方'
       },
       {
         value: 'bottom',
-        content: 'Bottom Side'
+        content: '下方'
       },
       {
         value: 'left',
-        content: 'Left Side'
+        content: '左方'
       }
     ],
 
@@ -306,19 +306,56 @@ App.config = App.config || {};
         content: '关'
       }
     ],
-    stationLabePostion:[
+    stationLabePostion: [{
+      value: 'bottom',
+      content: '下方'
+    }, {
+      value: 'top',
+      content: '上方'
+    }, {
+      value: 'left',
+      content: '左边'
+    }, {
+      value: 'right',
+      content: '右边'
+    }, ],
+    strokeOpacity: [{
+        value: '0',
+        content: '无'
+      },
       {
-        value:'bottom',
-        content:'下方'
-      },{
-        value:'top',
-        content:'上方'
-      },{
-        value:'left',
-        content:'左边'
-      },{
-        value:'right',
-        content:'右边'
+        value: '1',
+        content: '有'
+      },
+    ],
+    fontSize: [{
+        value: '8px',
+        content: '8'
+      },
+      {
+        value: '10px',
+        content: '10'
+      }, {
+        value: '12px',
+        content: '12'
+      }, {
+        value: '14px',
+        content: '14'
+      }, {
+        value: '18px',
+        content: '18'
+      }, {
+        value: '20px',
+        content: '20'
+      }, {
+        value: '24px',
+        content: '24'
+      }, {
+        value: '36px',
+        content: '36'
+      }, {
+        value: '48px',
+        content: '48'
       },
     ]
   };
@@ -328,23 +365,11 @@ App.config = App.config || {};
       inputs: {
         attrs: {
           '.connection': {
-            strokeWidth: {
-              type: 'select-button-group',
-              options: options.strokeWidth,
-              group: 'connection',
-              label: 'Link thickness',
-              when: {
-                ne: {
-                  'attrs/.connection/stroke': 'transparent'
-                }
-              },
-              index: 4
-            },
             strokeDasharray: {
               type: 'select-box',
               options: options.strokeStyle,
               group: 'connection',
-              label: 'Link style',
+              label: '线路种类',
               when: {
                 ne: {
                   'attrs/.connection/stroke': 'transparent'
@@ -353,55 +378,13 @@ App.config = App.config || {};
               index: 5
             }
           },
-          '.marker-source': {
-            transform: {
-              type: 'select-box',
-              options: options.arrowheadSize,
-              group: 'marker-source',
-              label: 'Source arrowhead',
-              index: 1
-            },
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              group: 'marker-source',
-              label: 'Color',
-              when: {
-                ne: {
-                  'attrs/.marker-source/transform': 'scale(0.001)'
-                }
-              },
-              index: 2
-            }
-          },
-          '.marker-target': {
-            transform: {
-              type: 'select-box',
-              options: options.arrowheadSize,
-              group: 'marker-target',
-              label: 'Target arrowhead',
-              index: 1
-            },
-            fill: {
-              type: 'color-palette',
-              options: options.colorPalette,
-              group: 'marker-target',
-              label: 'Color',
-              when: {
-                ne: {
-                  'attrs/.marker-target/transform': 'scale(0.001)'
-                }
-              },
-              index: 2
-            }
-          }
         },
         router: {
           name: {
             type: 'select-button-group',
             options: options.router,
             group: 'connection',
-            label: 'Connection type',
+            label: '线路走向方式',
             index: 1,
             defaultValue: options.router['orthogonal']
           },
@@ -409,9 +392,9 @@ App.config = App.config || {};
             side: {
               type: 'select-box',
               options: options.side,
-              placeholder: 'Pick a side',
+              placeholder: '选择方向',
               group: 'connection',
-              label: 'Anchors side',
+              label: '转角方向',
               when: {
                 eq: {
                   'router/name': 'oneSide'
@@ -424,63 +407,6 @@ App.config = App.config || {};
             }
           }
         },
-        connector: {
-          name: {
-            type: 'select-button-group',
-            options: options.connector,
-            group: 'connection',
-            label: 'Connection style',
-            index: 3
-          }
-        },
-        labels: {
-          type: 'list',
-          group: 'labels',
-          label: 'Labels',
-          attrs: {
-            label: {
-              'data-tooltip': 'Set (possibly multiple) labels for the link',
-              'data-tooltip-position': 'right',
-              'data-tooltip-position-selector': '.joint-inspector'
-            }
-          },
-          item: {
-            type: 'object',
-            properties: {
-              attrs: {
-                text: {
-                  text: {
-                    type: 'text',
-                    label: 'text',
-                    defaultValue: 'label',
-                    index: 1,
-                    attrs: {
-                      label: {
-                        'data-tooltip': 'Set text of the label',
-                        'data-tooltip-position': 'right',
-                        'data-tooltip-position-selector': '.joint-inspector'
-                      }
-                    }
-                  }
-                }
-              },
-              position: {
-                type: 'select-box',
-                options: options.labelPosition || [],
-                defaultValue: 0.5,
-                label: 'Position',
-                index: 2,
-                attrs: {
-                  label: {
-                    'data-tooltip': 'Position the label relative to the source of the link',
-                    'data-tooltip-position': 'right',
-                    'data-tooltip-position-selector': '.joint-inspector'
-                  }
-                }
-              }
-            }
-          }
-        }
       },
       groups: {
         connection: {
@@ -500,6 +426,34 @@ App.config = App.config || {};
           index: 4
         }
       }
+    },
+    'basic.textLabel': {
+      inputs: {
+        attrs: {
+          text: {
+            text: {
+              type: 'content-editable',
+              label: '文本',
+              group: 'presentation',
+              index: 1
+            },
+            // 'font-size': {
+            //   type: 'range',
+            //   min: 5,
+            //   max: 30,
+            //   label: '字体大小',
+            //   group: 'presentation',
+            //   index: 2
+            // }
+          },
+        }
+      },
+      groups: {
+        presentation: {
+          label: '属性',
+          index: 1
+        }
+      },
     },
     // 隔离开关配置
     'basic.isolationSwitch': {
@@ -573,26 +527,26 @@ App.config = App.config || {};
           },
         },
         devsInfomation: {
-            code: {
-              type: 'content-editable',
-              label: '编码',
-              group: 'property',
-              index: 3
-            },
-            num: {
-              type: 'content-editable',
-              label: '数量',
-              group: 'property',
-              index: 4
-            },
-            power: {
-              type: 'content-editable',
-              label: '功率',
-              group: 'property',
-              index: 5
-            },
+          code: {
+            type: 'content-editable',
+            label: '编码',
+            group: 'property',
+            index: 3
+          },
+          num: {
+            type: 'content-editable',
+            label: '数量',
+            group: 'property',
+            index: 4
+          },
+          power: {
+            type: 'content-editable',
+            label: '功率',
+            group: 'property',
+            index: 5
+          },
         },
-        lablePostion:{
+        lablePostion: {
           type: 'select',
           options: options.stationLabePostion,
           defaultValue: '1',
@@ -613,15 +567,32 @@ App.config = App.config || {};
       },
     },
     'basic.textBox': {
-      inputs:{
+      inputs: {
         attrs: {
-          
+          rect: {
+            'stroke-opacity': {
+              type: 'select',
+              options: options.strokeOpacity,
+              defaultValue: '1',
+              label: '有无边框',
+              group: 'presentation',
+              index: 3
+            }
+          }
         },
-        content:{
+        content: {
           type: 'textarea',
           label: '文本',
           group: 'presentation',
           index: 1
+        },
+        fontSize: {
+          type: 'select',
+          options: options.fontSize,
+          defaultValue: '12px',
+          label: '文本大小',
+          group: 'presentation',
+          index: 2
         }
       },
       groups: {

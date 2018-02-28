@@ -17,7 +17,7 @@
         </li>
       </ul>
     </div>
-    <div class="content">
+    <div class="list-content">
       <ul>
         <li>
           <div id="basicStencil"></div>
@@ -110,7 +110,6 @@ import '../../assets/libs/joint.shapes.eqelement.js'
 import inspectorConfig from '../../assets/libs/inspector.js'
 import $ from 'jquery'
 import _ from 'lodash'
-import BasicStencil from '../Stencil/Basic'
 import fs from 'fs'
 export default {
   data: function () {
@@ -425,7 +424,19 @@ export default {
               x: 1040,
               y: 20
             },
-            content: '11231232312'
+            content: '文本框'
+          },
+          {
+            type: 'basic.textLabel',
+            size: {
+              width: 44,
+              height: 24
+            },
+            position: {
+              x: 1140,
+              y: 30
+            },
+            attrs: { text: { text: '标签', 'font-size': 40 } }
           }
         ]
       },
@@ -447,9 +458,6 @@ export default {
       }
     }
   },
-  components: {
-    'basic-stencil': BasicStencil
-  },
   mounted: function () {
     const _this = this
     const ipcRenderer = this.$electron.ipcRenderer
@@ -467,9 +475,12 @@ export default {
     let selection = this.selection = this.$store.state.paper.selection
     let snaplines = this.snaplines = this.$store.state.paper.snaplines
     let stencil = this.stencil = this.$store.state.paper.stencil.basic
+
+    // electron的渲染进程
+    // 接收来自主线程的保存和打开文件事件
     ipcRenderer.on('selected-file', function (event, path) {
       if (path) {
-        fs.readFile(path[0], {encoding: 'utf-8'}, (err, data) => {
+        fs.readFile(path[0], { encoding: 'utf-8' }, (err, data) => {
           if (err) {
             console.log(err)
           }
@@ -484,7 +495,7 @@ export default {
     ipcRenderer.on('saved-file', function (event, path) {
       if (path) {
         let data = JSON.stringify(graph.toJSON())
-        fs.writeFile(path, data, {encoding: 'utf-8'}, function (err) {
+        fs.writeFile(path, data, { encoding: 'utf-8' }, function (err) {
           if (err) {
             console.log('写入失败')
           }
@@ -498,6 +509,7 @@ export default {
       _this.cellPulgin(cellView)
       _this.createInspector(cell)
     })
+    // 工具栏
     let toolbar = new joint.ui.Toolbar({
       references: {
         paperScroller: this.paperScroller,
@@ -558,6 +570,7 @@ export default {
     })
   },
   methods: {
+    // 打开halo
     cellPulgin: function (cellView) {
       let cell = cellView.model
       if (cell.isLink()) return
@@ -565,16 +578,18 @@ export default {
         cellView: cellView
       }
       let halo = new joint.ui.Halo(options)
-      if (cell.get('type') !== 'basic.cabinet') {
-        // halo.removeHandle('resize')
+      if (cell.get('type') === 'basic.textLabel') {
+        halo.removeHandle('resize')
       }
       halo.render()
     },
+    // 左侧属性编辑栏的方法
     createInspector: function (cell) {
       joint.ui.Inspector.create('#config', _.extend({
         cell: cell
       }, inspectorConfig.inspectorConfig[cell.get('type')]))
     },
+    // 工具栏勾选对齐线的方法
     changeSnapLines: function (checked) {
       if (checked) {
         this.snaplines.startListening()
@@ -584,6 +599,7 @@ export default {
         this.stencil.options.snaplines = null
       }
     },
+    // 打开为png,暂时无用
     openAsPNG: function () {
       this.paper.toPNG(function (dataURL) {
         new joint.ui.Lightbox({
@@ -596,27 +612,13 @@ export default {
         stylesheet: this.exportStylesheet
       })
     },
-    changeLinkColor: function (element, color) {
-      let childCells = this.graph.getSuccessors(element)
-      childCells.map(child => {
-        let links = this.graph.getConnectedLinks(child, {
-          inbound: true
-        })
-        links.map(link => {
-          link.attr({
-            '.connection': {
-              stroke: color
-            }
-          })
-        })
-      })
-    },
+    // 标签页切换
     tabChangeJQuery: function () {
       $('.list').find('li').click(function () {
         let index = $(this).index()
         $(this).addClass('selected').siblings().removeClass('selected')
-        $('.content').find('li').eq(index).siblings().hide(100, function () {
-          $('.content').find('li').eq(index).show(200)
+        $('.list-content').find('li').eq(index).siblings().hide(100, function () {
+          $('.list-content').find('li').eq(index).show(200)
         })
       })
     }
@@ -643,7 +645,6 @@ export default {
 
 #configuration {
 }
-
 
 table.altrowstable {
   /* font-family: verdana, arial, sans-serif; */
@@ -722,20 +723,20 @@ table.altrowstable td {
   line-height: 30px;
 }
 
-.content {
+.list-content {
   width: 100%;
   height: 100px;
   background-color: rgb(240, 240, 240);
 }
 
-.content ul {
+.list-content ul {
   padding: 0;
   margin: 0;
   width: 100%;
   height: 100%;
 }
 
-.content ul li {
+.list-content ul li {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -743,7 +744,7 @@ table.altrowstable td {
   display: none;
 }
 
-.content ul li:first-child {
+.list-content ul li:first-child {
   display: block;
 }
 </style>

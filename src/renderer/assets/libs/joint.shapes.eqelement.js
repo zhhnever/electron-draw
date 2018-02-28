@@ -141,7 +141,8 @@ import _ from 'lodash'
 
 // 隔离开关
 joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
-    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g><text/>',
+    // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g><text/>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.isolationSwitch',
         size: {
@@ -245,7 +246,8 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
 
 // 负荷开关
 joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
-    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g></g>',
+    // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g></g>',    
     defaults: _.defaultsDeep({
         type: 'basic.loadSwitch',
         size: {
@@ -261,8 +263,8 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 fill: 'transparent'
             },
             '.line1': {
-                x1: "5.62",
-                x2: "5.62",
+                x1: "6.2",
+                x2: "6.2",
                 y1: "0.35",
                 y2: "14.28",
                 fill: 'transparent',
@@ -272,8 +274,8 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 'stroke-width': '1px'
             },
             '.line2': {
-                x1: "5.62",
-                x2: "5.62",
+                x1: "6.2",
+                x2: "6.2",
                 y1: "42.43",
                 y2: "31.28",
                 fill: 'transparent',
@@ -283,7 +285,7 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
                 'stroke-width': '1px'
             },
             '.line3': {
-                x1: "5.62",
+                x1: "6.2",
                 x2: "1.36",
                 y1: "31.18",
                 y2: "15.03",
@@ -412,7 +414,8 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
 // 柱上变压器(共)
 
 joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.poleTypeTransformerPublic',
         size: {
@@ -474,7 +477,8 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
 
 // 柱上变压器(专)
 joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
-    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.poleTypeTransformer',
         size: {
@@ -536,7 +540,8 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
 
 // 断合器
 joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
-    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
+    // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
+    markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.circuitBreaker',
         size: {
@@ -617,7 +622,7 @@ joint.shapes.basic.Generic.define('basic.textBox', {
     attrs: {
         '.content': {
             text: '',
-            style:'font-size:12px;margin:0;text-align:center'
+            style:'margin:0;text-align:center',
         },        
         rect: {
             fill: 'transparent',
@@ -626,11 +631,12 @@ joint.shapes.basic.Generic.define('basic.textBox', {
             height: 100
         },
     },
-    content: ''
+    content: '',
+    fontSize:'12px',
 }, {
     markup: [
         '<g class="rotatable">',
-        // '<g class="scalable"><rect/></g>',
+        '<g class="scalable"><rect/></g>',
         '<foreignObject class="fobj"><body xmlns="http://www.w3.org/1999/xhtml"><p class="content"/></body></foreignObject>',
         '</g>'
     ].join(''),
@@ -639,23 +645,34 @@ joint.shapes.basic.Generic.define('basic.textBox', {
 
         this.listenTo(this, 'change:size', this.updateSize);
         this.listenTo(this, 'change:content', this.updateContent);
+        this.listenTo(this, 'change:fontSize', this.updateFontSize);        
         this.updateSize(this, this.get('size'));
         this.updateContent(this, this.get('content'));
+        this.updateFontSize(this, this.get('fontSize'));        
         joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
     },
 
     updateSize: function(cell, size) {
-
         // Selector `foreignObject' doesn't work accross all browsers, we'r using class selector instead.
         // We have to clone size as we don't want attributes.div.style to be same object as attributes.size.
+
         this.attr({
             '.fobj': joint.util.assign({}, size),
             p: {
-                style:`font-size:12px;margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
+                style:`font-size:${this.get('fontSize')};margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
             }
         });
     },
-
+    // 改变字体大小
+    updateFontSize: function(cell, fontSize){
+        let size = this.get('size')
+        this.attr({
+            fontSize: fontSize,
+            p: {
+                style:`font-size:${fontSize};margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
+            }
+        })
+    },
     updateContent: function(cell, content) {
 
         if (joint.env.test('svgforeignobject')) {
@@ -689,3 +706,22 @@ joint.shapes.basic.Generic.define('basic.textBox', {
         this.updateContent.apply(this, arguments);
     }
 });
+
+// 文本标签
+joint.shapes.basic.textLabel =  joint.shapes.basic.Generic.extend({
+    markup:'<g class="rotatable"><text/></g>',
+    defaults: _.defaultsDeep({
+        type: 'basic.textLabel',
+        size: {
+            width: 44,
+            height: 24
+          },
+        attrs: {
+            text:{
+                text:'',
+                'font-size':14,
+                fill:'#000000'
+            }
+        },
+    },joint.shapes.basic.Generic.prototype.defaults)
+})
