@@ -80,13 +80,13 @@ const mutations = {
     let selection = state.selection = new joint.ui.Selection({
       paper: state.paper
     })
+
     state.paper.on('blank:pointerdown', selection.startSelecting)
     state.paper.on('cell:pointerup', function (cellView, evt) {
       // Select an element if CTRL/Meta key is pressed while the element is clicked.
       if ((evt.ctrlKey || evt.metaKey) && !(cellView.model instanceof joint.dia.Link)) {
         selection.collection.add(cellView.model)
       }
-      console.log(selection.collection)
     })
 
     selection.on('selection-box:pointerdown', function (cellView, evt) {
