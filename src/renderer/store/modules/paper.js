@@ -1,5 +1,7 @@
 // joint paper module
-import joint, { layout } from '../../assets/libs/rappid.min.js'
+import joint, {
+  layout
+} from '../../assets/libs/rappid.min.js'
 import '../../assets/libs/joint.shapes.eqelement.js'
 import _ from 'lodash'
 const state = {
@@ -57,6 +59,7 @@ const mutations = {
     // 初始化keyboard
   },
   initStencil: (state, dom) => {
+    // for (let i = 0; i < opt.length; i++) {
     let stencil = new joint.ui.Stencil({
       paper: state.paper,
       snaplines: state.snaplines,
@@ -70,6 +73,7 @@ const mutations = {
     })
     dom.append(stencil.render().el)
     state.stencil.basic = stencil
+    // }
   },
   stencilLoadConfig: (state, config) => {
     state.stencil.basic.render().load(config)
@@ -103,7 +107,10 @@ const mutations = {
       },
       'ctrl+v': function () {
         let pastedCells = clipboard.pasteCells(state.graph, {
-          translate: { dx: 20, dy: 20 },
+          translate: {
+            dx: 20,
+            dy: 20
+          },
           useLocalStorage: true
         })
 
@@ -140,12 +147,18 @@ const mutations = {
 
       'ctrl+plus': function (evt) {
         evt.preventDefault()
-        state.paperScroller.zoom(0.2, { max: 5, grid: 0.2 })
+        state.paperScroller.zoom(0.2, {
+          max: 5,
+          grid: 0.2
+        })
       },
 
       'ctrl+minus': function (evt) {
         evt.preventDefault()
-        state.paperScroller.zoom(-0.2, { min: 0.2, grid: 0.2 })
+        state.paperScroller.zoom(-0.2, {
+          min: 0.2,
+          grid: 0.2
+        })
       },
 
       'keydown:shift': function (evt) {

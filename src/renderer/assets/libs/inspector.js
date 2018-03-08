@@ -378,6 +378,27 @@ App.config = App.config || {};
               index: 5
             }
           },
+          '.marker-source': {
+            transform: {
+              type: 'select-box',
+              options: options.arrowheadSize,
+              group: 'marker-source',
+              label: '线头样式',
+              index: 1
+            },
+            fill: {
+              type: 'color-palette',
+              options: options.colorPalette,
+              group: 'marker-source',
+              label: '线头颜色',
+              when: {
+                ne: {
+                  'attrs/.marker-source/transform': 'scale(0.001)'
+                }
+              },
+              index: 2
+            }
+          },
         },
         router: {
           name: {

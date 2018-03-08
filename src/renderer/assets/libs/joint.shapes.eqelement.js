@@ -112,7 +112,7 @@ import _ from 'lodash'
                 'data-tooltip-position': 'left'
             },
             '.marker-source': {
-                d: 'M 10 0 L 0 5 L 10 10 z',
+                d: 'M 6.5 0 L 11.5 0 L 10 10 z',
                 stroke: 'transparent',
                 fill: '#222138',
                 transform: 'scale(0.001)'
@@ -134,6 +134,18 @@ import _ from 'lodash'
             }
         }
     });
+
+    joint.shapes.basic.Generic.define('devs.HWCabinet',{
+        devsInfomation: {
+            name: '',
+            code: '',
+            num: 1,
+            power: '',
+        },
+        switch:{
+            
+        }
+    })
 
 })(joint);
 
@@ -723,5 +735,545 @@ joint.shapes.basic.textLabel =  joint.shapes.basic.Generic.extend({
                 fill:'#000000'
             }
         },
+    },joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 环网柜A
+joint.shapes.basic.HWCabinetA = joint.shapes.basic.Generic.extend({
+    markup:[
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="inPorts">',
+        '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
+        '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
+        '<g class="port3"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
+        '</g>'].join(''),
+    defaults: _.defaultsDeep({
+        type: 'basic.HWCabinetA',
+        size: {
+            width: 124,
+            height: 84
+        },
+        attrs: {
+            '.port1':{
+                ref:'.line',
+                'ref-x':10,
+                'ref-y':0,                       
+            },
+            '.port2':{
+                ref:'.line',
+                'ref-x':40,
+                'ref-y':0,  
+            },
+            '.port3':{
+                ref:'.line',
+                'ref-x':70,
+                'ref-y':0,  
+            },
+            '.rect': {
+                width:44,
+                height:44,
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.rect1': {
+                width: "7.89",
+                height: "22.41",
+                x: "0.34",
+                y: "6.23",
+                fill: '#8c8c8c',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1:"4.38",x2:"4.38",y1:"0.34",y2:"5.95",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1:"4.38",x2:"4.38",y1:"34.24",y2:"28.64",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l3': {
+                x1:"4.38",x2:"4.38",y1:"35.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l4': {
+                x1:"0.38",x2:"8.76",y1:"40.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },            
+            '.l5': {
+                x1:"0.38",x2:"4.38",y1:"40.24",y2:"55.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l6': {
+                x1:"4.38",x2:"4.38",y1:"55.24",y2:"65.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.p5': {
+                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+            '.line':{
+                x1:'5',
+                y1:'5',
+                x2:'39',
+                y2:'5',
+                stroke: 'black',
+                'stroke-width': '3px',
+            },
+            '.line1': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "0.35",
+                y2: "14.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line2': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "42.43",
+                y2: "31.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line3': {
+                x1: "6.2",
+                x2: "1.36",
+                y1: "31.18",
+                y2: "15.03",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line4': {
+                x1: "11.05",
+                x2: "0.35",
+                y1: "14.59",
+                y2: "14.59",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.ell1': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+            },
+            '.ell2': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.p4': {
+                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+
+        },
+
+    },joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 环网柜B
+joint.shapes.basic.HWCabinetB = joint.shapes.basic.Generic.extend({
+    markup:[
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="inPorts">',
+        '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
+        '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
+        '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
+        '<g class="port4"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
+        '</g>'].join(''),
+    defaults: _.defaultsDeep({
+        type: 'basic.HWCabinetB',
+        size: {
+            width: 124,
+            height: 84
+        },
+        attrs: {
+            '.port1':{
+                ref:'.line',
+                'ref-x':10,
+                'ref-y':0,                       
+            },
+            '.port2':{
+                ref:'.line',
+                'ref-x':40,
+                'ref-y':0,  
+            },
+            '.port3':{
+                ref:'.line',
+                'ref-x':70,
+                'ref-y':0,  
+            },
+            '.port4':{
+                ref:'.line',
+                'ref-x':100,
+                'ref-y':0,  
+            },
+            '.rect': {
+                width:44,
+                height:44,
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.rect1': {
+                width: "7.89",
+                height: "22.41",
+                x: "0.34",
+                y: "6.23",
+                fill: '#8c8c8c',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1:"4.38",x2:"4.38",y1:"0.34",y2:"5.95",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1:"4.38",x2:"4.38",y1:"34.24",y2:"28.64",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l3': {
+                x1:"4.38",x2:"4.38",y1:"35.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l4': {
+                x1:"0.38",x2:"8.76",y1:"40.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },            
+            '.l5': {
+                x1:"0.38",x2:"4.38",y1:"40.24",y2:"55.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l6': {
+                x1:"4.38",x2:"4.38",y1:"55.24",y2:"65.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.p5': {
+                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+            '.line':{
+                x1:'5',
+                y1:'5',
+                x2:'39',
+                y2:'5',
+                stroke: 'black',
+                'stroke-width': '3px',
+            },
+            '.line1': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "0.35",
+                y2: "14.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line2': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "42.43",
+                y2: "31.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line3': {
+                x1: "6.2",
+                x2: "1.36",
+                y1: "31.18",
+                y2: "15.03",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line4': {
+                x1: "11.05",
+                x2: "0.35",
+                y1: "14.59",
+                y2: "14.59",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.ell1': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+            },
+            '.ell2': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.p4': {
+                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+
+        },
+
+    },joint.shapes.basic.Generic.prototype.defaults)
+})
+
+// 环网柜B
+joint.shapes.basic.HWCabinetC = joint.shapes.basic.Generic.extend({
+    markup:[
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="inPorts">',
+        '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
+        '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
+        '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
+        '<g class="port4"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
+        '<g class="port5"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
+        '</g>'].join(''),
+    defaults: _.defaultsDeep({
+        type: 'basic.HWCabinetC',
+        size: {
+            width: 124,
+            height: 84
+        },
+        attrs: {
+            '.port1':{
+                ref:'.line',
+                'ref-x':10,
+                'ref-y':0,                       
+            },
+            '.port2':{
+                ref:'.line',
+                'ref-x':40,
+                'ref-y':0,  
+            },
+            '.port3':{
+                ref:'.line',
+                'ref-x':70,
+                'ref-y':0,  
+            },
+            '.port4':{
+                ref:'.line',
+                'ref-x':100,
+                'ref-y':0,  
+            },
+            '.port5':{
+                ref:'.line',
+                'ref-x':130,
+                'ref-y':0,  
+            },
+            '.rect': {
+                width:44,
+                height:44,
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.rect1': {
+                width: "7.89",
+                height: "22.41",
+                x: "0.34",
+                y: "6.23",
+                fill: '#8c8c8c',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l1': {
+                x1:"4.38",x2:"4.38",y1:"0.34",y2:"5.95",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l2': {
+                x1:"4.38",x2:"4.38",y1:"34.24",y2:"28.64",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l3': {
+                x1:"4.38",x2:"4.38",y1:"35.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l4': {
+                x1:"0.38",x2:"8.76",y1:"40.24",y2:"40.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },            
+            '.l5': {
+                x1:"0.38",x2:"4.38",y1:"40.24",y2:"55.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.l6': {
+                x1:"4.38",x2:"4.38",y1:"55.24",y2:"65.24",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.p5': {
+                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+            '.line':{
+                x1:'5',
+                y1:'5',
+                x2:'39',
+                y2:'5',
+                stroke: 'black',
+                'stroke-width': '3px',
+            },
+            '.line1': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "0.35",
+                y2: "14.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line2': {
+                x1: "6.2",
+                x2: "6.2",
+                y1: "42.43",
+                y2: "31.28",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line3': {
+                x1: "6.2",
+                x2: "1.36",
+                y1: "31.18",
+                y2: "15.03",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.line4': {
+                x1: "11.05",
+                x2: "0.35",
+                y1: "14.59",
+                y2: "14.59",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.ell1': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+            },
+            '.ell2': {
+                cx: '5.61',
+                cy: '17.99',
+                rx: '2.67',
+                ry: '2.79',
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round',
+                'stroke-width': '1px'
+            },
+            '.p4': {
+                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px',
+                magnet:true                                                                             
+            },
+
+        },
+
     },joint.shapes.basic.Generic.prototype.defaults)
 })
