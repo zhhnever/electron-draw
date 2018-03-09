@@ -272,6 +272,8 @@ export default {
       },
       paper: '',
       graph: '',
+      stencil: '',
+      snaplines: '',
       commandManager: '',
       paperScroller: '',
       tabShow: true,
@@ -486,8 +488,6 @@ export default {
           }
         ]
       },
-      stencil: '',
-      snaplines: '',
       elementIdArrary: [],
       elementCounts: {
         rect: 0,
@@ -567,7 +567,6 @@ export default {
         _this.elementIdArrary = []
       },
       'print:pointerclick': function () {
-        console.log(_this.paper)
         _this.paper.print()
       },
       'tuopu:pointerclick': function () {
@@ -621,7 +620,7 @@ export default {
         halo.removeHandle('resize')
       }
       halo.render()
-      console.log(cell.getPorts())
+      console.log(this.graph.toJSON())
     },
     // 左侧属性编辑栏的方法
     createInspector: function (cell) {
@@ -659,7 +658,6 @@ export default {
         let index = $(this).index()
         $(this).addClass('selected').siblings().removeClass('selected')
         let name = $(this).attr('name')
-
         _this.$store.commit('stencilLoadConfig', _this.stencilConfig[name]) // 加载stencil config
         // $('.list-content').find('li').eq(index).siblings().hide(100, function () {
         //   $('.list-content').find('li').eq(index).show(200)

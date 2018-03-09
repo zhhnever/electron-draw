@@ -112,17 +112,17 @@ import _ from 'lodash'
                 'data-tooltip-position': 'left'
             },
             '.marker-source': {
-                d: 'M 6.5 0 L 11.5 0 L 10 10 z',
+                d: 'M 10 5 L 0 10 L 0 0 z',
                 stroke: 'transparent',
                 fill: '#222138',
                 transform: 'scale(0.001)'
             },
             '.marker-target': {
-                d: 'M 10 0 L 0 5 L 10 10 z',
+                d: 'M 10 5 L 0 10 L 0 0 z',
                 stroke: 'transparent',
                 fill: '#222138',
                 transform: 'scale(0.001)'
-            },
+            }, 
             '.connection': {
                 stroke: '#222138',
                 strokeDasharray: '0',
@@ -139,8 +139,7 @@ import _ from 'lodash'
         devsInfomation: {
             name: '',
             code: '',
-            num: 1,
-            power: '',
+            type: 1,
         },
         switch:{
             
@@ -424,7 +423,6 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
 })
 
 // 柱上变压器(共)
-
 joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
     // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
     markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
@@ -483,6 +481,13 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
                 'refX2': -10,
                 transform: 'rotate(-90)'
             },
+        },
+        devsInfomation:{
+            name:'',
+            type:'',
+            code:'',
+            num:'',
+            power:''
         }
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
@@ -550,7 +555,7 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
-// 断合器
+// 断路器
 joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
     // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
     markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g></g>',
@@ -584,7 +589,7 @@ joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
             },
             text: {
                 'font-size': 12,
-                text: '断合器',
+                text: '断路器',
                 'y-alignment': 'middle',
                 'x-alignment': 'middle',
                 fill: 'black',
@@ -739,7 +744,7 @@ joint.shapes.basic.textLabel =  joint.shapes.basic.Generic.extend({
 })
 
 // 环网柜A
-joint.shapes.basic.HWCabinetA = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
     markup:[
         '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
         '<g class="inPorts">',
@@ -908,12 +913,34 @@ joint.shapes.basic.HWCabinetA = joint.shapes.basic.Generic.extend({
             },
 
         },
-
+        switch: {
+            loadSwitchA:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port1'
+                
+            },
+            circuitBreaker:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port2'
+                
+            },
+            loadSwitchB:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port3'
+                
+            }
+        }
     },joint.shapes.basic.Generic.prototype.defaults)
 })
 
 // 环网柜B
-joint.shapes.basic.HWCabinetB = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
     markup:[
         '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
         '<g class="inPorts">',
@@ -1088,12 +1115,38 @@ joint.shapes.basic.HWCabinetB = joint.shapes.basic.Generic.extend({
             },
 
         },
+        switch: {
+            loadSwitchA:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port1'
+            },
+            circuitBreakerA:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port2'                
+            },
+            circuitBreakerB:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port3'                                
+            },
+            loadSwitchB:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port4'                
+            }
+        }
 
     },joint.shapes.basic.Generic.prototype.defaults)
 })
 
-// 环网柜B
-joint.shapes.basic.HWCabinetC = joint.shapes.basic.Generic.extend({
+// 环网柜C
+joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     markup:[
         '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
         '<g class="inPorts">',
@@ -1274,6 +1327,38 @@ joint.shapes.basic.HWCabinetC = joint.shapes.basic.Generic.extend({
             },
 
         },
+        switch: {
+            loadSwitchA:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port1'
+            },
+            circuitBreakerA:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port2'                
+            },
+            circuitBreakerB:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port3'                                
+            },
+            circuitBreakerC:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port4'                                
+            },
+            loadSwitchB:{
+                type:'',
+                code:'',
+                state:'1',
+                portIndex:'port5'                
+            }
+        }
 
     },joint.shapes.basic.Generic.prototype.defaults)
 })
