@@ -651,88 +651,87 @@ App.config = App.config || {};
       },
     },
     'basic.HWCabinetA': {
-      inputs:{
-        attrs:{
+      inputs: {
+        attrs: {},
+        switch: {
+          loadSwitchA: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchA',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchA',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchA',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          loadSwitchB: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchB',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchB',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchB',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreaker: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreaker',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreaker',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreaker',
+              options: options.switchState,
+              index: 3
+            },
+          },
         },
-        switch:{
-          loadSwitchA:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchA',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchA',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchA',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          loadSwitchB:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchB',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchB',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchB',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreaker:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreaker',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreaker',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreaker',
-              options:options.switchState,
-              index: 3
-            },
-          },
-        },
-        devsInfomation:{
-          type:{
+        devsInfomation: {
+          type: {
             type: 'content-editable',
             label: '型号',
             group: 'attribute',
             index: 1
           },
-          name:{
+          name: {
             type: 'content-editable',
             label: '名称',
             group: 'attribute',
             index: 2
           },
-          code:{
+          code: {
             type: 'content-editable',
             label: '编号',
             group: 'attribute',
@@ -741,7 +740,7 @@ App.config = App.config || {};
         }
       },
       groups: {
-        attribute:{
+        attribute: {
           label: '环网柜属性',
           index: 1
         },
@@ -760,109 +759,108 @@ App.config = App.config || {};
       },
     },
     'basic.HWCabinetB': {
-      inputs:{
-        attrs:{
+      inputs: {
+        attrs: {},
+        switch: {
+          loadSwitchA: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchA',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchA',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchA',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          loadSwitchB: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchB',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchB',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchB',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreakerA: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreakerA',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreakerA',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreakerA',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreakerB: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreakerB',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreakerB',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreakerB',
+              options: options.switchState,
+              index: 3
+            },
+          },
         },
-        switch:{
-          loadSwitchA:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchA',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchA',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchA',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          loadSwitchB:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchB',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchB',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchB',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreakerA:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreakerA',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreakerA',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreakerA',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreakerB:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreakerB',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreakerB',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreakerB',
-              options:options.switchState,
-              index: 3
-            },
-          },
-        },
-        devsInfomation:{
-          type:{
+        devsInfomation: {
+          type: {
             type: 'content-editable',
             label: '型号',
             group: 'attribute',
             index: 1
           },
-          name:{
+          name: {
             type: 'content-editable',
             label: '名称',
             group: 'attribute',
             index: 2
           },
-          code:{
+          code: {
             type: 'content-editable',
             label: '编号',
             group: 'attribute',
@@ -871,7 +869,7 @@ App.config = App.config || {};
         }
       },
       groups: {
-        attribute:{
+        attribute: {
           label: '环网柜属性',
           index: 1
         },
@@ -894,130 +892,129 @@ App.config = App.config || {};
       },
     },
     'basic.HWCabinetC': {
-      inputs:{
-        attrs:{
+      inputs: {
+        attrs: {},
+        switch: {
+          loadSwitchA: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchA',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchA',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchA',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          loadSwitchB: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'loadSwitchB',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'loadSwitchB',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'loadSwitchB',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreakerA: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreakerA',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreakerA',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreakerA',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreakerB: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreakerB',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreakerB',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreakerB',
+              options: options.switchState,
+              index: 3
+            },
+          },
+          circuitBreakerC: {
+            type: {
+              type: 'content-editable',
+              label: '型号',
+              group: 'circuitBreakerC',
+              index: 1
+            },
+            code: {
+              type: 'content-editable',
+              label: '编号',
+              group: 'circuitBreakerC',
+              index: 2
+            },
+            state: {
+              type: 'select',
+              label: '状态',
+              group: 'circuitBreakerC',
+              options: options.switchState,
+              index: 3
+            },
+          },
         },
-        switch:{
-          loadSwitchA:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchA',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchA',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchA',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          loadSwitchB:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'loadSwitchB',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'loadSwitchB',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'loadSwitchB',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreakerA:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreakerA',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreakerA',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreakerA',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreakerB:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreakerB',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreakerB',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreakerB',
-              options:options.switchState,
-              index: 3
-            },
-          },
-          circuitBreakerC:{
-            type:{
-              type: 'content-editable',
-              label: '型号',
-              group: 'circuitBreakerC',
-              index: 1
-            },
-            code:{
-              type: 'content-editable',
-              label: '编号',
-              group: 'circuitBreakerC',
-              index: 2
-            },
-            state:{
-              type: 'select',
-              label: '状态',
-              group: 'circuitBreakerC',
-              options:options.switchState,
-              index: 3
-            },
-          },
-        },
-        devsInfomation:{
-          type:{
+        devsInfomation: {
+          type: {
             type: 'content-editable',
             label: '型号',
             group: 'attribute',
             index: 1
           },
-          name:{
+          name: {
             type: 'content-editable',
             label: '名称',
             group: 'attribute',
             index: 2
           },
-          code:{
+          code: {
             type: 'content-editable',
             label: '编号',
             group: 'attribute',
@@ -1026,7 +1023,7 @@ App.config = App.config || {};
         }
       },
       groups: {
-        attribute:{
+        attribute: {
           label: '环网柜属性',
           index: 1
         },
@@ -1052,10 +1049,9 @@ App.config = App.config || {};
         }
       },
     },
-    'basic.poleTypeTransformerPublic':{
+    'basic.poleTypeTransformerPublic': {
       inputs: {
-        attrs: {
-        },
+        attrs: {},
         devsInfomation: {
           name: {
             type: 'content-editable',
@@ -1100,10 +1096,9 @@ App.config = App.config || {};
         }
       },
     },
-    'basic.poleTypeTransformer':{
+    'basic.poleTypeTransformer': {
       inputs: {
-        attrs: {
-        },
+        attrs: {},
         devsInfomation: {
           name: {
             type: 'content-editable',
@@ -1148,7 +1143,7 @@ App.config = App.config || {};
         }
       },
     },
-    'basic.circuitBreaker':{
+    'basic.circuitBreaker': {
       inputs: {
         attrs: {
           text: {
@@ -1175,7 +1170,30 @@ App.config = App.config || {};
           index: 1
         }
       },
-    }
+    },
+    'basic.FDCabinet': {
+      inputs: {
+        attrs: {
+
+        },
+        ports: {
+          groups: {
+            'in': {
+
+            }
+          }
+        },
+        inPorts: {
+          type: 'list',
+          label: 'Ports',
+          item: {
+            type: 'text'
+          },
+          group: 'inPorts',
+          index: 0
+        },
+      }
+    },
   };
 
 })();

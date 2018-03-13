@@ -331,25 +331,6 @@ export default {
             }
           },
           {
-            type: 'basic.KGStation',
-            size: {
-              width: 44,
-              height: 44
-            },
-            position: {
-              x: 270,
-              y: 20
-            },
-            attrs: {
-              text: {
-                text: 'HW'
-              },
-              '.label': {
-                text: '环网柜'
-              }
-            }
-          },
-          {
             type: 'basic.poleTypeTransformerPublic',
             size: {
               width: 20,
@@ -448,6 +429,17 @@ export default {
             },
             position: {
               x: 610,
+              y: 8
+            }
+          },
+          {
+            type: 'basic.FDCabinet',
+            size: {
+              width: 124,
+              height: 84
+            },
+            position: {
+              x: 810,
               y: 8
             }
           }

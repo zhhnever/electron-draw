@@ -1,12 +1,4 @@
-/*! Rappid v2.2.0 - HTML5 Diagramming Framework - TRIAL VERSION
-
-Copyright (c) 2015 client IO
-
- 2017-11-20 
-This Source Code Form is subject to the terms of the Rappid Trial License
-, v. 2.0. If a copy of the Rappid License was not distributed with this
-file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
+/*! */
 
 import joint from './rappid.min.js'
 import _ from 'lodash'
@@ -143,6 +135,95 @@ import _ from 'lodash'
         },
         switch:{
             
+        }
+    })
+
+    joint.shapes.basic.Generic.define('devs.PortCabinet',{
+    },{
+        markup: [
+            '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+            '</g>'
+        ].join(''),
+        portMarkup: '<path class="port-body"/>',
+        // portLabelMarkup: '<text class="port-label"/>',
+        initialize: function() {
+            joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+            this.on('change:inPorts change:outPorts', this.updatePortItems, this);
+            this.on('change:size', this.changeSize, this);            
+            this.updatePortItems();
+        },
+        changeSize:function(model,changed,opt){
+            console.log(model)
+            if(model.attributes.ports.items.length>0){
+                
+            }
+        },
+        updatePortItems: function(model, changed, opt) {
+            // Make sure all ports are unique.
+            var inPorts = joint.util.uniq(this.get('inPorts'));
+            var outPorts = joint.util.difference(joint.util.uniq(this.get('outPorts')), inPorts);
+            var inPortItems = this.createPortItems('in', inPorts);
+            var outPortItems = this.createPortItems('out', outPorts);
+            this.prop('ports/items', inPortItems.concat(outPortItems), joint.util.assign({ rewrite: true }, opt));
+        },
+        createPortItem: function(group, port) {
+            return {
+                id: port,
+                group: group,
+                attrs: {
+                    '.port-label': {
+                        text: port
+                    }
+                }
+            };
+        },
+        createPortItems: function(group, ports) {
+    
+            return joint.util.toArray(ports).map(this.createPortItem.bind(this, group));
+        },
+        _addGroupPort: function(port, group, opt) {
+    
+            var ports = this.get(group);
+            return this.set(group, Array.isArray(ports) ? ports.concat(port) : [port], opt);
+        },
+        addOutPort: function(port, opt) {
+    
+            return this._addGroupPort(port, 'outPorts', opt);
+        },
+    
+        addInPort: function(port, opt) {
+    
+            return this._addGroupPort(port, 'inPorts', opt);
+        },
+    
+        _removeGroupPort: function(port, group, opt) {
+    
+            return this.set(group, joint.util.without(this.get(group), port), opt);
+        },
+    
+        removeOutPort: function(port, opt) {
+    
+            return this._removeGroupPort(port, 'outPorts', opt);
+        },
+    
+        removeInPort: function(port, opt) {
+    
+            return this._removeGroupPort(port, 'inPorts', opt);
+        },
+    
+        _changeGroup: function(group, properties, opt) {
+    
+            return this.prop('ports/groups/' + group, joint.util.isObject(properties) ? properties : {}, opt);
+        },
+    
+        changeInGroup: function(properties, opt) {
+    
+            return this._changeGroup('in', properties, opt);
+        },
+    
+        changeOutGroup: function(properties, opt) {
+    
+            return this._changeGroup('out', properties, opt);
         }
     })
 
@@ -1361,4 +1442,64 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
         }
 
     },joint.shapes.basic.Generic.prototype.defaults)
+})
+
+joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
+    markup: [
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '</g>'
+    ].join(''),
+    portMarkup: '<path class="port-body"/>',
+    defaults: _.defaultsDeep({
+        type: 'basic.FDCabinet',
+        size: {
+            width: 124,
+            height: 84
+        },
+        attrs: {
+            '.rect': {
+                width: 124,
+                height: 84,
+                fill: 'transparent',
+                stroke: 'black',
+                'stroke-width': '1px'
+            },
+            '.line': {
+                x1: '10',
+                y1: '35',
+                x2:'114',
+                y2:'35',
+                stroke: 'black',
+                'stroke-width': '3px',
+            }
+
+        },
+        ports: {
+            groups: {
+                'in': {
+                    position: {
+                        name: 'line',
+                        args: {
+                            start: {
+                                x: 10,
+                                y: 35
+                            },
+                            end: {
+                                x: 114,
+                                y: 35
+                            }
+                        }
+                    },
+                    attrs: {
+                        '.port-body': {
+                            d: 'M 0 0 L 0 10 M-5 10 L5 10 L0 20 L-5 10 Z',
+                            stroke: 'black',
+                            'stroke-width': '1px',                          
+                            magnet:true
+                        }
+                    }
+                }
+            }
+        }
+    }, joint.shapes.basic.Generic.prototype.defaults)
 })
