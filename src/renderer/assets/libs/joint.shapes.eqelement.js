@@ -1444,6 +1444,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     },joint.shapes.basic.Generic.prototype.defaults)
 })
 
+//分支箱
 joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
     markup: [
         '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
@@ -1498,8 +1499,33 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
                             magnet:true
                         }
                     }
-                }
-            }
+                },
+                'out': {
+                    position: {
+                        name: 'line',
+                        args: {
+                            start: {
+                                x: 10,
+                                y: 35
+                            },
+                            end: {
+                                x: 114,
+                                y: 35
+                            }
+                        }
+                    },
+                    attrs: {
+                        '.port-body': {
+                            d: 'M 0 0 L 0 -10 M-5 -10 L5 -10 L0 -20 L-5 -10 Z',
+                            stroke: 'black',
+                            'stroke-width': '1px',                          
+                            magnet:true
+                        }
+                    }
+                },
+            },
         }
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
+
+//

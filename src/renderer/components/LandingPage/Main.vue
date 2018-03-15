@@ -289,7 +289,7 @@ export default {
             },
             position: {
               x: 70,
-              y: 20
+              y: 206
             }
           },
           {
@@ -439,7 +439,7 @@ export default {
               height: 84
             },
             position: {
-              x: 810,
+              x: 910,
               y: 8
             }
           }

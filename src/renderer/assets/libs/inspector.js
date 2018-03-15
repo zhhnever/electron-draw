@@ -1185,14 +1185,29 @@ App.config = App.config || {};
         },
         inPorts: {
           type: 'list',
-          label: 'Ports',
+          label: '下方接线口',
           item: {
-            type: 'text'
+            type:'text'
           },
           group: 'inPorts',
           index: 0
         },
-      }
+        outPorts: {
+          type: 'list',
+          label: '上方接线口',
+          item: {
+            type:'text'            
+          },
+          group: 'inPorts',
+          index: 0
+        },
+      },
+      groups: {
+        presentation: {
+          label: '状态',
+          index: 1
+        }
+      },
     },
   };
 
