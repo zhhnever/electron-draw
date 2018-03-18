@@ -60,6 +60,8 @@ module.exports = {
     'no-unused-vars': 0,
     'no-undef':0,
     'new-parens':0,
-    'no-new':0
+    'no-new':0,
+    "complexity": 0,
+    "no-useless-return":0,
   }
 }

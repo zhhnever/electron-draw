@@ -328,6 +328,16 @@ App.config = App.config || {};
         content: '有'
       },
     ],
+    linkInsulation:[
+      {
+        value: true,
+        content: '是'
+      },
+      {
+        value: false,
+        content: '否'
+      },
+    ],
     fontSize: [{
         value: '8px',
         content: '8'
@@ -384,7 +394,10 @@ App.config = App.config || {};
               options: options.arrowheadSize,
               group: 'marker-source',
               label: '线头样式',
-              index: 1
+              index: 1,
+              when:{
+                not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}             
+              }
             },
             fill: {
               type: 'color-palette',
@@ -405,7 +418,11 @@ App.config = App.config || {};
               options: options.arrowheadSize,
               group: 'marker-target',
               label: '线尾样式',
-              index: 1
+              index: 1,
+              when:{
+              not: { test: { 'attrs/.connection/strokeDasharray': '0' }}
+              // not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
+              }
             },
             fill: {
               type: 'color-palette',
@@ -449,6 +466,48 @@ App.config = App.config || {};
             }
           }
         },
+        devsInfomation:{
+          name:{
+            type: 'text',
+            label: '线路名称',
+            group: 'presentation',
+            index: 1
+          },
+          type:{
+            type: 'text',
+            label: '型号',
+            group: 'presentation',
+            index: 2,
+            when:{
+              not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
+            }
+          },
+          length:{
+            type: 'text',
+            label: '长度',
+            group: 'presentation',
+            index: 3
+          },
+          insulation:{
+            type: 'select',
+            label: '是否绝缘',
+            options:options.linkInsulation,
+            defaultValue:true,
+            group: 'presentation',
+            index: 4
+          },
+          main:{
+            type: 'select',
+            label: '是否主干电缆',
+            options:options.linkInsulation,
+            when:{
+              not: { test: { 'attrs/.connection/strokeDasharray': '0' }}
+            },
+            defaultValue:true,
+            group: 'presentation',
+            index: 5
+          }
+        }
       },
       groups: {
         connection: {
@@ -466,6 +525,18 @@ App.config = App.config || {};
         labels: {
           label: 'Labels',
           index: 4
+        },
+        presentation:{
+          label:'属性',
+          index:0
+        }
+      },
+      renderFieldContent:function(options,path,value){
+        // console.log(path,value)
+      },
+      operators:{
+        test:function(cell,value,prop){
+          console.log(value)
         }
       }
     },
@@ -503,7 +574,7 @@ App.config = App.config || {};
         attrs: {
           text: {
             text: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'presentation',
               index: 1
@@ -533,7 +604,7 @@ App.config = App.config || {};
         attrs: {
           text: {
             text: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'presentation',
               index: 1
@@ -561,7 +632,7 @@ App.config = App.config || {};
         attrs: {
           '.label': {
             text: {
-              type: 'content-editable',
+              type: 'text',
               label: '名称',
               group: 'presentation',
               index: 1
@@ -578,25 +649,27 @@ App.config = App.config || {};
         },
         devsInfomation: {
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'property',
             index: 3
           },
           num: {
-            type: 'content-editable',
+            type: 'text',
             label: '数量',
             group: 'property',
+            defaultValue:'1',
             index: 5
           },
           power: {
-            type: 'content-editable',
+            type: 'text',
             label: '容量',
+            defaultValue:'1',            
             group: 'property',
             index: 6
           },
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'property',
             index: 4
@@ -656,13 +729,13 @@ App.config = App.config || {};
         switch: {
           loadSwitchA: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchA',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchA',
               index: 2
@@ -677,13 +750,13 @@ App.config = App.config || {};
           },
           loadSwitchB: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchB',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchB',
               index: 2
@@ -698,13 +771,13 @@ App.config = App.config || {};
           },
           circuitBreaker: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreaker',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreaker',
               index: 2
@@ -720,19 +793,19 @@ App.config = App.config || {};
         },
         devsInfomation: {
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'attribute',
             index: 1
           },
           name: {
-            type: 'content-editable',
+            type: 'text',
             label: '名称',
             group: 'attribute',
             index: 2
           },
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'attribute',
             index: 3
@@ -764,13 +837,13 @@ App.config = App.config || {};
         switch: {
           loadSwitchA: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchA',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchA',
               index: 2
@@ -785,13 +858,13 @@ App.config = App.config || {};
           },
           loadSwitchB: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchB',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchB',
               index: 2
@@ -806,13 +879,13 @@ App.config = App.config || {};
           },
           circuitBreakerA: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreakerA',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreakerA',
               index: 2
@@ -827,13 +900,13 @@ App.config = App.config || {};
           },
           circuitBreakerB: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreakerB',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreakerB',
               index: 2
@@ -849,19 +922,19 @@ App.config = App.config || {};
         },
         devsInfomation: {
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'attribute',
             index: 1
           },
           name: {
-            type: 'content-editable',
+            type: 'text',
             label: '名称',
             group: 'attribute',
             index: 2
           },
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'attribute',
             index: 3
@@ -897,13 +970,13 @@ App.config = App.config || {};
         switch: {
           loadSwitchA: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchA',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchA',
               index: 2
@@ -918,13 +991,13 @@ App.config = App.config || {};
           },
           loadSwitchB: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'loadSwitchB',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'loadSwitchB',
               index: 2
@@ -939,13 +1012,13 @@ App.config = App.config || {};
           },
           circuitBreakerA: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreakerA',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreakerA',
               index: 2
@@ -960,13 +1033,13 @@ App.config = App.config || {};
           },
           circuitBreakerB: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreakerB',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreakerB',
               index: 2
@@ -981,13 +1054,13 @@ App.config = App.config || {};
           },
           circuitBreakerC: {
             type: {
-              type: 'content-editable',
+              type: 'text',
               label: '型号',
               group: 'circuitBreakerC',
               index: 1
             },
             code: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'circuitBreakerC',
               index: 2
@@ -1003,19 +1076,19 @@ App.config = App.config || {};
         },
         devsInfomation: {
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'attribute',
             index: 1
           },
           name: {
-            type: 'content-editable',
+            type: 'text',
             label: '名称',
             group: 'attribute',
             index: 2
           },
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'attribute',
             index: 3
@@ -1054,31 +1127,32 @@ App.config = App.config || {};
         attrs: {},
         devsInfomation: {
           name: {
-            type: 'content-editable',
+            type: 'text',
             label: '名称',
             group: 'property',
             index: 1
           },
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'property',
             index: 1
           },
           num: {
-            type: 'content-editable',
+            type: 'text',
             label: '数量',
+            defaultValue:'1',
             group: 'property',
             index: 4
           },
           power: {
-            type: 'content-editable',
+            type: 'text',
             label: '容量',
             group: 'property',
             index: 3
           },
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'property',
             index: 2
@@ -1101,31 +1175,32 @@ App.config = App.config || {};
         attrs: {},
         devsInfomation: {
           name: {
-            type: 'content-editable',
+            type: 'text',
             label: '名称',
             group: 'property',
             index: 1
           },
           code: {
-            type: 'content-editable',
+            type: 'text',
             label: '编号',
             group: 'property',
             index: 1
           },
           num: {
-            type: 'content-editable',
+            type: 'text',
             label: '数量',
             group: 'property',
+            defaultValue:'1',
             index: 4
           },
           power: {
-            type: 'content-editable',
+            type: 'text',
             label: '容量',
             group: 'property',
             index: 3
           },
           type: {
-            type: 'content-editable',
+            type: 'text',
             label: '型号',
             group: 'property',
             index: 2
@@ -1143,12 +1218,12 @@ App.config = App.config || {};
         }
       },
     },
-    'basic.circuitBreaker': {
+    'basic.circuitBreakerSwitch': {
       inputs: {
         attrs: {
           text: {
             text: {
-              type: 'content-editable',
+              type: 'text',
               label: '编号',
               group: 'presentation',
               index: 1

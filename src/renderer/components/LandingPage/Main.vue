@@ -12,7 +12,7 @@
         <li name='switch'>
           <span>开断设备</span>
         </li>
-        <li name='other'>
+        <li name='others'>
           <span>其他</span>
         </li>
       </ul>
@@ -56,11 +56,11 @@
                 </tr>
                 <tr>
                   <td>杆上公变</td>
-                  <td>{{ elementCounts.rect }}</td>
+                  <td>{{ elementCounts.poleTypeTransformerPublic.user }}/{{ elementCounts.poleTypeTransformerPublic.num }}/{{ elementCounts.poleTypeTransformerPublic.power }}</td>                  
                 </tr>
                 <tr>
                   <td>箱式公变</td>
-                  <td>{{ elementCounts.substation }}</td>
+                  <td>{{ elementCounts.KGStation.XB.user }}/{{ elementCounts.KGStation.XB.num }}/{{ elementCounts.KGStation.XB.power }}</td>
                 </tr>
                 <tr>
                   <td>室内公变</td>
@@ -68,31 +68,42 @@
                 </tr>
                 <tr>
                   <td>专变</td>
-                  <td>{{ elementCounts.circle }}</td>
+                  <td>{{ elementCounts.poleTypeTransformer.user }}/{{ elementCounts.poleTypeTransformer.num }}/{{ elementCounts.poleTypeTransformer.power }}</td>
                 </tr>
                 <tr>
-                  <td>开关</td>
+                  <td>双电源</td>
                   <td>{{ elementCounts.switch }}</td>
                 </tr>
-                <!-- <tr>
-                <td>双电源</td>
-                <td>2</td>
-              </tr> -->
-                <!-- <tr>
-                <td rowspan="10">线路</td>
-              </tr>
-              <tr>
-                <td>专变</td>
-                <td>$80</td>
-              </tr>
-              <tr>
-                <td>配变总数</td>
-                <td>1</td>
-              </tr>
-              <tr>
-                <td>双电源</td>
-                <td>2</td>
-              </tr> -->
+                <tr>
+                  <td>配电总数</td>
+                  <td>{{ elementCounts.KGStation.PD.user }}/{{ elementCounts.KGStation.PD.num }}/{{ elementCounts.KGStation.PD.power }}</td>
+                </tr>
+                <tr>
+                  <td rowspan="4">线路KM</td>
+                </tr>
+                <tr>
+                  <td>绝缘线</td>
+                  <td>{{ elementCounts.switch }}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>{{ elementCounts.switch }}</td>
+                </tr>
+                <tr>
+                  <td>总长</td>
+                  <td>{{ elementCounts.link.total }}</td>
+                </tr>
+                <tr>
+                  <td rowspan="3">电缆KM</td>
+                </tr>
+                <tr>
+                  <td>主干</td>
+                  <td>{{ elementCounts.switch }}</td>
+                </tr>
+                <tr>
+                  <td>分干</td>
+                  <td>{{ elementCounts.switch }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -105,183 +116,194 @@
 </template>
 
 <script>
-import joint from '../../assets/libs/rappid.min.js'
-import '../../assets/libs/joint.shapes.eqelement.js'
-import inspectorConfig from '../../assets/libs/inspector.js'
-import $ from 'jquery'
-import _ from 'lodash'
-import fs from 'fs'
-export default {
-  data: function () {
-    return {
-      config: {
-        groups: {
-          'undo-redo': {
-            index: 1
+  import joint from '../../assets/libs/rappid.min.js'
+  import '../../assets/libs/joint.shapes.eqelement.js'
+  import inspectorConfig from '../../assets/libs/inspector.js'
+  import $ from 'jquery'
+  import _ from 'lodash'
+  import fs from 'fs'
+  export default {
+    data: function () {
+      return {
+        config: {
+          groups: {
+            'undo-redo': {
+              index: 1
+            },
+            'clear': {
+              index: 2
+            },
+            'export': {
+              index: 3
+            },
+            'print': {
+              index: 4
+            },
+            'fullscreen': {
+              index: 5
+            },
+            'order': {
+              index: 6
+            },
+            'layout': {
+              index: 7
+            },
+            'zoom': {
+              index: 8
+            },
+            'grid': {
+              index: 9
+            },
+            'snapline': {
+              index: 10
+            }
           },
-          'clear': {
-            index: 2
-          },
-          'export': {
-            index: 3
-          },
-          'print': {
-            index: 4
-          },
-          'fullscreen': {
-            index: 5
-          },
-          'order': {
-            index: 6
-          },
-          'layout': {
-            index: 7
-          },
-          'zoom': {
-            index: 8
-          },
-          'grid': {
-            index: 9
-          },
-          'snapline': {
-            index: 10
-          }
+          tools: [
+            {
+              type: 'button',
+              name: 'save',
+              text: '保存',
+              attrs: {
+                button: {
+                  'data-tooltip': '保存',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            {
+              type: 'button',
+              name: 'open',
+              text: '打开',
+              attrs: {
+                button: {
+                  'data-tooltip': '打开',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            // {
+            //   type: 'button',
+            //   name: 'count',
+            //   text: '统计',
+            //   attrs: {
+            //     button: {
+            //       'data-tooltip': '统计',
+            //       'data-tooltip-position': 'top',
+            //       'data-tooltip-position-selector': '.toolbar-container'
+            //     }
+            //   }
+            // },
+            {
+              type: 'undo',
+              name: 'undo',
+              attrs: {
+                button: {
+                  'data-tooltip': '撤销',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            {
+              type: 'redo',
+              name: 'redo',
+              attrs: {
+                button: {
+                  'data-tooltip': '前进',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            {
+              type: 'button',
+              name: 'clear',
+              group: 'clear',
+              text: '清除画板',
+              attrs: {
+                button: {
+                  id: 'btn-clear',
+                  'data-tooltip': '清除画板',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            {
+              type: 'button',
+              name: 'print',
+              group: 'print',
+              text: '打印',
+              attrs: {
+                button: {
+                  id: 'btn-print',
+                  'data-tooltip': '打印',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            },
+            // {
+            //   type: 'button',
+            //   name: 'tuopu',
+            //   group: 'print',
+            //   text: '拓扑图',
+            //   attrs: {
+            //     button: {
+            //       id: 'btn-topu',
+            //       'data-tooltip': 'Open a Print Dialog',
+            //       'data-tooltip-position': 'top',
+            //       'data-tooltip-position-selector': '.toolbar-container'
+            //     }
+            //   }
+            // },
+            {
+              type: 'label',
+              name: 'zoom-slider-label',
+              group: 'zoom',
+              text: '缩放:'
+            },
+            {
+              type: 'zoom-slider',
+              name: 'zoom-slider',
+              group: 'zoom'
+            },
+            {
+              type: 'separator',
+              group: 'snapline'
+            },
+            {
+              type: 'checkbox',
+              name: 'snapline',
+              group: 'snapline',
+              label: 'Snaplines:',
+              value: true,
+              attrs: {
+                input: {
+                  id: 'snapline-switch'
+                },
+                label: {
+                  'data-tooltip': 'Enable/Disable Snaplines',
+                  'data-tooltip-position': 'top',
+                  'data-tooltip-position-selector': '.toolbar-container'
+                }
+              }
+            }
+          ]
         },
-        tools: [
-          {
-            type: 'button',
-            name: 'save',
-            text: '保存',
-            attrs: {
-              button: {
-                'data-tooltip': '保存',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'button',
-            name: 'open',
-            text: '打开',
-            attrs: {
-              button: {
-                'data-tooltip': '打开',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'undo',
-            name: 'undo',
-            attrs: {
-              button: {
-                'data-tooltip': 'Undo',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'redo',
-            name: 'redo',
-            attrs: {
-              button: {
-                'data-tooltip': 'Redo',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'button',
-            name: 'clear',
-            group: 'clear',
-            text: '清除画板',
-            attrs: {
-              button: {
-                id: 'btn-clear',
-                'data-tooltip': 'Clear Paper',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'button',
-            name: 'print',
-            group: 'print',
-            text: '打印',
-            attrs: {
-              button: {
-                id: 'btn-print',
-                'data-tooltip': 'Open a Print Dialog',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'button',
-            name: 'tuopu',
-            group: 'print',
-            text: '拓扑图',
-            attrs: {
-              button: {
-                id: 'btn-topu',
-                'data-tooltip': 'Open a Print Dialog',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          },
-          {
-            type: 'label',
-            name: 'zoom-slider-label',
-            group: 'zoom',
-            text: '缩放:'
-          },
-          {
-            type: 'zoom-slider',
-            name: 'zoom-slider',
-            group: 'zoom'
-          },
-          {
-            type: 'separator',
-            group: 'snapline'
-          },
-          {
-            type: 'checkbox',
-            name: 'snapline',
-            group: 'snapline',
-            label: 'Snaplines:',
-            value: true,
-            attrs: {
-              input: {
-                id: 'snapline-switch'
-              },
-              label: {
-                'data-tooltip': 'Enable/Disable Snaplines',
-                'data-tooltip-position': 'top',
-                'data-tooltip-position-selector': '.toolbar-container'
-              }
-            }
-          }
-        ]
-      },
-      paper: '',
-      graph: '',
-      stencil: '',
-      snaplines: '',
-      commandManager: '',
-      paperScroller: '',
-      tabShow: true,
-      table: {},
-      selection: '',
-      stencilConfig: {
-        basic: [
-          {
+        paper: '',
+        graph: '',
+        stencil: '',
+        snaplines: '',
+        commandManager: '',
+        paperScroller: '',
+        tabShow: true,
+        table: {},
+        selection: '',
+        stencilConfig: {
+          basic: [{
             type: 'basic.KGStation',
             size: {
               width: 44,
@@ -289,7 +311,26 @@ export default {
             },
             position: {
               x: 70,
-              y: 206
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '配电站',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              },
+              text: {
+                text: 'PD'
+              },
+              '.label': {
+                text: '配电站'
+              }
+            },
+            devsInfomation: {
+              name: '',
+              code: '',
+              num: 1,
+              power: ''
             }
           },
           {
@@ -303,31 +344,23 @@ export default {
               y: 20
             },
             attrs: {
-              text: {
-                text: 'PD'
+              '.': {
+                'data-tooltip': '箱式变',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
               },
-              '.label': {
-                text: '配电站'
-              }
-            }
-          },
-          {
-            type: 'basic.KGStation',
-            size: {
-              width: 44,
-              height: 44
-            },
-            position: {
-              x: 370,
-              y: 20
-            },
-            attrs: {
               text: {
                 text: 'XB'
               },
               '.label': {
                 text: '箱式变'
               }
+            },
+            devsInfomation: {
+              name: '',
+              code: '',
+              num: 1,
+              power: ''
             }
           },
           {
@@ -337,13 +370,24 @@ export default {
               height: 44
             },
             position: {
-              x: 470,
+              x: 270,
               y: 20
             },
             attrs: {
+              '.': {
+                'data-tooltip': '柱上变压(公)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              },
               text: {
                 text: '柱上变压'
               }
+            },
+            devsInfomation: {
+              name: '',
+              code: '',
+              num: 1,
+              power: ''
             }
           },
           {
@@ -353,42 +397,22 @@ export default {
               height: 44
             },
             position: {
-              x: 570,
+              x: 370,
               y: 20
             },
             attrs: {
+              '.': {
+                'data-tooltip': '柱上变压(专)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              },
               text: {
                 text: '柱上变压'
               }
             }
-          },
-          {
-            type: 'basic.textBox',
-            size: {
-              width: 44,
-              height: 44
-            },
-            position: {
-              x: 670,
-              y: 20
-            },
-            content: '文本框'
-          },
-          {
-            type: 'basic.textLabel',
-            size: {
-              width: 44,
-              height: 24
-            },
-            position: {
-              x: 870,
-              y: 30
-            },
-            attrs: { text: { text: '标签', 'font-size': 40 } }
           }
-        ],
-        hw: [
-          {
+          ],
+          hw: [{
             type: 'basic.cabinet',
             size: {
               width: 44,
@@ -397,39 +421,67 @@ export default {
             position: {
               x: 70,
               y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(自定义)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
             type: 'basic.HWCabinetA',
             size: {
               width: 124,
-              height: 84
+              height: 92
             },
             position: {
               x: 170,
-              y: 8
+              y: 3
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(A)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
             type: 'basic.HWCabinetB',
             size: {
               width: 164,
-              height: 84
+              height: 92
             },
             position: {
               x: 370,
-              y: 8
+              y: 3
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(B)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
             type: 'basic.HWCabinetC',
             size: {
               width: 194,
-              height: 84
+              height: 92
             },
             position: {
               x: 610,
-              y: 8
+              y: 3
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(C)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
@@ -441,11 +493,17 @@ export default {
             position: {
               x: 910,
               y: 8
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '分支箱',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           }
-        ],
-        switch: [
-          {
+          ],
+          switch: [{
             type: 'basic.isolationSwitch',
             size: {
               width: 15,
@@ -454,6 +512,13 @@ export default {
             position: {
               x: 70,
               y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '隔离开关',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
@@ -465,10 +530,17 @@ export default {
             position: {
               x: 170,
               y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '负荷开关',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           },
           {
-            type: 'basic.circuitBreaker',
+            type: 'basic.circuitBreakerSwitch',
             size: {
               width: 10.2,
               height: 44
@@ -476,312 +548,485 @@ export default {
             position: {
               x: 270,
               y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '断合器',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           }
-        ]
-      },
-      elementIdArrary: [],
-      elementCounts: {
-        rect: 0,
-        substation: 0,
-        switch: 0,
-        circle: 0
-      }
-    }
-  },
-  mounted: function () {
-    const _this = this
-    const ipcRenderer = this.$electron.ipcRenderer
-    this.tabChangeJQuery() // 标签页切换
-    joint.setTheme('modern') // 主题风格
-    this.$store.commit('init', $('#paperScroller')) // 初始化paper
-    this.$store.commit('initStencil', $('#basicStencil')) // 初始化stencil
-    this.$store.commit('stencilLoadConfig', this.stencilConfig.basic) // 加载stencil config
-    this.$store.commit('initializeKeyboardShortcuts') // 加载快捷键
-
-    let paper = this.paper = this.$store.state.paper.paper
-    let graph = this.graph = this.$store.state.paper.graph
-    let commandManager = this.commandManager = this.$store.state.paper.commandManager
-    let paperScroller = this.paperScroller = this.$store.state.paper.paperScroller
-    let selection = this.selection = this.$store.state.paper.selection
-    let snaplines = this.snaplines = this.$store.state.paper.snaplines
-    let stencil = this.stencil = this.$store.state.paper.stencil.basic
-
-    // electron的渲染进程
-    // 接收来自主线程的保存和打开文件事件
-    ipcRenderer.on('selected-file', function (event, path) {
-      if (path) {
-        fs.readFile(path[0], { encoding: 'utf-8' }, (err, data) => {
-          if (err) {
-            console.log(err)
+          ],
+          others: [{
+            type: 'basic.textBox',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 70,
+              y: 20
+            },
+            content: '文本框'
+          },
+          {
+            type: 'basic.textLabel',
+            size: {
+              width: 44,
+              height: 24
+            },
+            position: {
+              x: 170,
+              y: 30
+            },
+            attrs: {
+              text: {
+                text: '标签',
+                'font-size': 40
+              }
+            }
           }
-          if (data) {
-            console.log(data)
-            let graphData = JSON.parse(data)
-            graph.fromJSON(graphData)
+          ]
+        },
+        elementIdArrary: [],
+        elementCounts: {
+          KGStation: {
+            XB: {
+              user: 0,
+              num: 0,
+              power: 0
+            },
+            PD: {
+              user: 0,
+              num: 0,
+              power: 0
+            }
+          },
+          poleTypeTransformer: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          poleTypeTransformerPublic: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          DoublePower: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          link: {
+            main: {},
+            insulation: {}
           }
-        })
-      }
-    })
-    ipcRenderer.on('saved-file', function (event, path) {
-      if (path) {
-        let data = JSON.stringify(graph.toJSON())
-        fs.writeFile(path, data, { encoding: 'utf-8' }, function (err) {
-          if (err) {
-            console.log('写入失败')
-          }
-        })
-      }
-    })
-    // 监听元素点击事件
-    paper.on('element:pointerup link:options', cellView => {
-      // console.log(cellView)
-      let cell = cellView.model
-      _this.cellPulgin(cellView)
-      _this.createInspector(cell)
-    })
-    // 工具栏
-    let toolbar = new joint.ui.Toolbar({
-      references: {
-        paperScroller: this.paperScroller,
-        commandManager: this.commandManager
-      },
-      tools: this.config.tools
-    })
-    // 绑定事件
-    toolbar.on({
-      'png:pointerclick': function () {
-        _this.openAsPNG()
-      },
-      'snapline:change': _.bind(this.changeSnapLines, this),
-      'clear:pointerclick': function () {
-        _this.graph.clear()
-        _this.elementIdArrary = []
-      },
-      'print:pointerclick': function () {
-        _this.paper.print()
-      },
-      'tuopu:pointerclick': function () {
-        // 生成拓扑图
-        let sources = _this.graph.getSources()
-        sources.map(rootNode => {
-          let childNode = _this.graph.getSuccessors(rootNode, { breadthFirst: true })
-        })
-      },
-      'grid-size:change': _.bind(this.paper.setGridSize, this.paper),
-      'open:pointerclick': function () {
-        ipcRenderer.send('open-file-dialog')
-      },
-      'save:pointerclick': function () {
-        ipcRenderer.send('save-file-dialog')
-      }
-    })
-    $('#toolbar').append(toolbar.el)
-    toolbar.render()
-
-    // 画板新增元素之后,统计栏数量+1
-    // 开关新增之后,给开关绑定事件
-    graph.on('remove', cell => {
-      let type = cell.get('type')
-      switch (type) {
-        case 'basic.Substation':
-          _this.elementCounts.substation -= 1
-          break
-        case 'basic.Circle':
-          _this.elementCounts.circle -= 1
-          break
-        case 'basic.Rect':
-          _this.elementCounts.rect -= 1
-          break
-        case 'basic.switch':
-          _this.elementCounts.switch -= 1
-          break
-      }
-    })
-  },
-  methods: {
-    // 打开halo
-    cellPulgin: function (cellView) {
-      let cell = cellView.model
-      if (cell.isLink()) return
-      let options = {
-        cellView: cellView
-      }
-      let halo = new joint.ui.Halo(options)
-      if (cell.get('type') === 'basic.textLabel') {
-        halo.removeHandle('resize')
-      }
-      halo.render()
-      console.log(this.graph.toJSON())
-    },
-    // 左侧属性编辑栏的方法
-    createInspector: function (cell) {
-      joint.ui.Inspector.create('#config', _.extend({
-        cell: cell
-      }, inspectorConfig.inspectorConfig[cell.get('type')]))
-    },
-    // 工具栏勾选对齐线的方法
-    changeSnapLines: function (checked) {
-      if (checked) {
-        this.snaplines.startListening()
-        this.stencil.options.snaplines = this.snaplines
-      } else {
-        this.snaplines.stopListening()
-        this.stencil.options.snaplines = null
+        }
       }
     },
-    // 打开为png,暂时无用
-    openAsPNG: function () {
-      this.paper.toPNG(function (dataURL) {
-        new joint.ui.Lightbox({
-          title: '(右键另存为即可保存图片)',
-          image: dataURL
-        }).open()
-      }, {
-        padding: 10,
-        useComputedStyles: false,
-        stylesheet: this.exportStylesheet
-      })
-    },
-    // 标签页切换
-    tabChangeJQuery: function () {
+    mounted: function () {
       const _this = this
-      $('.list').find('li').click(function () {
-        let index = $(this).index()
-        $(this).addClass('selected').siblings().removeClass('selected')
-        let name = $(this).attr('name')
-        _this.$store.commit('stencilLoadConfig', _this.stencilConfig[name]) // 加载stencil config
-        // $('.list-content').find('li').eq(index).siblings().hide(100, function () {
-        //   $('.list-content').find('li').eq(index).show(200)
-        // })
+      const ipcRenderer = this.$electron.ipcRenderer
+      this.tabChangeJQuery() // 标签页切换
+      joint.setTheme('modern') // 主题风格
+      this.$store.commit('init', $('#paperScroller')) // 初始化paper
+      this.$store.commit('initStencil', $('#basicStencil')) // 初始化stencil
+      this.$store.commit('stencilLoadConfig', this.stencilConfig.basic) // 加载stencil config
+      this.$store.commit('initializeKeyboardShortcuts') // 加载快捷键
+      this.initializeTooltips()
+      let paper = this.paper = this.$store.state.paper.paper
+      let graph = this.graph = this.$store.state.paper.graph
+      let commandManager = this.commandManager = this.$store.state.paper.commandManager
+      let paperScroller = this.paperScroller = this.$store.state.paper.paperScroller
+      let selection = this.selection = this.$store.state.paper.selection
+      let snaplines = this.snaplines = this.$store.state.paper.snaplines
+      let stencil = this.stencil = this.$store.state.paper.stencil.basic
+
+      // electron的渲染进程
+      // 接收来自主线程的保存和打开文件事件
+      ipcRenderer.on('selected-file', function (event, path) {
+        if (path) {
+          fs.readFile(path[0], {
+            encoding: 'utf-8'
+          }, (err, data) => {
+            if (err) {
+              console.log(err)
+            }
+            if (data) {
+              console.log(data)
+              let graphData = JSON.parse(data)
+              graph.fromJSON(graphData)
+            }
+          })
+        }
       })
+      ipcRenderer.on('saved-file', function (event, path) {
+        if (path) {
+          let data = JSON.stringify(graph.toJSON())
+          fs.writeFile(path, data, {
+            encoding: 'utf-8'
+          }, function (err) {
+            if (err) {
+              console.log('写入失败')
+            }
+          })
+        }
+      })
+      // 监听元素点击事件
+      paper.on('element:pointerup link:options', cellView => {
+        // console.log(cellView)
+        let cell = cellView.model
+        _this.cellPulgin(cellView)
+        _this.createInspector(cell)
+      })
+      // 工具栏
+      let toolbar = new joint.ui.Toolbar({
+        references: {
+          paperScroller: this.paperScroller,
+          commandManager: this.commandManager
+        },
+        tools: this.config.tools
+      })
+      // 绑定事件
+      toolbar.on({
+        'png:pointerclick': function () {
+          _this.openAsPNG()
+        },
+        'snapline:change': _.bind(this.changeSnapLines, this),
+        'clear:pointerclick': function () {
+          _this.graph.clear()
+          _this.elementIdArrary = []
+        },
+        'print:pointerclick': function () {
+          _this.paper.print()
+        },
+        'tuopu:pointerclick': function () {
+          // 生成拓扑图
+          let sources = _this.graph.getSources()
+          sources.map(rootNode => {
+            let childNode = _this.graph.getSuccessors(rootNode, {
+              breadthFirst: true
+            })
+          })
+        },
+        'grid-size:change': _.bind(this.paper.setGridSize, this.paper),
+        'open:pointerclick': function () {
+          ipcRenderer.send('open-file-dialog')
+        },
+        'save:pointerclick': function () {
+          ipcRenderer.send('save-file-dialog')
+        },
+        'count:pointerclick': function () {
+          _this.count()
+        }
+      })
+      $('#toolbar').append(toolbar.el)
+      toolbar.render()
+
+      graph.on('add change:devsInfomation remove', cell => {
+        this.count(cell)
+      })
+    },
+    methods: {
+      // 打开halo
+      cellPulgin: function (cellView) {
+        let cell = cellView.model
+        if (cell.isLink()) {
+          return
+        }
+        let options = {
+          cellView: cellView
+        }
+        let halo = new joint.ui.Halo(options)
+        if (cell.get('type') === 'basic.textLabel') {
+          halo.removeHandle('resize')
+        }
+        halo.render()
+      },
+      // 左侧属性编辑栏的方法
+      createInspector: function (cell) {
+        joint.ui.Inspector.create('#config', _.extend({
+          cell: cell
+        }, inspectorConfig.inspectorConfig[cell.get('type')]))
+      },
+      // 工具栏勾选对齐线的方法
+      changeSnapLines: function (checked) {
+        if (checked) {
+          this.snaplines.startListening()
+          this.stencil.options.snaplines = this.snaplines
+        } else {
+          this.snaplines.stopListening()
+          this.stencil.options.snaplines = null
+        }
+      },
+      // 打开为png,暂时无用
+      openAsPNG: function () {
+        this.paper.toPNG(function (dataURL) {
+          new joint.ui.Lightbox({
+            title: '(右键另存为即可保存图片)',
+            image: dataURL
+          }).open()
+        }, {
+          padding: 10,
+          useComputedStyles: false,
+          stylesheet: this.exportStylesheet
+        })
+      },
+      // 标签页切换
+      tabChangeJQuery: function () {
+        const _this = this
+        $('.list').find('li').click(function () {
+          let index = $(this).index()
+          $(this).addClass('selected').siblings().removeClass('selected')
+          let name = $(this).attr('name')
+          _this.$store.commit('stencilLoadConfig', _this.stencilConfig[name]) // 加载stencil config
+          // $('.list-content').find('li').eq(index).siblings().hide(100, function () {
+          //   $('.list-content').find('li').eq(index).show(200)
+          // })
+        })
+      },
+      count: function (cell) {
+        if (cell.isLink()) return // 线路不统计
+        this.elementCounts = {
+          KGStation: {
+            XB: {
+              user: 0,
+              num: 0,
+              power: 0
+            },
+            PD: {
+              user: 0,
+              num: 0,
+              power: 0
+            }
+          },
+          poleTypeTransformer: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          poleTypeTransformerPublic: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          DoublePower: {
+            user: 0,
+            num: 0,
+            power: 0
+          },
+          link: {
+            main: {},
+            insulation: {}
+          }
+        }
+        let elements = this.graph.toJSON().cells
+  
+        elements.map(element => {
+          let type = element.type.split('.')[1]
+          if (type.toLowerCase().indexOf('switch') !== -1 || type === 'textBox' || type === 'textLabel' || type === 'Link') return // 开关类/标签文本框不统计
+          let devsInfomation = element.devsInfomation
+          if (element.attrs.text.text === 'PD') {
+            this.elementCounts[type].PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
+              : 0
+            this.elementCounts[type].PD.user += 1
+            this.elementCounts[type].PD.power += devsInfomation.power ? parseInt(devsInfomation.power)
+              : 0
+            return
+          }
+          if (element.attrs.text.text === 'XB') {
+            this.elementCounts[type].XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
+              : 0
+            this.elementCounts[type].XB.user += 1
+            this.elementCounts[type].XB.power += devsInfomation.power ? parseInt(devsInfomation.power)
+              : 0
+            return
+          }
+          this.elementCounts[type].num += devsInfomation.num ? parseInt(devsInfomation.num)
+            : 0
+          this.elementCounts[type].user += 1
+          this.elementCounts[type].power += devsInfomation.power ? parseInt(devsInfomation.power)
+            : 0
+          // switch (element.type) {
+          //   case 'basic.KGStation':
+          //     if (element.attrs.text.text === 'PD') {
+          //       this.elementCounts.PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
+          //         : 0
+          //       this.elementCounts.PD.user += 1
+          //       this.elementCounts.PD.power += devsInfomation.power ? parseInt(devsInfomation.power)
+          //         : 0
+          //       return
+          //     }
+          //     if (element.attrs.text.text === 'XB') {
+          //       this.elementCounts.XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
+          //         : 0
+          //       this.elementCounts.XB.user += 1
+          //       this.elementCounts.XB.power += devsInfomation.power ? parseInt(devsInfomation.power)
+          //         : 0
+          //     }
+          //     break
+          //   case 'basic.poleTypeTransformerPublic':
+          //     this.elementCounts.ZSBYPublic.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
+          //     this.elementCounts.ZSBYPublic.user += 1
+          //     this.elementCounts.ZSBYPublic.power += devsInfomation.power ? parseInt(devsInfomation.power)
+          //       : 0
+          //     break
+          //   case 'basic.poleTypeTransformer':
+          //     this.elementCounts.ZSBY.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
+          //     this.elementCounts.ZSBY.user += 1
+          //     this.elementCounts.ZSBY.power += devsInfomation.power ? parseInt(devsInfomation.power)
+          //       : 0
+          //     break
+          //   case 'app.link':
+          //     this.elementCounts.ZSBY.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
+          //     this.elementCounts.ZSBY.user += 1
+          //     this.elementCounts.ZSBY.power += devsInfomation.power ? parseInt(devsInfomation.power)
+          //       : 0
+          //     break
+          //   default:
+          //     break
+          // }
+        })
+        // console.log(elements)
+      },
+      initializeTooltips: function () {
+        new joint.ui.Tooltip({
+          rootTarget: document.body,
+          target: '[data-tooltip]',
+          direction: 'auto',
+          padding: 10
+        })
+      }
     }
   }
-}
 </script>
 <style scoped>
-@import url("../../assets/libs/rappid.min.css");
-@import url("../../assets/css/style.css");
-.main {
-  width: 100%;
-  height: 100%;
-}
+  @import url("../../assets/libs/rappid.min.css");
+  @import url("../../assets/css/style.css");
+  .main {
+    width: 100%;
+    height: 100%;
+  }
 
-#paperScroller {
-  position: absolute;
-  right: 0;
-  left: 300px;
-  top: 188px;
-  bottom: 0;
-  border: 1px solid rgb(240, 240, 240);
-}
+  #paperScroller {
+    position: absolute;
+    right: 0;
+    left: 300px;
+    top: 188px;
+    bottom: 0;
+    border: 1px solid rgb(240, 240, 240);
+  }
 
-#configuration {
-}
+  #configuration {}
 
-table.altrowstable {
-  /* font-family: verdana, arial, sans-serif; */
-  font-size: 11px;
-  color: #333333;
-  border-width: 1px;
-  border-color: #a9c6c9;
-  border-collapse: collapse;
-}
+  table.altrowstable {
+    /* font-family: verdana, arial, sans-serif; */
+    font-size: 11px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #a9c6c9;
+    border-collapse: collapse;
+  }
 
-table.altrowstable th {
-  border-width: 1px;
-  padding: 8px;
-  border-style: solid;
-  border-color: #a9c6c9;
-}
+  table.altrowstable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+  }
 
-table.altrowstable td {
-  border-width: 1px;
-  padding: 8px;
-  border-style: solid;
-  border-color: #a9c6c9;
-}
+  table.altrowstable td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #a9c6c9;
+  }
 
-.oddrowcolor {
-  background-color: #d4e3e5;
-}
+  .oddrowcolor {
+    background-color: #d4e3e5;
+  }
 
-.evenrowcolor {
-  background-color: #c3dde0;
-}
+  .evenrowcolor {
+    background-color: #c3dde0;
+  }
 
-#bianya {
-  height: 80px;
-  /* margin-top: 20px */
-}
+  #bianya {
+    height: 80px;
+    /* margin-top: 20px */
+  }
 
-.list {
-  width: 100%;
-  height: 30px;
-}
+  .list {
+    width: 100%;
+    height: 30px;
+  }
 
-.list ul {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  border-bottom: 1px solid #37accb;
-  user-select: none;
-}
+  .list ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-bottom: 1px solid #37accb;
+    user-select: none;
+  }
 
-.list ul li {
-  /* display: inline-block; */
-  float: left;
-  position: relative;
-  /* padding: 0px 10px; */
-  background-color: #37accb;
-  border-right: 1px solid #37accb;
-  width: 100px;
-  text-align: center;
-}
+  .list ul li {
+    /* display: inline-block; */
+    float: left;
+    position: relative;
+    /* padding: 0px 10px; */
+    background-color: #37accb;
+    border-right: 1px solid #37accb;
+    width: 100px;
+    text-align: center;
+  }
 
-.list ul .selected {
-  background-color: white;
-}
+  .list ul .selected {
+    background-color: white;
+  }
 
-.list ul li img {
-  width: 20px;
-  vertical-align: middle;
-  margin-bottom: 3px;
-}
+  .list ul li img {
+    width: 20px;
+    vertical-align: middle;
+    margin-bottom: 3px;
+  }
 
-.list ul li span {
-  font-size: 12px;
-  line-height: 30px;
-}
+  .list ul li span {
+    font-size: 12px;
+    line-height: 30px;
+  }
 
-.list-content {
-  width: 100%;
-  height: 100px;
-  background-color: rgb(240, 240, 240);
-}
+  .list-content {
+    width: 100%;
+    height: 100px;
+    background-color: rgb(240, 240, 240);
+  }
 
-.list-content ul {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
+  .list-content ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 
-.list-content ul li {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-}
+  .list-content ul li {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
 
-.list-content ul li:first-child {
-  display: block;
-}
+  .list-content ul li:first-child {
+    display: block;
+  }
 
-.copyElements {
-  background-image: url("data:image/svg+xml;charset=utf8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2218.75px%22%20height%3D%2218.75px%22%20viewBox%3D%220%200%2018.75%2018.75%22%20enable-background%3D%22new%200%200%2018.75%2018.75%22%20xml%3Aspace%3D%22preserve%22%3E%3Cg%3E%3Cpath%20fill%3D%22%236A6C8A%22%20d%3D%22M12.852%2C0.875h-9.27c-0.853%2C0-1.547%2C0.694-1.547%2C1.547v10.816h1.547V2.422h9.27V0.875z%20M15.172%2C3.965h-8.5%20c-0.849%2C0-1.547%2C0.698-1.547%2C1.547v10.816c0%2C0.849%2C0.698%2C1.547%2C1.547%2C1.547h8.5c0.85%2C0%2C1.543-0.698%2C1.543-1.547V5.512%20C16.715%2C4.663%2C16.021%2C3.965%2C15.172%2C3.965L15.172%2C3.965z%20M15.172%2C16.328h-8.5V5.512h8.5V16.328z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E%20");
-}
+  .copyElements {
+    background-image: url("data:image/svg+xml;charset=utf8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2218.75px%22%20height%3D%2218.75px%22%20viewBox%3D%220%200%2018.75%2018.75%22%20enable-background%3D%22new%200%200%2018.75%2018.75%22%20xml%3Aspace%3D%22preserve%22%3E%3Cg%3E%3Cpath%20fill%3D%22%236A6C8A%22%20d%3D%22M12.852%2C0.875h-9.27c-0.853%2C0-1.547%2C0.694-1.547%2C1.547v10.816h1.547V2.422h9.27V0.875z%20M15.172%2C3.965h-8.5%20c-0.849%2C0-1.547%2C0.698-1.547%2C1.547v10.816c0%2C0.849%2C0.698%2C1.547%2C1.547%2C1.547h8.5c0.85%2C0%2C1.543-0.698%2C1.543-1.547V5.512%20C16.715%2C4.663%2C16.021%2C3.965%2C15.172%2C3.965L15.172%2C3.965z%20M15.172%2C16.328h-8.5V5.512h8.5V16.328z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E%20");
+  }
+
+  .deviceStatisticsContent {
+    padding-left: 20px
+  }
 </style>

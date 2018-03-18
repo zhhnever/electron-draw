@@ -34,7 +34,8 @@ import _ from 'lodash'
     joint.shapes.basic.Generic.define('devs.Equipment', {
         devsInfomation: {
             name: '',
-            code: '',
+            code: '',//编码
+            type:'',//型号
             num: 1,
             power: '',
         },
@@ -91,6 +92,13 @@ import _ from 'lodash'
     })
 
     joint.dia.Link.define('app.Link', {
+        devsInfomation: {
+            name: '',//名称
+            length:'',//长度
+            type:'',//型号
+            insulation:true,//是否绝缘
+            main:true//是否主干线
+        },
         router: {
             name: 'normal'
         },
@@ -105,18 +113,18 @@ import _ from 'lodash'
             },
             '.marker-source': {
                 d: 'M 10 5 L 0 10 L 0 0 z',
-                stroke: 'transparent',
-                fill: '#222138',
+                stroke: '#000000',
+                fill: 'transparent',
                 transform: 'scale(0.001)'
             },
             '.marker-target': {
                 d: 'M 10 5 L 0 10 L 0 0 z',
-                stroke: 'transparent',
-                fill: '#222138',
+                stroke: '#000000',
+                fill: 'transparent',
                 transform: 'scale(0.001)'
             }, 
             '.connection': {
-                stroke: '#222138',
+                stroke: '#000000',
                 strokeDasharray: '0',
                 strokeWidth: 1,
                 fill: 'transparent'
@@ -135,11 +143,15 @@ import _ from 'lodash'
         },
         switch:{
             
+        },
+        attrs: {
+            
         }
     })
 
     joint.shapes.basic.Generic.define('devs.PortCabinet',{
-    },{
+    },
+    {
         markup: [
             '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
             '</g>'
@@ -503,7 +515,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
     }
 })
 
-// 柱上变压器(共)
+// 柱上变压器(公)
 joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
     // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
     markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
@@ -567,7 +579,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
             name:'',
             type:'',
             code:'',
-            num:'',
+            num:1,
             power:''
         }
     }, joint.shapes.basic.Generic.prototype.defaults)
@@ -579,6 +591,13 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
     markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.poleTypeTransformer',
+        devsInfomation: {
+            name: '',
+            code: '',
+            type:'',
+            num: 1,
+            power: ''
+        },
         size: {
             width: 20,
             height: 44
@@ -637,11 +656,11 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
 })
 
 // 断路器
-joint.shapes.basic.circuitBreaker = joint.shapes.devs.Switch.extend({
+joint.shapes.basic.circuitBreakerSwitch = joint.shapes.devs.Switch.extend({
     // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
     markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g></g>',
     defaults: _.defaultsDeep({
-        type: 'basic.circuitBreaker',
+        type: 'basic.circuitBreakerSwitch',
         size: {
             width: 10.2,
             height: 44
@@ -757,7 +776,7 @@ joint.shapes.basic.Generic.define('basic.textBox', {
         this.attr({
             '.fobj': joint.util.assign({}, size),
             p: {
-                style:`font-size:${this.get('fontSize')};margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
+                style:`font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;height:${size.height}px;width:${size.width}px`
             }
         });
     },
@@ -767,7 +786,7 @@ joint.shapes.basic.Generic.define('basic.textBox', {
         this.attr({
             fontSize: fontSize,
             p: {
-                style:`font-size:${fontSize};margin:0;text-align:center;height:${size.height}px;width:${size.width}px`
+                style:`font-size:${fontSize};margin:0;text-align:center;color:#000000;height:${size.height}px;width:${size.width}px`
             }
         })
     },
@@ -909,7 +928,7 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p5': {
-                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                d :"M-1.2 65.24 H9.2 L4.38,75.24 L-1.2 65.24Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -986,7 +1005,7 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p4': {
-                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                d :"M1.2 42.43 H11.2 L6.2,52.43 L1.2 42.43Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -1111,7 +1130,7 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p5': {
-                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                d :"M-1.2 65.24 H9.2 L4.38,75.24 L-1.2 65.24Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -1188,7 +1207,7 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p4': {
-                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                d :"M1.2 42.43 H11.2 L6.2,52.43 L1.2 42.43Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -1230,9 +1249,9 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
 joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     markup:[
         '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
-        '<g class="inPorts">',
+        '<g class="inPorts" >',
         '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
-        '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
+        '<g class="port2" transform=""><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
         '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
         '<g class="port4"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
         '<g class="port5"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
@@ -1323,7 +1342,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p5': {
-                d :"M1.2 65.24 H7.2 L4.38,70.24 L1.2 65.24Z",
+                d :"M-1.2 65.24 H9.2 L4.38,75.24 L-1.2 65.24Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -1400,7 +1419,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
                 'stroke-width': '1px'
             },
             '.p4': {
-                d :"M3.2 42.43 H9.2 L6.2,47.43 L3.2 42.43Z",
+                d :"M1.2 42.43 H11.2 L6.2,52.43 L1.2 42.43Z",
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px',
@@ -1467,9 +1486,9 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
             },
             '.line': {
                 x1: '10',
-                y1: '35',
+                y1: '42',
                 x2:'114',
-                y2:'35',
+                y2:'42',
                 stroke: 'black',
                 'stroke-width': '3px',
             }
@@ -1483,11 +1502,11 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
                         args: {
                             start: {
                                 x: 10,
-                                y: 35
+                                y: 42
                             },
                             end: {
                                 x: 114,
-                                y: 35
+                                y: 42
                             }
                         }
                     },
@@ -1506,11 +1525,11 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
                         args: {
                             start: {
                                 x: 10,
-                                y: 35
+                                y: 42
                             },
                             end: {
                                 x: 114,
-                                y: 35
+                                y: 42
                             }
                         }
                     },
