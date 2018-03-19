@@ -328,8 +328,7 @@ App.config = App.config || {};
         content: '有'
       },
     ],
-    linkInsulation:[
-      {
+    linkInsulation: [{
         value: true,
         content: '是'
       },
@@ -395,8 +394,12 @@ App.config = App.config || {};
               group: 'marker-source',
               label: '线头样式',
               index: 1,
-              when:{
-                not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}             
+              when: {
+                not: {
+                  eq: {
+                    'attrs/.connection/strokeDasharray': '0'
+                  }
+                }
               }
             },
             fill: {
@@ -419,9 +422,13 @@ App.config = App.config || {};
               group: 'marker-target',
               label: '线尾样式',
               index: 1,
-              when:{
-              not: { test: { 'attrs/.connection/strokeDasharray': '0' }}
-              // not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
+              when: {
+                not: {
+                  eq: {
+                    'attrs/.connection/strokeDasharray': '0'
+                  }
+                }
+                // not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
               }
             },
             fill: {
@@ -466,45 +473,48 @@ App.config = App.config || {};
             }
           }
         },
-        devsInfomation:{
-          name:{
+        devsInfomation: {
+          name: {
             type: 'text',
             label: '线路名称',
             group: 'presentation',
             index: 1
           },
-          type:{
+          type: {
             type: 'text',
             label: '型号',
+            defaultValue: 'JJ-100', 
             group: 'presentation',
             index: 2,
-            when:{
-              not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
-            }
           },
-          length:{
+          length: {
             type: 'text',
             label: '长度',
+            defaultValue: 10,            
             group: 'presentation',
             index: 3
           },
-          insulation:{
+          insulation: {
             type: 'select',
             label: '是否绝缘',
-            options:options.linkInsulation,
-            defaultValue:true,
+            options: options.linkInsulation,
+            defaultValue: true,
             group: 'presentation',
             index: 4
           },
-          main:{
-            type: 'select',
+          main: {
+            type: 'select-box',
             label: '是否主干电缆',
-            options:options.linkInsulation,
-            when:{
-              not: { test: { 'attrs/.connection/strokeDasharray': '0' }}
+            options: options.linkInsulation,
+            when: {
+              not: {
+                eq: {
+                  'attrs/.connection/strokeDasharray': '0'
+                }
+              }
             },
-            defaultValue:true,
-            group: 'presentation',
+            defaultValue: true,
+            group: 'main',
             index: 5
           }
         }
@@ -526,17 +536,13 @@ App.config = App.config || {};
           label: 'Labels',
           index: 4
         },
-        presentation:{
-          label:'属性',
-          index:0
-        }
-      },
-      renderFieldContent:function(options,path,value){
-        // console.log(path,value)
-      },
-      operators:{
-        test:function(cell,value,prop){
-          console.log(value)
+        presentation: {
+          label: '属性',
+          index: 5
+        },
+        main:{
+          label: '是否主干',
+          index: 6
         }
       }
     },
@@ -571,16 +577,6 @@ App.config = App.config || {};
     // 隔离开关配置
     'basic.isolationSwitch': {
       inputs: {
-        attrs: {
-          text: {
-            text: {
-              type: 'text',
-              label: '编号',
-              group: 'presentation',
-              index: 1
-            }
-          },
-        },
         state: {
           type: 'select',
           options: options.switchState,
@@ -588,29 +584,36 @@ App.config = App.config || {};
           label: '开关状态',
           group: 'presentation',
           index: 2
+        },
+        devsInfomation: {
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'property',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
+            group: 'property',
+            index: 2
+          }
         }
       },
       groups: {
         presentation: {
           label: '状态',
           index: 1
+        },
+        property: {
+          label: '属性',
+          index: 2
         }
       },
-
     },
     // 负荷开关配置
     'basic.loadSwitch': {
       inputs: {
-        attrs: {
-          text: {
-            text: {
-              type: 'text',
-              label: '编号',
-              group: 'presentation',
-              index: 1
-            }
-          },
-        },
         state: {
           type: 'select',
           options: options.switchState,
@@ -618,12 +621,30 @@ App.config = App.config || {};
           label: '开关状态',
           group: 'presentation',
           index: 2
+        },
+        devsInfomation: {
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'property',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
+            group: 'property',
+            index: 2
+          }
         }
       },
       groups: {
         presentation: {
           label: '状态',
           index: 1
+        },
+        property: {
+          label: '属性',
+          index: 2
         }
       },
     },
@@ -658,13 +679,13 @@ App.config = App.config || {};
             type: 'text',
             label: '数量',
             group: 'property',
-            defaultValue:'1',
+            defaultValue: '1',
             index: 5
           },
           power: {
             type: 'text',
             label: '容量',
-            defaultValue:'1',            
+            defaultValue: '1',
             group: 'property',
             index: 6
           },
@@ -1141,7 +1162,7 @@ App.config = App.config || {};
           num: {
             type: 'text',
             label: '数量',
-            defaultValue:'1',
+            defaultValue: '1',
             group: 'property',
             index: 4
           },
@@ -1190,7 +1211,7 @@ App.config = App.config || {};
             type: 'text',
             label: '数量',
             group: 'property',
-            defaultValue:'1',
+            defaultValue: '1',
             index: 4
           },
           power: {
@@ -1220,16 +1241,6 @@ App.config = App.config || {};
     },
     'basic.circuitBreakerSwitch': {
       inputs: {
-        attrs: {
-          text: {
-            text: {
-              type: 'text',
-              label: '编号',
-              group: 'presentation',
-              index: 1
-            }
-          },
-        },
         state: {
           type: 'select',
           options: options.switchState,
@@ -1237,10 +1248,28 @@ App.config = App.config || {};
           label: '开关状态',
           group: 'presentation',
           index: 2
+        },
+        devsInfomation: {
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'property',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
+            group: 'property',
+            index: 2
+          }
         }
       },
       groups: {
         presentation: {
+          label: '状态',
+          index: 1
+        },
+        property: {
           label: '状态',
           index: 1
         }
@@ -1262,7 +1291,7 @@ App.config = App.config || {};
           type: 'list',
           label: '下方接线口',
           item: {
-            type:'text'
+            type: 'text'
           },
           group: 'inPorts',
           index: 0
@@ -1271,7 +1300,7 @@ App.config = App.config || {};
           type: 'list',
           label: '上方接线口',
           item: {
-            type:'text'            
+            type: 'text'
           },
           group: 'inPorts',
           index: 0
@@ -1284,6 +1313,40 @@ App.config = App.config || {};
         }
       },
     },
+    'basic.cabinet':{
+      inputs: {
+        devsInfomation: {
+          name: {
+            type: 'text',
+            label: '名称',
+            group: 'property',
+            index: 1
+          },
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'property',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
+            group: 'property',
+            index: 2
+          }
+        }
+      },
+      groups: {
+        presentation: {
+          label: '状态',
+          index: 1
+        },
+        property: {
+          label: '状态',
+          index: 1
+        }
+      },
+    }
   };
 
 })();

@@ -704,7 +704,7 @@ joint.shapes.basic.circuitBreakerSwitch = joint.shapes.devs.Switch.extend({
     }, joint.shapes.basic.Generic.prototype.defaults)
 })
 // 柜体---->开关站柜体,变电柜柜体
-joint.shapes.basic.cabinet = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
     markup:'<g class="rotatable"><g class="scalable"><rect/><line/></g></g>',
     defaults: _.defaultsDeep({
         type: 'basic.cabinet',

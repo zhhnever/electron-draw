@@ -49,60 +49,66 @@
               <tbody>
                 <tr>
                   <td colspan="2">线路名称</td>
-                  <td>XXX线路</td>
+                  <td colspan="2">XXX线路</td>
                 </tr>
                 <tr>
                   <td rowspan="7">户台KVA</td>
                 </tr>
                 <tr>
                   <td>杆上公变</td>
-                  <td>{{ elementCounts.poleTypeTransformerPublic.user }}/{{ elementCounts.poleTypeTransformerPublic.num }}/{{ elementCounts.poleTypeTransformerPublic.power }}</td>                  
+                  <td colspan="2">{{ elementCounts.poleTypeTransformerPublic.user }}/{{ elementCounts.poleTypeTransformerPublic.num }}/{{ elementCounts.poleTypeTransformerPublic.power }}</td>                  
                 </tr>
                 <tr>
                   <td>箱式公变</td>
-                  <td>{{ elementCounts.KGStation.XB.user }}/{{ elementCounts.KGStation.XB.num }}/{{ elementCounts.KGStation.XB.power }}</td>
+                  <td colspan="2">{{ elementCounts.KGStation.XB.user }}/{{ elementCounts.KGStation.XB.num }}/{{ elementCounts.KGStation.XB.power }}</td>
                 </tr>
                 <tr>
                   <td>室内公变</td>
-                  <td>0</td>
+                  <td colspan="2">0</td>
                 </tr>
                 <tr>
                   <td>专变</td>
-                  <td>{{ elementCounts.poleTypeTransformer.user }}/{{ elementCounts.poleTypeTransformer.num }}/{{ elementCounts.poleTypeTransformer.power }}</td>
+                  <td colspan="2">{{ elementCounts.poleTypeTransformer.user }}/{{ elementCounts.poleTypeTransformer.num }}/{{ elementCounts.poleTypeTransformer.power }}</td>
                 </tr>
                 <tr>
                   <td>双电源</td>
-                  <td>{{ elementCounts.switch }}</td>
+                  <td colspan="2">{{ elementCounts.switch }}</td>
                 </tr>
                 <tr>
                   <td>配电总数</td>
-                  <td>{{ elementCounts.KGStation.PD.user }}/{{ elementCounts.KGStation.PD.num }}/{{ elementCounts.KGStation.PD.power }}</td>
+                  <td colspan="2">{{ elementCounts.KGStation.PD.user }}/{{ elementCounts.KGStation.PD.num }}/{{ elementCounts.KGStation.PD.power }}</td>
                 </tr>
                 <tr>
-                  <td rowspan="4">线路KM</td>
+                  <td id="linkRow" rowspan="5">线路KM</td>
                 </tr>
-                <tr>
-                  <td>绝缘线</td>
-                  <td>{{ elementCounts.switch }}</td>
+                <tr id="insulationLink">
+                  <td rowspan="2">绝缘线</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td></td>
-                  <td>{{ elementCounts.switch }}</td>
+                  <td></td>
+                </tr>
+                <tr id="uninsulationLink">
+                  <td>非绝缘线</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>总长</td>
-                  <td>{{ elementCounts.link.total }}</td>
+                  <td colspan="2">{{ elementCounts.link.total }}</td>
                 </tr>
                 <tr>
                   <td rowspan="3">电缆KM</td>
                 </tr>
-                <tr>
+                <tr id="mianCable">
                   <td>主干</td>
-                  <td>{{ elementCounts.switch }}</td>
+                  <td colspan="2">{{ elementCounts.link.mainCable }}</td>
                 </tr>
-                <tr>
+                <tr id="cable">
                   <td>分干</td>
-                  <td>{{ elementCounts.switch }}</td>
+                  <td colspan="2">{{ elementCounts.link.cable }}</td>
                 </tr>
               </tbody>
             </table>
@@ -122,6 +128,7 @@
   import $ from 'jquery'
   import _ from 'lodash'
   import fs from 'fs'
+  import eCounts from '../../assets/libs/elementCounts.js'
   export default {
     data: function () {
       return {
@@ -590,44 +597,13 @@
           ]
         },
         elementIdArrary: [],
-        elementCounts: {
-          KGStation: {
-            XB: {
-              user: 0,
-              num: 0,
-              power: 0
-            },
-            PD: {
-              user: 0,
-              num: 0,
-              power: 0
-            }
-          },
-          poleTypeTransformer: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          poleTypeTransformerPublic: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          DoublePower: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          link: {
-            main: {},
-            insulation: {}
-          }
-        }
+        elementCounts: eCounts.createNew()
       }
     },
     mounted: function () {
       const _this = this
       const ipcRenderer = this.$electron.ipcRenderer
+
       this.tabChangeJQuery() // 标签页切换
       joint.setTheme('modern') // 主题风格
       this.$store.commit('init', $('#paperScroller')) // 初始化paper
@@ -739,7 +715,7 @@
           cellView: cellView
         }
         let halo = new joint.ui.Halo(options)
-        if (cell.get('type') === 'basic.textLabel') {
+        if (cell.get('type') !== 'basic.textBox' && cell.get('type') !== 'basic.cabinet') {
           halo.removeHandle('resize')
         }
         halo.render()
@@ -787,47 +763,13 @@
         })
       },
       count: function (cell) {
-        if (cell.isLink()) return // 线路不统计
-        this.elementCounts = {
-          KGStation: {
-            XB: {
-              user: 0,
-              num: 0,
-              power: 0
-            },
-            PD: {
-              user: 0,
-              num: 0,
-              power: 0
-            }
-          },
-          poleTypeTransformer: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          poleTypeTransformerPublic: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          DoublePower: {
-            user: 0,
-            num: 0,
-            power: 0
-          },
-          link: {
-            main: {},
-            insulation: {}
-          }
-        }
-        let elements = this.graph.toJSON().cells
-  
+        this.elementCounts = eCounts.createNew()
+        let elements = this.graph.getElements()
         elements.map(element => {
-          let type = element.type.split('.')[1]
-          if (type.toLowerCase().indexOf('switch') !== -1 || type === 'textBox' || type === 'textLabel' || type === 'Link') return // 开关类/标签文本框不统计
-          let devsInfomation = element.devsInfomation
-          if (element.attrs.text.text === 'PD') {
+          let type = element.attributes.type.split('.')[1]
+          if (type.toLowerCase().indexOf('switch') !== -1 || type === 'textBox' || type === 'textLabel' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
+          let devsInfomation = element.attributes.devsInfomation
+          if (element.attributes.attrs.text.text === 'PD') {
             this.elementCounts[type].PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
               : 0
             this.elementCounts[type].PD.user += 1
@@ -835,7 +777,7 @@
               : 0
             return
           }
-          if (element.attrs.text.text === 'XB') {
+          if (element.attributes.attrs.text.text === 'XB') {
             this.elementCounts[type].XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
               : 0
             this.elementCounts[type].XB.user += 1
@@ -848,47 +790,40 @@
           this.elementCounts[type].user += 1
           this.elementCounts[type].power += devsInfomation.power ? parseInt(devsInfomation.power)
             : 0
-          // switch (element.type) {
-          //   case 'basic.KGStation':
-          //     if (element.attrs.text.text === 'PD') {
-          //       this.elementCounts.PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
-          //         : 0
-          //       this.elementCounts.PD.user += 1
-          //       this.elementCounts.PD.power += devsInfomation.power ? parseInt(devsInfomation.power)
-          //         : 0
-          //       return
-          //     }
-          //     if (element.attrs.text.text === 'XB') {
-          //       this.elementCounts.XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
-          //         : 0
-          //       this.elementCounts.XB.user += 1
-          //       this.elementCounts.XB.power += devsInfomation.power ? parseInt(devsInfomation.power)
-          //         : 0
-          //     }
-          //     break
-          //   case 'basic.poleTypeTransformerPublic':
-          //     this.elementCounts.ZSBYPublic.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
-          //     this.elementCounts.ZSBYPublic.user += 1
-          //     this.elementCounts.ZSBYPublic.power += devsInfomation.power ? parseInt(devsInfomation.power)
-          //       : 0
-          //     break
-          //   case 'basic.poleTypeTransformer':
-          //     this.elementCounts.ZSBY.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
-          //     this.elementCounts.ZSBY.user += 1
-          //     this.elementCounts.ZSBY.power += devsInfomation.power ? parseInt(devsInfomation.power)
-          //       : 0
-          //     break
-          //   case 'app.link':
-          //     this.elementCounts.ZSBY.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
-          //     this.elementCounts.ZSBY.user += 1
-          //     this.elementCounts.ZSBY.power += devsInfomation.power ? parseInt(devsInfomation.power)
-          //       : 0
-          //     break
-          //   default:
-          //     break
-          // }
         })
-        // console.log(elements)
+        let links = this.graph.getLinks()
+        if (links.length <= 0) return
+        links.map((link, index) => {
+          // 通过线条样式判断是线路还是电缆
+          let linkInfo = link.attributes.devsInfomation
+          let linkLength = linkInfo.length ? parseFloat(linkInfo.length) : 0
+          if (link.attributes.attrs['.connection'].strokeDasharray === '0') {
+            // 判断是否绝缘线
+            if (linkInfo.insulation) {
+              if (!this.elementCounts.link.insulation[linkInfo.type]) this.elementCounts.link.insulation[linkInfo.type] = 0
+              this.elementCounts.link.insulation[linkInfo.type] += linkLength
+            } else {
+              if (!this.elementCounts.link.uninsulation[linkInfo.type]) this.elementCounts.link.uninsulation[linkInfo.type] = 0
+              this.elementCounts.link.uninsulation[linkInfo.type] += linkLength
+            }
+          } else {
+            if (linkInfo.main) {
+              this.elementCounts.link.mainCable += linkLength
+            } else {
+              this.elementCounts.link.cable += linkLength
+            }
+          }
+          if ((index + 1) === links.length) {
+            let insulationLength = this.elementCounts.link.insulation.length === 0 ? 1 : this.elementCounts.link.insulation.length
+            let uninsulationLength = this.elementCounts.link.uninsulation.length === 0 ? 1 : this.elementCounts.link.insulation.length
+            $('linkRow').attr('rowspan', (uninsulationLength + insulationLength + 2))
+            for (let key in this.elementCounts.link.insulation) {
+            }
+          }
+        })
+      },
+      linkCount: function (cell) {
+
       },
       initializeTooltips: function () {
         new joint.ui.Tooltip({
