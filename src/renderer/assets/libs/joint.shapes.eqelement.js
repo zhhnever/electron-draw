@@ -147,6 +147,8 @@ import _ from 'lodash'
         attrs: {
             
         }
+    },{
+        
     })
 
     joint.shapes.basic.Generic.define('devs.PortCabinet',{
@@ -846,11 +848,12 @@ joint.shapes.basic.textLabel =  joint.shapes.basic.Generic.extend({
 // 环网柜A
 joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
     markup:[
-        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/>',
         '<g class="inPorts">',
         '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
         '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
         '<g class="port3"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
         '</g>',
         '</g>'].join(''),
     defaults: _.defaultsDeep({
@@ -862,22 +865,22 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
         attrs: {
             '.port1':{
                 ref:'.line',
-                'ref-x':10,
+                'ref-x':'10%',
                 'ref-y':0,                       
             },
             '.port2':{
                 ref:'.line',
-                'ref-x':40,
+                'ref-x':'45%',
                 'ref-y':0,  
             },
             '.port3':{
                 ref:'.line',
-                'ref-x':70,
+                'ref-x':'80%',
                 'ref-y':0,  
             },
             '.rect': {
-                width:44,
-                height:44,
+                width:124,
+                height:84,
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
@@ -936,9 +939,9 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
             },
             '.line':{
                 x1:'5',
-                y1:'5',
-                x2:'39',
-                y2:'5',
+                y1:'8',
+                x2:'119',
+                y2:'8',
                 stroke: 'black',
                 'stroke-width': '3px',
             },

@@ -69,6 +69,13 @@ const mutations = {
       dropAnimation: {
         duration: 100,
         easing: 'swing'
+      },
+      dragEndClone: function (element) {
+        console.log(element)
+        if (element.attributes.type.indexOf('HWCabinet') > -1) {
+          element.scale(2 * 1.2016129032258065, 2 * 1.3095238095238095)
+        }
+        return element.clone()
       }
     })
     dom.append(stencil.render().el)

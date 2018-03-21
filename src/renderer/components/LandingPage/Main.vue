@@ -440,8 +440,8 @@
           {
             type: 'basic.HWCabinetA',
             size: {
-              width: 124,
-              height: 92
+              width: 64,
+              height: 44
             },
             position: {
               x: 170,
@@ -716,7 +716,7 @@
         }
         let halo = new joint.ui.Halo(options)
         if (cell.get('type') !== 'basic.textBox' && cell.get('type') !== 'basic.cabinet') {
-          halo.removeHandle('resize')
+          // halo.removeHandle('resize')
         }
         halo.render()
       },

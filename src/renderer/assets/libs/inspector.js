@@ -318,7 +318,7 @@ App.config = App.config || {};
     }, {
       value: 'right',
       content: '右边'
-    }, ],
+    }],
     strokeOpacity: [{
         value: '0',
         content: '无'
@@ -1293,7 +1293,7 @@ App.config = App.config || {};
           item: {
             type: 'text'
           },
-          group: 'inPorts',
+          group: 'ports',
           index: 0
         },
         outPorts: {
@@ -1302,13 +1302,17 @@ App.config = App.config || {};
           item: {
             type: 'text'
           },
-          group: 'inPorts',
+          group: 'ports',
           index: 0
         },
       },
       groups: {
         presentation: {
           label: '状态',
+          index: 1
+        },
+        ports: {
+          label: '接口',
           index: 1
         }
       },
