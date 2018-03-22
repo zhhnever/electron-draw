@@ -2,25 +2,22 @@
 
 Copyright (c) 2015 client IO
 
- 2017-11-20 
-
-
+ 2017-11-20
 This Source Code Form is subject to the terms of the Rappid Trial License
 , v. 2.0. If a copy of the Rappid License was not distributed with this
 file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
- or from the Rappid archive as was distributed by client IO. See the LICENSE file.*/
+ or from the Rappid archive as was distributed by client IO. See the LICENSE file. */
 
-
-var App = App || {};
+let App = {}
 App.config = App.config || {};
 
 (function () {
+  'use strict'
 
-  'use strict';
+  let options = {
 
-  var options = {
-
-    colorPalette: [{
+    colorPalette: [
+      {
         content: 'transparent',
         icon: 'src/renderer/assets/images/transparent-icon.png'
       },
@@ -74,7 +71,8 @@ App.config = App.config || {};
       }
     ],
 
-    fontWeight: [{
+    fontWeight: [
+      {
         value: '300',
         content: '<span style="font-weight: 300">Light</span>'
       },
@@ -88,7 +86,8 @@ App.config = App.config || {};
       }
     ],
 
-    fontFamily: [{
+    fontFamily: [
+      {
         value: 'Alegreya Sans',
         content: '<span style="font-family: Alegreya Sans">Alegreya Sans</span>'
       },
@@ -102,7 +101,8 @@ App.config = App.config || {};
       }
     ],
 
-    strokeStyle: [{
+    strokeStyle: [
+      {
         value: '0',
         content: '架空线'
       },
@@ -112,7 +112,8 @@ App.config = App.config || {};
       }
     ],
 
-    side: [{
+    side: [
+      {
         value: 'top',
         content: '上方'
       },
@@ -130,7 +131,8 @@ App.config = App.config || {};
       }
     ],
 
-    portLabelPositionRectangle: [{
+    portLabelPositionRectangle: [
+      {
         value: {
           name: 'top',
           args: {
@@ -168,7 +170,8 @@ App.config = App.config || {};
       }
     ],
 
-    portLabelPositionEllipse: [{
+    portLabelPositionEllipse: [
+      {
         value: 'radial',
         content: 'Horizontal'
       },
@@ -178,7 +181,8 @@ App.config = App.config || {};
       }
     ],
 
-    imageIcons: [{
+    imageIcons: [
+      {
         value: 'assets/image-icon1.svg',
         content: '<img height="42px" src="assets/image-icon1.svg"/>'
       },
@@ -196,7 +200,8 @@ App.config = App.config || {};
       }
     ],
 
-    imageGender: [{
+    imageGender: [
+      {
         value: 'assets/member-male.png',
         content: '<img height="50px" src="assets/member-male.png" style="margin: 5px 0 0 2px;"/>'
       },
@@ -206,7 +211,8 @@ App.config = App.config || {};
       }
     ],
 
-    arrowheadSize: [{
+    arrowheadSize: [
+      {
         value: 'scale(0.001)',
         content: 'None'
       },
@@ -224,7 +230,8 @@ App.config = App.config || {};
       }
     ],
 
-    strokeWidth: [{
+    strokeWidth: [
+      {
         value: 1,
         content: '<div style="background:#fff;width:2px;height:30px;margin:0 14px;border-radius: 2px;"/>'
       },
@@ -242,7 +249,8 @@ App.config = App.config || {};
       }
     ],
 
-    router: [{
+    router: [
+      {
         value: 'normal',
         content: '<p style="background:#fff;width:2px;height:30px;margin:0 14px;border-radius: 2px;"/>'
       },
@@ -256,7 +264,8 @@ App.config = App.config || {};
       }
     ],
 
-    connector: [{
+    connector: [
+      {
         value: 'normal',
         content: '<p style="width:20px;height:20px;margin:5px;border-top:2px solid #fff;border-left:2px solid #fff;"/>'
       },
@@ -270,7 +279,8 @@ App.config = App.config || {};
       }
     ],
 
-    labelPosition: [{
+    labelPosition: [
+      {
         value: 30,
         content: 'Close to source'
       },
@@ -281,10 +291,11 @@ App.config = App.config || {};
       {
         value: -30,
         content: 'Close to target'
-      },
+      }
     ],
 
-    portMarkup: [{
+    portMarkup: [
+      {
         value: '<rect class="port-body" width="20" height="20" x="-10" y="-10"/>',
         content: 'Rectangle'
       },
@@ -298,13 +309,13 @@ App.config = App.config || {};
       }
     ],
     switchState: [{
-        value: '1',
-        content: '开'
-      },
-      {
-        value: '0',
-        content: '关'
-      }
+      value: '1',
+      content: '开'
+    },
+    {
+      value: '0',
+      content: '关'
+    }
     ],
     stationLabePostion: [{
       value: 'bottom',
@@ -320,54 +331,54 @@ App.config = App.config || {};
       content: '右边'
     }],
     strokeOpacity: [{
-        value: '0',
-        content: '无'
-      },
-      {
-        value: '1',
-        content: '有'
-      },
+      value: '0',
+      content: '无'
+    },
+    {
+      value: '1',
+      content: '有'
+    }
     ],
     linkInsulation: [{
-        value: true,
-        content: '是'
-      },
-      {
-        value: false,
-        content: '否'
-      },
+      value: true,
+      content: '是'
+    },
+    {
+      value: false,
+      content: '否'
+    }
     ],
     fontSize: [{
-        value: '8px',
-        content: '8'
-      },
-      {
-        value: '10px',
-        content: '10'
-      }, {
-        value: '12px',
-        content: '12'
-      }, {
-        value: '14px',
-        content: '14'
-      }, {
-        value: '18px',
-        content: '18'
-      }, {
-        value: '20px',
-        content: '20'
-      }, {
-        value: '24px',
-        content: '24'
-      }, {
-        value: '36px',
-        content: '36'
-      }, {
-        value: '48px',
-        content: '48'
-      },
+      value: '8px',
+      content: '8'
+    },
+    {
+      value: '10px',
+      content: '10'
+    }, {
+      value: '12px',
+      content: '12'
+    }, {
+      value: '14px',
+      content: '14'
+    }, {
+      value: '18px',
+      content: '18'
+    }, {
+      value: '20px',
+      content: '20'
+    }, {
+      value: '24px',
+      content: '24'
+    }, {
+      value: '36px',
+      content: '36'
+    }, {
+      value: '48px',
+      content: '48'
+    }
     ]
-  };
+  }
 
   App.config.inspector = {
     'app.Link': {
@@ -443,7 +454,7 @@ App.config = App.config || {};
               },
               index: 2
             }
-          },
+          }
         },
         router: {
           name: {
@@ -483,14 +494,14 @@ App.config = App.config || {};
           type: {
             type: 'text',
             label: '型号',
-            defaultValue: 'JJ-100', 
+            defaultValue: 'JJ-100',
             group: 'presentation',
-            index: 2,
+            index: 2
           },
           length: {
             type: 'text',
             label: '长度',
-            defaultValue: 10,            
+            defaultValue: 10,
             group: 'presentation',
             index: 3
           },
@@ -540,7 +551,7 @@ App.config = App.config || {};
           label: '属性',
           index: 5
         },
-        main:{
+        main: {
           label: '是否主干',
           index: 6
         }
@@ -555,7 +566,7 @@ App.config = App.config || {};
               label: '文本',
               group: 'presentation',
               index: 1
-            },
+            }
             // 'font-size': {
             //   type: 'range',
             //   min: 5,
@@ -564,7 +575,7 @@ App.config = App.config || {};
             //   group: 'presentation',
             //   index: 2
             // }
-          },
+          }
         }
       },
       groups: {
@@ -572,7 +583,7 @@ App.config = App.config || {};
           label: '属性',
           index: 1
         }
-      },
+      }
     },
     // 隔离开关配置
     'basic.isolationSwitch': {
@@ -609,7 +620,7 @@ App.config = App.config || {};
           label: '属性',
           index: 2
         }
-      },
+      }
     },
     // 负荷开关配置
     'basic.loadSwitch': {
@@ -646,7 +657,7 @@ App.config = App.config || {};
           label: '属性',
           index: 2
         }
-      },
+      }
     },
     'basic.KGStation': {
       inputs: {
@@ -658,7 +669,7 @@ App.config = App.config || {};
               group: 'presentation',
               index: 1
             }
-          },
+          }
         },
         lablePostion: {
           type: 'select',
@@ -694,8 +705,8 @@ App.config = App.config || {};
             label: '型号',
             group: 'property',
             index: 4
-          },
-        },
+          }
+        }
       },
       groups: {
         presentation: {
@@ -706,7 +717,7 @@ App.config = App.config || {};
           label: '属性',
           index: 1
         }
-      },
+      }
     },
     'basic.textBox': {
       inputs: {
@@ -742,7 +753,7 @@ App.config = App.config || {};
           label: '基础',
           index: 1
         }
-      },
+      }
     },
     'basic.HWCabinetA': {
       inputs: {
@@ -767,7 +778,7 @@ App.config = App.config || {};
               group: 'loadSwitchA',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           loadSwitchB: {
             type: {
@@ -788,7 +799,7 @@ App.config = App.config || {};
               group: 'loadSwitchB',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreaker: {
             type: {
@@ -809,8 +820,8 @@ App.config = App.config || {};
               group: 'circuitBreaker',
               options: options.switchState,
               index: 3
-            },
-          },
+            }
+          }
         },
         devsInfomation: {
           type: {
@@ -830,7 +841,7 @@ App.config = App.config || {};
             label: '编号',
             group: 'attribute',
             index: 3
-          },
+          }
         }
       },
       groups: {
@@ -850,7 +861,7 @@ App.config = App.config || {};
           label: '断路器',
           index: 4
         }
-      },
+      }
     },
     'basic.HWCabinetB': {
       inputs: {
@@ -875,7 +886,7 @@ App.config = App.config || {};
               group: 'loadSwitchA',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           loadSwitchB: {
             type: {
@@ -896,7 +907,7 @@ App.config = App.config || {};
               group: 'loadSwitchB',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreakerA: {
             type: {
@@ -917,7 +928,7 @@ App.config = App.config || {};
               group: 'circuitBreakerA',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreakerB: {
             type: {
@@ -938,8 +949,8 @@ App.config = App.config || {};
               group: 'circuitBreakerB',
               options: options.switchState,
               index: 3
-            },
-          },
+            }
+          }
         },
         devsInfomation: {
           type: {
@@ -959,7 +970,7 @@ App.config = App.config || {};
             label: '编号',
             group: 'attribute',
             index: 3
-          },
+          }
         }
       },
       groups: {
@@ -983,7 +994,7 @@ App.config = App.config || {};
           label: '断路器B',
           index: 5
         }
-      },
+      }
     },
     'basic.HWCabinetC': {
       inputs: {
@@ -1008,7 +1019,7 @@ App.config = App.config || {};
               group: 'loadSwitchA',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           loadSwitchB: {
             type: {
@@ -1029,7 +1040,7 @@ App.config = App.config || {};
               group: 'loadSwitchB',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreakerA: {
             type: {
@@ -1050,7 +1061,7 @@ App.config = App.config || {};
               group: 'circuitBreakerA',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreakerB: {
             type: {
@@ -1071,7 +1082,7 @@ App.config = App.config || {};
               group: 'circuitBreakerB',
               options: options.switchState,
               index: 3
-            },
+            }
           },
           circuitBreakerC: {
             type: {
@@ -1092,8 +1103,8 @@ App.config = App.config || {};
               group: 'circuitBreakerC',
               options: options.switchState,
               index: 3
-            },
-          },
+            }
+          }
         },
         devsInfomation: {
           type: {
@@ -1113,7 +1124,7 @@ App.config = App.config || {};
             label: '编号',
             group: 'attribute',
             index: 3
-          },
+          }
         }
       },
       groups: {
@@ -1141,7 +1152,7 @@ App.config = App.config || {};
           label: '断路器C',
           index: 6
         }
-      },
+      }
     },
     'basic.poleTypeTransformerPublic': {
       inputs: {
@@ -1177,8 +1188,8 @@ App.config = App.config || {};
             label: '型号',
             group: 'property',
             index: 2
-          },
-        },
+          }
+        }
       },
       groups: {
         presentation: {
@@ -1189,7 +1200,7 @@ App.config = App.config || {};
           label: '属性',
           index: 2
         }
-      },
+      }
     },
     'basic.poleTypeTransformer': {
       inputs: {
@@ -1225,8 +1236,8 @@ App.config = App.config || {};
             label: '型号',
             group: 'property',
             index: 2
-          },
-        },
+          }
+        }
       },
       groups: {
         presentation: {
@@ -1237,7 +1248,7 @@ App.config = App.config || {};
           label: '属性',
           index: 2
         }
-      },
+      }
     },
     'basic.circuitBreakerSwitch': {
       inputs: {
@@ -1273,7 +1284,7 @@ App.config = App.config || {};
           label: '状态',
           index: 1
         }
-      },
+      }
     },
     'basic.FDCabinet': {
       inputs: {
@@ -1304,7 +1315,7 @@ App.config = App.config || {};
           },
           group: 'ports',
           index: 0
-        },
+        }
       },
       groups: {
         presentation: {
@@ -1315,9 +1326,9 @@ App.config = App.config || {};
           label: '接口',
           index: 1
         }
-      },
+      }
     },
-    'basic.cabinet':{
+    'basic.cabinet': {
       inputs: {
         devsInfomation: {
           name: {
@@ -1349,11 +1360,10 @@ App.config = App.config || {};
           label: '状态',
           index: 1
         }
-      },
+      }
     }
-  };
-
-})();
+  }
+})()
 
 export default {
   inspectorConfig: App.config.inspector

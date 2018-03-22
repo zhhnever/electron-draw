@@ -59,7 +59,6 @@ const mutations = {
     // 初始化keyboard
   },
   initStencil: (state, dom) => {
-    // for (let i = 0; i < opt.length; i++) {
     let stencil = new joint.ui.Stencil({
       paper: state.paper,
       snaplines: state.snaplines,
@@ -71,8 +70,8 @@ const mutations = {
         easing: 'swing'
       },
       dragEndClone: function (element) {
-        console.log(element)
-        if (element.attributes.type.indexOf('HWCabinet') > -1) {
+        // 分支箱/环网柜 缩小
+        if (element.attributes.type.toLowerCase().indexOf('cabinet') > -1) {
           element.scale(2 * 1.2016129032258065, 2 * 1.3095238095238095)
         }
         return element.clone()

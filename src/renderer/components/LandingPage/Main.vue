@@ -110,18 +110,21 @@
       </div>
       <div id="paperScroller"></div>
     </div>
-
+    <canvas id="canvas" style="display:none"></canvas>
   </div>
 </template>
 
 <script>
 import joint from '../../assets/libs/rappid.min.js'
-import '../../assets/libs/joint.shapes.eqelement.js'
-import inspectorConfig from '../../assets/libs/inspector.js'
+import '../../jointconfig/joint.shapes.eqelement.js'
+import inspectorConfig from '../../jointconfig/inspector.js'
 import $ from 'jquery'
 import _ from 'lodash'
 import fs from 'fs'
-import eCounts from '../../assets/libs/elementCounts.js'
+import eCounts from '../../jointconfig/elementCounts.js'
+import canvg from 'canvg'
+import jqprint from '../../assets/libs/jqprint'
+
 export default {
   data: function () {
     return {
@@ -488,8 +491,8 @@ export default {
         {
           type: 'basic.FDCabinet',
           size: {
-            width: 44,
-            height: 44
+            width: 52,
+            height: 28
           },
           position: {
             x: 530,
@@ -669,7 +672,19 @@ export default {
         _this.elementIdArrary = []
       },
       'print:pointerclick': function () {
-        _this.paper.print()
+        let svgXml = $('#paperScroller svg')[0]
+        document.getElementById('canvas').setAttribute('height', svgXml.height.baseVal.value)
+        document.getElementById('canvas').setAttribute('width', svgXml.width.baseVal.value)
+        canvg(document.getElementById('canvas'), '<svg>' + svgXml.innerHTML + '</svg>', {
+          ignoreMouse: true,
+          ignoreAnimation: true
+        })
+        let image = _this.convertCanvasToImage(document.getElementById('canvas'))
+        console.log(image)
+        console.log(svgXml.innerHTML)
+        $(image).print({title: null, iframe: false})
+
+        // $('#canvas').attr('height',_this.paper.)
       },
       'tuopu:pointerclick': function () {
         // 生成拓扑图
@@ -816,9 +831,6 @@ export default {
         }
       })
     },
-    linkCount: function (cell) {
-
-    },
     initializeTooltips: function () {
       new joint.ui.Tooltip({
         rootTarget: document.body,
@@ -826,6 +838,11 @@ export default {
         direction: 'auto',
         padding: 10
       })
+    },
+    convertCanvasToImage: function (canvas) {
+      let image = new Image()
+      image.src = canvas.toDataURL('image/png')
+      return image
     }
   }
 }

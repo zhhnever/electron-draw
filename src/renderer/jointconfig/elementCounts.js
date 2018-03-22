@@ -1,6 +1,6 @@
-var ElementCounts = {
+let ElementCounts = {
   createNew: function () {
-    var elementCounts = {};
+    let elementCounts = {}
     elementCounts = {
       KGStation: {
         XB: {

@@ -1,6 +1,9 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, Tray, ipcMain, dialog } from 'electron'
+import { app, BrowserWindow, Menu, Tray, ipcMain, dialog, shell } from 'electron'
+import os from 'os'
+import fs from 'fs'
+import path from 'path'
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -135,5 +138,21 @@ ipcMain.on('save-file-dialog', function (event) {
   }
   dialog.showSaveDialog(options, function (filename) {
     event.sender.send('saved-file', filename)
+  })
+})
+
+ipcMain.on('print-to-pdf', function (event) {
+  const pdfPath = path.join(os.tmpdir(), 'print.pdf')
+  const win = BrowserWindow.fromWebContents(event.sender)
+  // Use default printing options
+  mainWindow.webContents.printToPDF({}, function (error, data) {
+    if (error) throw error
+    fs.writeFile(pdfPath, data, function (error) {
+      if (error) {
+        throw error
+      }
+      shell.openExternal('file://' + pdfPath)
+      event.sender.send('wrote-pdf', pdfPath)
+    })
   })
 })

@@ -2441,7 +2441,7 @@ joint-halo.joint-theme-material.surrounding.tiny .handle.w {
 }
 
 .joint-stencil.joint-theme-material input[type=search]::-moz-placeholder {
-  color: #d2d7e2b;
+  color: #d2d7e2;
   opacity: 1
 }
 
@@ -8596,5 +8596,19 @@ button.joint-widget.joint-theme-modern:hover {
   .printarea-size-a4 {
     width: 200mm!important;
     height: 232mm!important
+  }
+}
+
+@media print and (orientation:landscape) {
+  .printarea-size-a3 {
+    width: 420mm!important;
+    height: 297mm!important
+  }
+}
+
+@media print and (orientation:portrait) {
+  .printarea-size-a3 {
+    width: 420mm!important;
+    height: 297mm!important
   }
 }
