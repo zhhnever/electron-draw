@@ -711,13 +711,13 @@ joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
     defaults: _.defaultsDeep({
         type: 'basic.cabinet',
         size: {
-            width: 44,
-            height: 44
+            width: 124,
+            height: 84
         },
         attrs: {
             rect: {
-                width:44,
-                height:44,
+                width:124,
+                height:84,
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
@@ -725,7 +725,7 @@ joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
             line:{
                 x1:'5',
                 y1:'5',
-                x2:'39',
+                x2:'119',
                 y2:'5',
                 stroke: 'black',
                 'stroke-width': '3px'
@@ -939,9 +939,9 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
             },
             '.line':{
                 x1:'5',
-                y1:'8',
+                y1:'5',
                 x2:'119',
-                y2:'8',
+                y2:'5',
                 stroke: 'black',
                 'stroke-width': '3px',
             },
@@ -1045,12 +1045,13 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
 // 环网柜B
 joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
     markup:[
-        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/>',
         '<g class="inPorts">',
         '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
         '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
         '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
         '<g class="port4"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
         '</g>',
         '</g>'].join(''),
     defaults: _.defaultsDeep({
@@ -1062,27 +1063,27 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
         attrs: {
             '.port1':{
                 ref:'.line',
-                'ref-x':10,
+                'ref-x':'6%',
                 'ref-y':0,                       
             },
             '.port2':{
                 ref:'.line',
-                'ref-x':40,
+                'ref-x':'32%',
                 'ref-y':0,  
             },
             '.port3':{
                 ref:'.line',
-                'ref-x':70,
+                'ref-x':'62%',
                 'ref-y':0,  
             },
             '.port4':{
                 ref:'.line',
-                'ref-x':100,
+                'ref-x':'84%',
                 'ref-y':0,  
             },
             '.rect': {
-                width:44,
-                height:44,
+                width:124,
+                height:84,
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
@@ -1142,7 +1143,7 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
             '.line':{
                 x1:'5',
                 y1:'5',
-                x2:'39',
+                x2:'119',
                 y2:'5',
                 stroke: 'black',
                 'stroke-width': '3px',
@@ -1251,13 +1252,14 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
 // 环网柜C
 joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     markup:[
-        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+        '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/>',
         '<g class="inPorts" >',
         '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
         '<g class="port2" transform=""><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>', 
         '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
         '<g class="port4"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',         
         '<g class="port5"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',       
+        '</g>',
         '</g>',
         '</g>'].join(''),
     defaults: _.defaultsDeep({
@@ -1269,32 +1271,32 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
         attrs: {
             '.port1':{
                 ref:'.line',
-                'ref-x':10,
+                'ref-x':'3%',
                 'ref-y':0,                       
             },
             '.port2':{
                 ref:'.line',
-                'ref-x':40,
+                'ref-x':'24%',
                 'ref-y':0,  
             },
             '.port3':{
                 ref:'.line',
-                'ref-x':70,
+                'ref-x':'45%',
                 'ref-y':0,  
             },
             '.port4':{
                 ref:'.line',
-                'ref-x':100,
+                'ref-x':'68%',
                 'ref-y':0,  
             },
             '.port5':{
                 ref:'.line',
-                'ref-x':130,
+                'ref-x':'85%',
                 'ref-y':0,  
             },
             '.rect': {
-                width:44,
-                height:44,
+                width:124,
+                height:84,
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
@@ -1354,7 +1356,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
             '.line':{
                 x1:'5',
                 y1:'5',
-                x2:'39',
+                x2:'119',
                 y2:'5',
                 stroke: 'black',
                 'stroke-width': '3px',
@@ -1477,12 +1479,12 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
         type: 'basic.FDCabinet',
         size: {
             width: 124,
-            height: 84
+            height: 64
         },
         attrs: {
             '.rect': {
                 width: 124,
-                height: 84,
+                height:64,
                 fill: 'transparent',
                 stroke: 'black',
                 'stroke-width': '1px'
