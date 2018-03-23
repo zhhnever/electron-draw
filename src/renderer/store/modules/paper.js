@@ -2,7 +2,7 @@
 import joint, {
   layout
 } from '../../assets/libs/rappid.min.js'
-import '../../assets/libs/joint.shapes.eqelement.js'
+import '../../jointconfig/joint.shapes.eqelement.js'
 import _ from 'lodash'
 const state = {
   paper: null,

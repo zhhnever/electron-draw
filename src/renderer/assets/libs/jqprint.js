@@ -5,6 +5,8 @@
  *--------------------------------------------------------------------------*/
 
  import jQuery from 'jquery'
+ import {  BrowserWindow, ipcRenderer, BrowserWindowProxy } from 'electron'
+ import fs from 'fs'
 (function ($) {
   "use strict";
   // A nice closure for our definitions
@@ -31,6 +33,8 @@
               wdoc.write(options.doctype);
           }
           wdoc.write(content);
+          console.log(frameWindow.document)
+          
           wdoc.close();
           var printed = false;
           var callPrint = function () {
@@ -41,10 +45,10 @@
               frameWindow.focus();
               try {
                   // Fix for IE11 - printng the whole page instead of the iframe content
-                  if (!frameWindow.document.execCommand('print', false, null)) {
+                //   if (!frameWindow.document.execCommand('print', false, null)) {
                       // document.execCommand returns false if it failed -http://stackoverflow.com/a/21336448/937891
-                      frameWindow.print();
-                  }
+                     frameWindow.print();
+                //   }
                   // focus body as it is losing focus in iPad and content not getting printed
                   $('body').focus();
               } catch (e) {
@@ -242,15 +246,20 @@
       if (options.iframe) {
           // Use an iframe for printing
           try {
-              printContentInIFrame(content, options);
+              fs.writeFileSync('src/renderer/print/printTemplate.html',content,'utf8',function(err) {
+                  if (err) console.log(err)
+                  let win = window.open('src/renderer/print/printTemplate.html')  
+                  win.print()              
+              })
+            //   printContentInIFrame(content, options);
           } catch (e) {
               // Use the pop-up method if iframe fails for some reason
               console.error("Failed to print from iframe", e.stack, e.message);
-              printContentInNewWindow(content, options);
+            //   printContentInNewWindow(content, options);
           }
       } else {
           // Use a new window for printing
-          printContentInNewWindow(content, options);
+        //   printContentInNewWindow(content, options);
       }
       return this;
   };

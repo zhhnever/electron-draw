@@ -110,7 +110,7 @@
       </div>
       <div id="paperScroller"></div>
     </div>
-    <canvas id="canvas" style="display:none"></canvas>
+    <canvas id="canvas"></canvas>
   </div>
 </template>
 
@@ -672,18 +672,19 @@ export default {
         _this.elementIdArrary = []
       },
       'print:pointerclick': function () {
-        let svgXml = $('#paperScroller svg')[0]
-        document.getElementById('canvas').setAttribute('height', svgXml.height.baseVal.value)
-        document.getElementById('canvas').setAttribute('width', svgXml.width.baseVal.value)
-        canvg(document.getElementById('canvas'), '<svg>' + svgXml.innerHTML + '</svg>', {
-          ignoreMouse: true,
-          ignoreAnimation: true
-        })
-        let image = _this.convertCanvasToImage(document.getElementById('canvas'))
-        console.log(image)
-        console.log(svgXml.innerHTML)
-        $(image).print({title: null, iframe: false})
-
+        // let svgXml = $('#paperScroller .joint-paper')[0]
+        // console.log(svgXml)
+        // document.getElementById('canvas').setAttribute('height', svgXml.height.baseVal.value)
+        // document.getElementById('canvas').setAttribute('width', svgXml.width.baseVal.value)
+        // canvg(document.getElementById('canvas'), '<svg>' + svgXml.innerHTML + '</svg>', {
+        //   ignoreMouse: true,
+        //   ignoreAnimation: true
+        // })
+        // setTimeout(function () {
+        //   let image = _this.convertCanvasToImage(document.getElementById('canvas'))
+        $('#paperScroller .joint-paper').print()
+        // }, 200)
+        // _this.paper.print()
         // $('#canvas').attr('height',_this.paper.)
       },
       'tuopu:pointerclick': function () {
