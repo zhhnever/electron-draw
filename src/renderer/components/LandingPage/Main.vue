@@ -646,6 +646,17 @@ export default {
         })
       }
     })
+    ipcRenderer.on('wrote-pdf', function (event, data) {
+      if (data) {
+        fs.writeFile('d:/web/1.pdf', data, {
+          encoding: 'utf-8'
+        }, function (err) {
+          if (err) {
+            console.log('写入失败')
+          }
+        })
+      }
+    })
     // 监听元素点击事件
     paper.on('element:pointerup link:options', cellView => {
       // console.log(cellView)
@@ -682,9 +693,10 @@ export default {
         // })
         // setTimeout(function () {
         //   let image = _this.convertCanvasToImage(document.getElementById('canvas'))
-        $('#paperScroller .joint-paper').print()
+        // $('#paperScroller .joint-paper').print({title: '打印预览', prepend: '<button id="printBtn">打印<button>'})
+        // window.print()
         // }, 200)
-        // _this.paper.print()
+        _this.paper.print()
         // $('#canvas').attr('height',_this.paper.)
       },
       'tuopu:pointerclick': function () {
@@ -851,6 +863,13 @@ export default {
 <style scoped>
 @import url("../../assets/libs/rappid.min.css");
 @import url("../../assets/css/style.css");
+/*白纸黑字*/
+@media print {
+   body {
+      color: #000;
+      background: #fff;
+   }
+}
 .main {
   width: 100%;
   height: 100%;
@@ -863,9 +882,6 @@ export default {
   top: 188px;
   bottom: 0;
   border: 1px solid rgb(240, 240, 240);
-}
-
-#configuration {
 }
 
 table.altrowstable {

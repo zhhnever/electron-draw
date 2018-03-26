@@ -8563,7 +8563,9 @@ button.joint-widget.joint-theme-modern:hover {
     display: none!important
   }
   html>body>.printarea {
-    display: block!important
+    display: block!important;
+    height: 900px;
+    width: 1600px;
   }
   .printarea {
     position: absolute!important;

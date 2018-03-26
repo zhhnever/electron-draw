@@ -156,3 +156,25 @@ ipcMain.on('print-to-pdf', function (event) {
     })
   })
 })
+
+ipcMain.on('print-preview', function (event) {
+  let printWin = new BrowserWindow({width: 800, height: 600, title: '打印预览', autoHideMenuBar: true})
+  const pdfPath = path.join(os.tmpdir(), 'printTemplate.html')
+  const pdfSavePath = app.getPath('documents')
+  printWin.loadURL(winURL)
+  printWin.webContents.on('dom-ready', function () {
+    // Use default printing options
+    printWin.webContents.print()
+    // printWin.webContents.printToPDF({pageSize: 'A3', printBackground: true}, (error, data) => {
+    //   if (error) throw error
+    //   event.sender.send('wrote-pdf', data)
+    //   // fs.writeFile(`${pdfSavePath}/print.pdf`, data, function (error) {
+    //   //   if (error) {
+    //   //     throw error
+    //   //   }
+    //   //   shell.openExternal(`${pdfSavePath}/print.pdf`)
+    //   //   // event.sender.send('wrote-pdf', pdfPath)
+    //   // })
+    // })
+  })
+})
