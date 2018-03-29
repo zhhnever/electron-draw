@@ -82,6 +82,11 @@ import _ from 'lodash'
         default:
           break
       }
+    },
+    updateDevsInfomation: (modal, change, opt) => {
+      for (let value in change) {
+        if (value && value !== '') {}
+      }
     }
   })
 
@@ -494,10 +499,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
         'refY2': 35
       }
     }
-  }, joint.shapes.basic.Generic.prototype.defaults),
-  updateDevsInfomation: (modal, change, opt) => {
-    // todo 更新信息
-  }
+  }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
 // 柱上变压器(公)

@@ -122,8 +122,6 @@ import $ from 'jquery'
 import _ from 'lodash'
 import fs from 'fs'
 import eCounts from '../../jointconfig/elementCounts.js'
-import canvg from 'canvg'
-import jqprint from '../../assets/libs/jqprint'
 
 export default {
   data: function () {
@@ -683,21 +681,7 @@ export default {
         _this.elementIdArrary = []
       },
       'print:pointerclick': function () {
-        // let svgXml = $('#paperScroller .joint-paper')[0]
-        // console.log(svgXml)
-        // document.getElementById('canvas').setAttribute('height', svgXml.height.baseVal.value)
-        // document.getElementById('canvas').setAttribute('width', svgXml.width.baseVal.value)
-        // canvg(document.getElementById('canvas'), '<svg>' + svgXml.innerHTML + '</svg>', {
-        //   ignoreMouse: true,
-        //   ignoreAnimation: true
-        // })
-        // setTimeout(function () {
-        //   let image = _this.convertCanvasToImage(document.getElementById('canvas'))
-        // $('#paperScroller .joint-paper').print({title: '打印预览', prepend: '<button id="printBtn">打印<button>'})
-        // window.print()
-        // }, 200)
         _this.paper.print()
-        // $('#canvas').attr('height',_this.paper.)
       },
       'tuopu:pointerclick': function () {
         // 生成拓扑图
