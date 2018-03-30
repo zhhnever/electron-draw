@@ -557,7 +557,7 @@ App.config = App.config || {};
         }
       }
     },
-    'basic.textLabel': {
+    'basic.TextLabel': {
       inputs: {
         attrs: {
           text: {
@@ -719,7 +719,7 @@ App.config = App.config || {};
         }
       }
     },
-    'basic.textBox': {
+    'basic.TextBox': {
       inputs: {
         attrs: {
           rect: {

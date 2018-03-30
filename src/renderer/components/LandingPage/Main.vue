@@ -561,7 +561,7 @@ export default {
         }
         ],
         others: [{
-          type: 'basic.textBox',
+          type: 'basic.TextBox',
           size: {
             width: 44,
             height: 44
@@ -573,7 +573,7 @@ export default {
           content: '文本框'
         },
         {
-          type: 'basic.textLabel',
+          type: 'basic.TextLabel',
           size: {
             width: 44,
             height: 24
@@ -773,7 +773,7 @@ export default {
       let elements = this.graph.getElements()
       elements.map(element => {
         let type = element.attributes.type.split('.')[1]
-        if (type.toLowerCase().indexOf('switch') !== -1 || type === 'textBox' || type === 'textLabel' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
+        if (type.toLowerCase().indexOf('switch') !== -1 || type === 'TextBox' || type === 'TextLabel' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
         let devsInfomation = element.attributes.devsInfomation
         if (element.attributes.attrs.text.text === 'PD') {
           this.elementCounts[type].PD.num += devsInfomation.num ? parseInt(devsInfomation.num)

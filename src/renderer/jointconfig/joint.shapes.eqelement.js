@@ -2,7 +2,8 @@
 
 import joint from '../assets/libs/rappid.min.js'
 import _ from 'lodash'
-(function (joint) {
+import vue from 'vue'
+(function (joint, Vue) {
 // 定义开关基类,初始化监听状态改变,
 // 状态改变之后 改变线路颜色
   'use strict'
@@ -33,7 +34,8 @@ import _ from 'lodash'
       num: 1,
       power: ''
     },
-    lablePostion: 'bottom'
+    lablePostion: 'bottom',
+    labelId: '' // 文本标签的id
   }, {
     initialize: function () {
       joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
@@ -84,9 +86,30 @@ import _ from 'lodash'
       }
     },
     updateDevsInfomation: (modal, change, opt) => {
-      for (let value in change) {
-        if (value && value !== '') {}
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = modal.getBBox()
+      let labelText = ''
+
+      if (!modal.labelId || modal.labelId === '') {
+        textLabel = new joint.shapes.basic.TextBox({
+          position: {x: aRect.x, y: aRect.y + aRect.height + 5},
+          attrs: { rect: { 'stroke-opacity': 0 } },
+          content: '',
+          size: { width: 70, height: 30 },
+          targetElement: modal.id
+        })
+      } else {
+        textLabel = graph.getCell(modal.labelId)
       }
+      modal.labelId = textLabel.id
+      Object.keys(change).forEach(function (key) {
+        if (change[key] && change[key] !== '') labelText += change[key] + '/'
+      })
+      setTimeout(() => {
+        textLabel.setDivContent(this, labelText)
+        graph.addCell(textLabel)
+      }, 20)
     }
   })
 
@@ -229,7 +252,7 @@ import _ from 'lodash'
       return this._changeGroup('out', properties, opt)
     }
   })
-})(joint)
+})(joint, vue)
 
 //
 
@@ -727,11 +750,11 @@ joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
 })
 
 // 文本框
-joint.shapes.basic.Generic.define('basic.textBox', {
+joint.shapes.basic.Generic.define('basic.TextBox', {
   // see joint.css for more element styles
   attrs: {
     '.content': {
-      text: '',
+      html: '',
       style: 'margin:0;text-align:center'
     },
     rect: {
@@ -752,13 +775,14 @@ joint.shapes.basic.Generic.define('basic.textBox', {
   ].join(''),
 
   initialize: function () {
+    joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
     this.listenTo(this, 'change:size', this.updateSize)
     this.listenTo(this, 'change:content', this.updateContent)
     this.listenTo(this, 'change:fontSize', this.updateFontSize)
+    // this.listenTo(this, 'change:attr/.content', this.updateContent)
     this.updateSize(this, this.get('size'))
     this.updateContent(this, this.get('content'))
     this.updateFontSize(this, this.get('fontSize'))
-    joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
   },
 
   updateSize: function (cell, size) {
@@ -813,10 +837,10 @@ joint.shapes.basic.Generic.define('basic.textBox', {
 })
 
 // 文本标签
-joint.shapes.basic.textLabel = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.TextLabel = joint.shapes.basic.Generic.extend({
   markup: '<g class="rotatable"><text/></g>',
   defaults: _.defaultsDeep({
-    type: 'basic.textLabel',
+    type: 'basic.TextLabel',
     size: {
       width: 44,
       height: 24
@@ -827,7 +851,8 @@ joint.shapes.basic.textLabel = joint.shapes.basic.Generic.extend({
         'font-size': 14,
         fill: '#000000'
       }
-    }
+    },
+    targetElement: '' // 目标元素的id,这个标签属于这个id指向的元素
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
