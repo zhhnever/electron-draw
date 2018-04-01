@@ -12,6 +12,9 @@
         <li name='switch'>
           <span>开断设备</span>
         </li>
+        <li name='tower'>
+          <span>杆塔/连接点</span>
+        </li>
         <li name='others'>
           <span>其他</span>
         </li>
@@ -57,7 +60,7 @@
                 </tr>
                 <tr>
                   <td>室内公变</td>
-                  <td colspan="2">0</td>
+                  <td colspan="2">{{ elementCounts.KGStation.PD.user }}/{{ elementCounts.KGStation.PD.num }}/{{ elementCounts.KGStation.PD.power }}</td>
                 </tr>
                 <tr>
                   <td>专变</td>
@@ -69,23 +72,17 @@
                 </tr>
                 <tr>
                   <td>配电总数</td>
-                  <td colspan="2">{{ elementCounts.KGStation.PD.user }}/{{ elementCounts.KGStation.PD.num }}/{{ elementCounts.KGStation.PD.power }}</td>
+                  <td colspan="2"></td>
                 </tr>
                 <tr>
                   <td id="linkRow" rowspan="5">线路KM</td>
                 </tr>
                 <tr id="insulationLink">
-                  <td rowspan="2">绝缘线</td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
+                  <td >绝缘线</td>
                   <td></td>
                 </tr>
                 <tr id="uninsulationLink">
                   <td>非绝缘线</td>
-                  <td></td>
                   <td></td>
                 </tr>
                 <tr>
@@ -110,7 +107,6 @@
       </div>
       <div id="paperScroller"></div>
     </div>
-    <canvas id="canvas"></canvas>
   </div>
 </template>
 
@@ -198,7 +194,7 @@ export default {
           // },
           {
             type: 'undo',
-            name: 'undo',
+            name: '撤销',
             attrs: {
               button: {
                 'data-tooltip': '撤销',
@@ -209,7 +205,7 @@ export default {
           },
           {
             type: 'redo',
-            name: 'redo',
+            name: '前进',
             attrs: {
               button: {
                 'data-tooltip': '前进',
@@ -380,9 +376,6 @@ export default {
                 'data-tooltip': '柱上变压(公)',
                 'data-tooltip-position': 'bottom',
                 'data-tooltip-position-selector': '.joint-stencil'
-              },
-              text: {
-                text: '柱上变压'
               }
             },
             devsInfomation: {
@@ -407,103 +400,101 @@ export default {
                 'data-tooltip': '柱上变压(专)',
                 'data-tooltip-position': 'bottom',
                 'data-tooltip-position-selector': '.joint-stencil'
-              },
-              text: {
-                text: '柱上变压'
               }
             }
           }
         ],
-        hw: [{
-          type: 'basic.cabinet',
-          size: {
-            width: 44,
-            height: 44
+        hw: [
+          {
+            type: 'basic.cabinet',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 70,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(自定义)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
+            }
           },
-          position: {
-            x: 70,
-            y: 20
+          {
+            type: 'basic.HWCabinetA',
+            size: {
+              width: 64,
+              height: 44
+            },
+            position: {
+              x: 170,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(A)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
+            }
           },
-          attrs: {
-            '.': {
-              'data-tooltip': '环网柜(自定义)',
-              'data-tooltip-position': 'bottom',
-              'data-tooltip-position-selector': '.joint-stencil'
+          {
+            type: 'basic.HWCabinetB',
+            size: {
+              width: 64,
+              height: 44
+            },
+            position: {
+              x: 290,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(B)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
+            }
+          },
+          {
+            type: 'basic.HWCabinetC',
+            size: {
+              width: 64,
+              height: 44
+            },
+            position: {
+              x: 410,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '环网柜(C)',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
+            }
+          },
+          {
+            type: 'basic.FDCabinet',
+            size: {
+              width: 52,
+              height: 28
+            },
+            position: {
+              x: 530,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '分支箱',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              }
             }
           }
-        },
-        {
-          type: 'basic.HWCabinetA',
-          size: {
-            width: 64,
-            height: 44
-          },
-          position: {
-            x: 170,
-            y: 20
-          },
-          attrs: {
-            '.': {
-              'data-tooltip': '环网柜(A)',
-              'data-tooltip-position': 'bottom',
-              'data-tooltip-position-selector': '.joint-stencil'
-            }
-          }
-        },
-        {
-          type: 'basic.HWCabinetB',
-          size: {
-            width: 64,
-            height: 44
-          },
-          position: {
-            x: 290,
-            y: 20
-          },
-          attrs: {
-            '.': {
-              'data-tooltip': '环网柜(B)',
-              'data-tooltip-position': 'bottom',
-              'data-tooltip-position-selector': '.joint-stencil'
-            }
-          }
-        },
-        {
-          type: 'basic.HWCabinetC',
-          size: {
-            width: 64,
-            height: 44
-          },
-          position: {
-            x: 410,
-            y: 20
-          },
-          attrs: {
-            '.': {
-              'data-tooltip': '环网柜(C)',
-              'data-tooltip-position': 'bottom',
-              'data-tooltip-position-selector': '.joint-stencil'
-            }
-          }
-        },
-        {
-          type: 'basic.FDCabinet',
-          size: {
-            width: 52,
-            height: 28
-          },
-          position: {
-            x: 530,
-            y: 20
-          },
-          attrs: {
-            '.': {
-              'data-tooltip': '分支箱',
-              'data-tooltip-position': 'bottom',
-              'data-tooltip-position-selector': '.joint-stencil'
-            }
-          }
-        }
         ],
         switch: [{
           type: 'basic.isolationSwitch',
@@ -560,6 +551,17 @@ export default {
           }
         }
         ],
+        tower: [{
+          type: 'basic.Tower',
+          size: {
+            width: 10,
+            height: 10
+          },
+          position: {
+            x: 70,
+            y: 50
+          }
+        }],
         others: [{
           type: 'basic.TextBox',
           size: {
@@ -600,12 +602,12 @@ export default {
     const ipcRenderer = this.$electron.ipcRenderer
 
     this.tabChangeJQuery() // 标签页切换
-    joint.setTheme('modern') // 主题风格
+    // joint.setTheme('modern') // 主题风格
     this.$store.commit('init', $('#paperScroller')) // 初始化paper
     this.$store.commit('initStencil', $('#basicStencil')) // 初始化stencil
     this.$store.commit('stencilLoadConfig', this.stencilConfig.basic) // 加载stencil config
     this.$store.commit('initializeKeyboardShortcuts') // 加载快捷键
-    this.initializeTooltips()
+    // this.initializeTooltips()
     let paper = this.paper = this.$store.state.paper.paper
     let graph = this.graph = this.$store.state.paper.graph
     let commandManager = this.commandManager = this.$store.state.paper.commandManager
@@ -709,6 +711,11 @@ export default {
     graph.on('add change:devsInfomation remove', cell => {
       this.count(cell)
     })
+    graph.on('add', cell => {
+      if (cell.isLink()) return
+      cell.attr('.label/text', '')
+      // cell.attr('circle/magnet', true)
+    })
   },
   methods: {
     // 打开halo
@@ -773,9 +780,9 @@ export default {
       let elements = this.graph.getElements()
       elements.map(element => {
         let type = element.attributes.type.split('.')[1]
-        if (type.toLowerCase().indexOf('switch') !== -1 || type === 'TextBox' || type === 'TextLabel' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
+        if (type.toLowerCase().indexOf('switch') !== -1 || type === 'TextBox' || type === 'TextLabel' || type === 'Tower' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
         let devsInfomation = element.attributes.devsInfomation
-        if (element.attributes.attrs.text.text === 'PD') {
+        if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'PD') {
           this.elementCounts[type].PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
             : 0
           this.elementCounts[type].PD.user += 1
@@ -783,7 +790,7 @@ export default {
             : 0
           return
         }
-        if (element.attributes.attrs.text.text === 'XB') {
+        if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'XB') {
           this.elementCounts[type].XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
             : 0
           this.elementCounts[type].XB.user += 1
@@ -977,4 +984,10 @@ table.altrowstable td {
 .deviceStatisticsContent {
   padding-left: 20px;
 }
+/* .joint-theme-default .joint-paper{
+  box-shadow: 0 0 2px #000  
+} */
+/* .joint-paper-scroller.joint-theme-default .joint-paper {
+  box-shadow: 0 0 2px #000
+} */
 </style>

@@ -1,9 +1,8 @@
 // joint paper module
-import joint, {
-  layout
-} from '../../assets/libs/rappid.min.js'
+import joint from '../../assets/libs/rappid.min.js'
 import '../../jointconfig/joint.shapes.eqelement.js'
 import _ from 'lodash'
+import V from 'jquery'
 const state = {
   paper: null,
   snaplines: null,
@@ -34,8 +33,36 @@ const mutations = {
       width: 1600,
       height: 900,
       model: state.graph,
-      defaultLink: new joint.shapes.app.Link,
-      perpendicularLinks: true
+      defaultLink: new joint.shapes.app.Link({
+        vertexOnDblClick: true // 双击线路可以弯曲线路
+      }),
+      perpendicularLinks: true,
+      linkView: joint.dia.LinkView.extend({
+        pointerdblclick: function (evt, x, y) {
+          if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+            this.addVertex({ x: x, y: y })
+          }
+        },
+        // 单击线路打开线路属性
+        pointerclick: function (evt, x, y) {
+          this.notify('link:options', evt, x, y)
+        },
+        mouseover: function () {
+          return
+        },
+        mouseenter: function (evt) {
+          return
+        }
+      }),
+      interactive: function (cellView) {
+        // 自定义vertexOnDblClick属性,只针对link有效,双加增加vertex点.
+        if (cellView.model.get('vertexOnDblClick')) {
+          return {
+            vertexAdd: false
+          }
+        }
+        return true
+      }
     })
     paper.drawGrid()
     state.paper = paper
@@ -63,7 +90,7 @@ const mutations = {
       paper: state.paper,
       snaplines: state.snaplines,
       width: 1920,
-      height: 200,
+      height: 100,
       // search: { '*': ['type'] },
       dropAnimation: {
         duration: 100,
@@ -88,7 +115,8 @@ const mutations = {
     let keyboard = state.keyboard = new joint.ui.Keyboard()
     let clipboard = state.clipboard = new joint.ui.Clipboard() // 初始化剪切板
     let selection = state.selection = new joint.ui.Selection({
-      paper: state.paper
+      paper: state.paper,
+      filter: ['basic.TextBox']
     })
 
     state.paper.on('blank:pointerdown', selection.startSelecting)

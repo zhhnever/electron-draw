@@ -661,30 +661,35 @@ App.config = App.config || {};
     },
     'basic.KGStation': {
       inputs: {
-        attrs: {
-          '.label': {
-            text: {
-              type: 'text',
-              label: '名称',
-              group: 'presentation',
-              index: 1
-            }
-          }
-        },
-        lablePostion: {
-          type: 'select',
-          options: options.stationLabePostion,
-          defaultValue: '1',
-          label: '名称位置',
-          group: 'presentation',
-          index: 2
-        },
+        // lablePostion: {
+        //   type: 'select',
+        //   options: options.stationLabePostion,
+        //   defaultValue: '1',
+        //   label: '名称位置',
+        //   group: 'presentation',
+        //   index: 2
+        // },
         devsInfomation: {
+          name: {
+            type: 'text',
+            label: '名称',
+            group: 'presentation',
+            // defaultValue: '1',
+            index: 1
+          },
           code: {
             type: 'text',
             label: '编号',
             group: 'property',
+            defaultValue: '',
             index: 3
+          },
+          type: {
+            type: 'text',
+            label: '型号',
+            group: 'property',
+            defaultValue: '',
+            index: 4
           },
           num: {
             type: 'text',
@@ -696,15 +701,9 @@ App.config = App.config || {};
           power: {
             type: 'text',
             label: '容量',
-            defaultValue: '1',
+            defaultValue: '',
             group: 'property',
             index: 6
-          },
-          type: {
-            type: 'text',
-            label: '型号',
-            group: 'property',
-            index: 4
           }
         }
       },

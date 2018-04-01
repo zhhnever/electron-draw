@@ -2,8 +2,7 @@
 
 import joint from '../assets/libs/rappid.min.js'
 import _ from 'lodash'
-import vue from 'vue'
-(function (joint, Vue) {
+(function (joint) {
 // 定义开关基类,初始化监听状态改变,
 // 状态改变之后 改变线路颜色
   'use strict'
@@ -26,92 +25,103 @@ import vue from 'vue'
     }
   })
   // 定义设备基类
-  joint.shapes.basic.Generic.define('devs.Equipment', {
-    devsInfomation: {
-      name: '',
-      code: '', // 编码
-      type: '', // 型号
-      num: 1,
-      power: ''
-    },
-    lablePostion: 'bottom',
-    labelId: '' // 文本标签的id
-  }, {
-    initialize: function () {
-      joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
-      this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
-      this.on('change:lablePostion', this.changeLabelPosstion, this) // 添加 监听文本位置改变的方法
-    },
-    changeLabelPosstion: (modal, change, opt) => {
-      switch (change) {
-        case 'bottom':
-          modal.attr({
-            '.label': {
-              'refY2': 35,
-              'refX2': 0,
-              transform: 'rotate(0)'
-            }
-          })
-          break
-        case 'top':
-          modal.attr({
-            '.label': {
-              'refY2': -35,
-              'refX2': 0,
-              transform: 'rotate(0)'
-            }
-          })
-          break
-        case 'left':
-          modal.attr({
-            '.label': {
-              'refY2': 0,
-              'refX2': -35,
-              transform: 'rotate(90)'
-            }
-          })
-          break
-        case 'right':
-          modal.attr({
-            '.label': {
-              'refY2': 0,
-              'refX2': 35,
-              transform: 'rotate(90)'
-            }
-          })
-          break
+  joint.shapes.basic.Generic.define('devs.Equipment',
+    {
+      devsInfomation: {
+        name: '',
+        code: '', // 编码
+        type: '0', // 型号
+        num: 1,
+        power: ''
+      },
+      lablePostion: 'bottom',
+      labelId: '' // 文本标签的id
+    }, {
+      initialize: function () {
+        joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
+        this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
+        this.on('change:lablePostion', this.changeLabelPosition, this) // 添加 监听文本位置改变的方法
+        this.on('change:position', this.changePositon, this) // 移动的时候标签跟着一起移动
+      },
+      changePositon: (modal, change, opt) => {
+        if (modal.labelId && modal.labelId !== '') {
+          let textBox = modal.graph.getCell(modal.labelId)
 
-        default:
-          break
-      }
-    },
-    updateDevsInfomation: (modal, change, opt) => {
-      let graph = modal.graph
-      let textLabel = null
-      let aRect = modal.getBBox()
-      let labelText = ''
+          textBox.translate(opt.tx, opt.ty)
+        }
+      },
+      changeLabelPosition: (modal, change, opt) => {
+        switch (change) {
+          case 'bottom':
+            modal.attr({
+              '.label': {
+                'refY2': 35,
+                'refX2': 0,
+                transform: 'rotate(0)'
+              }
+            })
+            break
+          case 'top':
+            modal.attr({
+              '.label': {
+                'refY2': -35,
+                'refX2': 0,
+                transform: 'rotate(0)'
+              }
+            })
+            break
+          case 'left':
+            modal.attr({
+              '.label': {
+                'refY2': 0,
+                'refX2': -35,
+                transform: 'rotate(90)'
+              }
+            })
+            break
+          case 'right':
+            modal.attr({
+              '.label': {
+                'refY2': 0,
+                'refX2': 35,
+                transform: 'rotate(90)'
+              }
+            })
+            break
 
-      if (!modal.labelId || modal.labelId === '') {
-        textLabel = new joint.shapes.basic.TextBox({
-          position: {x: aRect.x, y: aRect.y + aRect.height + 5},
-          attrs: { rect: { 'stroke-opacity': 0 } },
-          content: '',
-          size: { width: 70, height: 30 },
-          targetElement: modal.id
+          default:
+            break
+        }
+      },
+      updateDevsInfomation: (modal, change, opt) => {
+        let graph = modal.graph
+        let textLabel = null
+        let aRect = modal.getBBox()
+        let labelText = ''
+
+        if (!modal.labelId || modal.labelId === '') {
+          textLabel = new joint.shapes.basic.TextBox({
+            position: {x: aRect.x, y: aRect.y + aRect.height + 5},
+            attrs: { rect: { 'stroke-opacity': 0 } },
+            content: '',
+            size: { width: 70, height: 30 },
+            targetElement: modal.id
+          })
+        } else {
+          textLabel = graph.getCell(modal.labelId)
+        }
+        // console.log(change)
+        Object.keys(change).forEach(function (key) {
+          if (change[key] && change[key] !== '') labelText += change[key] + '/'
         })
-      } else {
-        textLabel = graph.getCell(modal.labelId)
+        // labelText = `${change.name}/${change.code}/${change.type}/${change.num}/${change.power}`
+        setTimeout(() => {
+          modal.labelId = textLabel.id
+          textLabel.setDivContent(this, labelText)
+          graph.addCell(textLabel)
+        }, 20)
       }
-      modal.labelId = textLabel.id
-      Object.keys(change).forEach(function (key) {
-        if (change[key] && change[key] !== '') labelText += change[key] + '/'
-      })
-      setTimeout(() => {
-        textLabel.setDivContent(this, labelText)
-        graph.addCell(textLabel)
-      }, 20)
-    }
-  })
+    })
 
   joint.dia.Link.define('app.Link', {
     devsInfomation: {
@@ -162,15 +172,7 @@ import vue from 'vue'
       name: '',
       code: '',
       type: 1
-    },
-    switch: {
-
-    },
-    attrs: {
-
     }
-  }, {
-
   })
 
   joint.shapes.basic.Generic.define('devs.PortCabinet', {}, {
@@ -189,7 +191,6 @@ import vue from 'vue'
     changeSize: function (model, changed, opt) {
       console.log(model)
       if (model.attributes.ports.items.length > 0) {
-
       }
     },
     updatePortItems: function (model, changed, opt) {
@@ -252,14 +253,14 @@ import vue from 'vue'
       return this._changeGroup('out', properties, opt)
     }
   })
-})(joint, vue)
+})(joint)
 
 //
 
 // 隔离开关
 joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
   // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g><text/>',
-  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
     type: 'basic.isolationSwitch',
     size: {
@@ -318,17 +319,18 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
         'stroke-linejoin': 'round',
         'stroke-width': '1px'
       },
-      text: {
+      '.label': {
         'font-size': 14,
         text: '隔离开关',
         'y-alignment': 'middle',
         'x-alignment': 'middle',
         fill: 'black',
-        'ref': 'rect',
-        'refX': 1,
-        'refY': 0.5,
-        'refX2': -10,
-        transform: 'rotate(-90)'
+        'ref': '.line2',
+        'refX': 1.5,
+        'refY': 25,
+        // 'refX2': 10,
+        'refY2': ''
+        // transform: 'rotate(-90)'
       }
     }
   }, joint.shapes.basic.Generic.prototype.defaults),
@@ -360,11 +362,10 @@ joint.shapes.basic.isolationSwitch = joint.shapes.devs.Switch.extend({
     }
   }
 })
-
 // 负荷开关
 joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
   // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text/></g>',
-  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
     type: 'basic.loadSwitch',
     size: {
@@ -441,17 +442,18 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
         'stroke-linejoin': 'round',
         'stroke-width': '1px'
       },
-      text: {
+      '.label': {
         'font-size': 14,
         text: '负荷开关',
         'y-alignment': 'middle',
         'x-alignment': 'middle',
         fill: 'black',
-        'ref': 'rect',
-        'refX': 1,
-        'refY': 0.5,
-        'refX2': -10,
-        transform: 'rotate(-90)'
+        'ref': '.line2',
+        'refX': 1.5,
+        'refY': 20,
+        // 'refX2': 10,
+        'refY2': ''
+        // transform: 'rotate(-90)'
       }
     }
   }, joint.shapes.basic.Generic.prototype.defaults),
@@ -485,7 +487,57 @@ joint.shapes.basic.loadSwitch = joint.shapes.devs.Switch.extend({
     }
   }
 })
-
+// 断路器
+joint.shapes.basic.circuitBreakerSwitch = joint.shapes.devs.Switch.extend({
+  // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
+  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text class="label"/></g>',
+  defaults: _.defaultsDeep({
+    type: 'basic.circuitBreakerSwitch',
+    size: {
+      width: 10.2,
+      height: 44
+    },
+    attrs: {
+      rect: {
+        width: '7.89',
+        height: '22.41',
+        x: '0.34',
+        y: '6.23',
+        fill: '#8c8c8c',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.l1': {
+        x1: '4.38',
+        x2: '4.38',
+        y1: '0.34',
+        y2: '5.95',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.l2': {
+        x1: '4.38',
+        x2: '4.38',
+        y1: '34.24',
+        y2: '28.64',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.label': {
+        'font-size': 12,
+        text: '断路器',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.l2',
+        'refX': 0,
+        'refY': 15
+      }
+    }
+  }, joint.shapes.basic.Generic.prototype.defaults)
+})
 joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
   markup: '<g class="rotatable"><g class="scalable"><rect/><text/></g><g><text class="label"/></g></g>',
   defaults: _.defaultsDeep({
@@ -521,14 +573,20 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
         'refY': 0.5,
         'refY2': 35
       }
+    },
+    devsInfomation: {
+      name: '',
+      code: '', // 编码
+      type: '', // 型号
+      num: 1,
+      power: ''
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
-
 // 柱上变压器(公)
 joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
   // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
-  markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
     type: 'basic.poleTypeTransformerPublic',
     size: {
@@ -572,17 +630,15 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
         stroke: 'black',
         'stroke-width': '1px'
       },
-      text: {
+      '.label': {
         'font-size': 12,
-        text: '柱上变压器',
+        text: '柱上公变',
         'y-alignment': 'middle',
         'x-alignment': 'middle',
         fill: 'black',
-        ref: '.p2',
-        'refX': 1,
-        'refY': 18,
-        'refX2': -10,
-        transform: 'rotate(-90)'
+        ref: '.l2',
+        'refX': 0,
+        'refY': 15
       }
     },
     devsInfomation: {
@@ -594,11 +650,10 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
-
 // 柱上变压器(专)
 joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
   // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
-  markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
     type: 'basic.poleTypeTransformer',
     devsInfomation: {
@@ -649,79 +704,23 @@ joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
         stroke: 'black',
         'stroke-width': '1px'
       },
-      text: {
+      '.label': {
         'font-size': 12,
-        text: '柱上变压器',
+        text: '柱上专变',
         'y-alignment': 'middle',
         'x-alignment': 'middle',
         fill: 'black',
-        ref: '.p2',
-        'refX': 1,
-        'refY': 18,
-        'refX2': -10,
-        transform: 'rotate(-90)'
+        ref: '.l2',
+        'refX': 0,
+        'refY': 15
       }
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
-// 断路器
-joint.shapes.basic.circuitBreakerSwitch = joint.shapes.devs.Switch.extend({
-  // markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g><text/></g>',
-  markup: '<g class="rotatable"><g class="scalable"><rect/><line class="l1"/><line class="l2"/></g></g>',
-  defaults: _.defaultsDeep({
-    type: 'basic.circuitBreakerSwitch',
-    size: {
-      width: 10.2,
-      height: 44
-    },
-    attrs: {
-      rect: {
-        width: '7.89',
-        height: '22.41',
-        x: '0.34',
-        y: '6.23',
-        fill: '#8c8c8c',
-        stroke: 'black',
-        'stroke-width': '1px'
-      },
-      '.l1': {
-        x1: '4.38',
-        x2: '4.38',
-        y1: '0.34',
-        y2: '5.95',
-        fill: 'transparent',
-        stroke: 'black',
-        'stroke-width': '1px'
-      },
-      '.l2': {
-        x1: '4.38',
-        x2: '4.38',
-        y1: '34.24',
-        y2: '28.64',
-        fill: 'transparent',
-        stroke: 'black',
-        'stroke-width': '1px'
-      },
-      text: {
-        'font-size': 12,
-        text: '断路器',
-        'y-alignment': 'middle',
-        'x-alignment': 'middle',
-        fill: 'black',
-        ref: 'rect',
-        'refX': 1,
-        'refY': 0.5,
-        'refX2': -10,
-        'refY2': -10,
-        transform: 'rotate(-90)'
-      }
-    }
-  }, joint.shapes.basic.Generic.prototype.defaults)
-})
-// 柜体---->开关站柜体,变电柜柜体
+// 柜体---->环网柜柜体
 joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
-  markup: '<g class="rotatable"><g class="scalable"><rect/><line/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><rect/><line/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
     type: 'basic.cabinet',
     size: {
@@ -743,6 +742,16 @@ joint.shapes.basic.cabinet = joint.shapes.devs.Equipment.extend({
         y2: '5',
         stroke: 'black',
         'stroke-width': '3px'
+      },
+      '.label': {
+        'font-size': 12,
+        text: '环网柜',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: 'rect',
+        'refX': 0.5,
+        'refY': 54
       }
     }
 
@@ -779,7 +788,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.listenTo(this, 'change:size', this.updateSize)
     this.listenTo(this, 'change:content', this.updateContent)
     this.listenTo(this, 'change:fontSize', this.updateFontSize)
-    // this.listenTo(this, 'change:attr/.content', this.updateContent)
+    this.listenTo(this, '', this.updateContent)
     this.updateSize(this, this.get('size'))
     this.updateContent(this, this.get('content'))
     this.updateFontSize(this, this.get('fontSize'))
@@ -792,7 +801,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.attr({
       '.fobj': joint.util.assign({}, size),
       p: {
-        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;word-wrap:break-word;height:${size.height}px;width:${size.width}px`
       }
     })
   },
@@ -802,11 +811,12 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.attr({
       fontSize: fontSize,
       p: {
-        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;word-wrap:break-word;height:${size.height}px;width:${size.width}px`
       }
     })
   },
   updateContent: function (cell, content) {
+    this.attributes.content = content
     if (joint.env.test('svgforeignobject')) {
       // Content element is a <div> element.
       this.attr({
@@ -866,6 +876,7 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
     '<g class="port3"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
     '</g>',
     '</g>',
+    '<text class="label"/>',
     '</g>'
   ].join(''),
   defaults: _.defaultsDeep({
@@ -1043,8 +1054,17 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
         stroke: 'black',
         'stroke-width': '1px',
         magnet: true
+      },
+      '.label': {
+        'font-size': 12,
+        text: '环网柜',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.rect',
+        'refX': 0.5,
+        'refY': 54
       }
-
     },
     switch: {
       loadSwitchA: {
@@ -1083,6 +1103,7 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
     '<g class="port4"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
     '</g>',
     '</g>',
+    '<text class="label"/>',
     '</g>'
   ].join(''),
   defaults: _.defaultsDeep({
@@ -1265,6 +1286,16 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
         stroke: 'black',
         'stroke-width': '1px',
         magnet: true
+      },
+      '.label': {
+        'font-size': 12,
+        text: '环网柜',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.rect',
+        'refX': 0.5,
+        'refY': 54
       }
 
     },
@@ -1310,6 +1341,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     '<g class="port5"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
     '</g>',
     '</g>',
+    '<text class="label"/>',
     '</g>'
   ].join(''),
   defaults: _.defaultsDeep({
@@ -1497,8 +1529,17 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
         stroke: 'black',
         'stroke-width': '1px',
         magnet: true
+      },
+      '.label': {
+        'font-size': 12,
+        text: '环网柜',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.rect',
+        'refX': 0.5,
+        'refY': 54
       }
-
     },
     switch: {
       loadSwitchA: {
@@ -1540,6 +1581,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
 joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
   markup: [
     '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/></g>',
+    '<text class="label" />',
     '</g>'
   ].join(''),
   portMarkup: '<path class="port-body"/>',
@@ -1564,8 +1606,17 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
         y2: '32',
         stroke: 'black',
         'stroke-width': '3px'
+      },
+      '.label': {
+        'font-size': 12,
+        text: '分支箱',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.rect',
+        'refX': 0.5,
+        'refY': 54
       }
-
     },
     ports: {
       groups: {
@@ -1620,4 +1671,39 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
-//
+// 杆塔/连接点
+joint.shapes.basic.Tower = joint.shapes.basic.Generic.extend({
+  markup: [
+    '<g class="rotatable"><g class="scalable"><circle /></g>',
+    '<text class="label" />',
+    '</g>'
+  ].join(''),
+  defaults: _.defaultsDeep({
+    type: 'basic.Tower',
+    size: {
+      width: 44,
+      height: 44
+    },
+    attrs: {
+      'circle': {
+        r: '22',
+        fill: '#000000',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.label': {
+        'font-size': 12,
+        text: '连接点',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: 'circle',
+        'refX': 0.5,
+        'refY': 26
+      }
+    },
+    devsInfomation: {
+      code: ''
+    }
+  }, joint.shapes.basic.Generic.prototype.defaults)
+})

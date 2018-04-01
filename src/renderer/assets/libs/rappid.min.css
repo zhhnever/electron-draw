@@ -298,7 +298,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
 .joint-link.joint-theme-modern .connection-wrap {
   stroke: #000;
   stroke-width: 15;
-  stroke-linecap: round;
+  /* stroke-linecap: round; */
   stroke-linejoin: round;
   opacity: 0;
   cursor: move
@@ -354,13 +354,16 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
 .joint-paper-scroller>.paper-scroller-background {
   margin: 0;
   position: relative;
-  display: inline-block
+  display: inline-block;
+  background-color: #f6f6f6
 }
 
 .joint-paper-scroller .joint-paper {
   margin: 0;
   position: absolute;
-  display: inline-block
+  display: inline-block;
+  background-color: #f6f6f6;
+  box-shadow: 0 0 2px #000  
 }
 
 .joint-paper-scroller .joint-paper>svg {
