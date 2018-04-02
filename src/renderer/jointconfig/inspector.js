@@ -252,30 +252,30 @@ App.config = App.config || {};
     router: [
       {
         value: 'normal',
-        content: '<p style="background:#fff;width:2px;height:30px;margin:0 14px;border-radius: 2px;"/>'
+        content: '<p style="background:#000;width:2px;height:30px;margin:0 14px;border-radius: 2px;"/>'
       },
       {
         value: 'orthogonal',
-        content: '<p style="width:20px;height:30px;margin:0 5px;border-bottom: 2px solid #fff;border-left: 2px solid #fff;"/>'
+        content: '<p style="width:20px;height:30px;margin:0 5px;border-bottom: 2px solid #000;border-left: 2px solid #000;"/>'
       },
       {
         value: 'oneSide',
-        content: '<p style="width:20px;height:30px;margin:0 5px;border: 2px solid #fff;border-top: none;"/>'
+        content: '<p style="width:20px;height:30px;margin:0 5px;border: 2px solid #000;border-top: none;"/>'
       }
     ],
 
     connector: [
       {
         value: 'normal',
-        content: '<p style="width:20px;height:20px;margin:5px;border-top:2px solid #fff;border-left:2px solid #fff;"/>'
+        content: '<p style="width:20px;height:20px;margin:5px;border-top:2px solid #000;border-left:2px solid #000;"/>'
       },
       {
         value: 'rounded',
-        content: '<p style="width:20px;height:20px;margin:5px;border-top-left-radius:30%;border-top:2px solid #fff;border-left:2px solid #fff;"/>'
+        content: '<p style="width:20px;height:20px;margin:5px;border-top-left-radius:30%;border-top:2px solid #000;border-left:2px solid #000;"/>'
       },
       {
         value: 'smooth',
-        content: '<p style="width:20px;height:20px;margin:5px;border-top-left-radius:100%;border-top:2px solid #fff;border-left:2px solid #fff;"/>'
+        content: '<p style="width:20px;height:20px;margin:5px;border-top-left-radius:100%;border-top:2px solid #000;border-left:2px solid #000;"/>'
       }
     ],
 
@@ -506,16 +506,16 @@ App.config = App.config || {};
             index: 3
           },
           insulation: {
-            type: 'select',
+            type: 'select-box',
             label: '是否绝缘',
-            options: options.linkInsulation,
+            options: [{content: '是', value: true}, {content: '否', value: false}],
             defaultValue: true,
             group: 'presentation',
             index: 4
           },
           main: {
             type: 'select-box',
-            label: '是否主干电缆',
+            label: '是否主干',
             options: options.linkInsulation,
             when: {
               not: {
@@ -589,7 +589,7 @@ App.config = App.config || {};
     'basic.isolationSwitch': {
       inputs: {
         state: {
-          type: 'select',
+          type: 'select-box',
           options: options.switchState,
           defaultValue: '1',
           label: '开关状态',
@@ -626,7 +626,7 @@ App.config = App.config || {};
     'basic.loadSwitch': {
       inputs: {
         state: {
-          type: 'select',
+          type: 'select-box',
           options: options.switchState,
           defaultValue: '1',
           label: '开关状态',

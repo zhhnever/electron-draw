@@ -4,15 +4,19 @@
     <div class="list">
       <ul>
         <li class="selected" name='basic'>
+          <img src="../../assets/images/配电管理.png" alt="">          
           <span>配电设备</span>
         </li>
         <li name='hw'>
+          <img src="../../assets/images/机柜管理.png" alt="">          
           <span>环网柜</span>
         </li>
         <li name='switch'>
+          <img src="../../assets/images/入墙开关.png" alt="">      
           <span>开断设备</span>
         </li>
         <li name='tower'>
+          <img src="../../assets/images/电塔.png"  alt="">
           <span>杆塔/连接点</span>
         </li>
         <li name='others'>
@@ -72,22 +76,22 @@
                 </tr>
                 <tr>
                   <td>配电总数</td>
-                  <td colspan="2"></td>
+                  <td colspan="2">{{ elementCounts.stationTotal.user }}/{{ elementCounts.stationTotal.num }}/{{ elementCounts.stationTotal.power }}</td>
                 </tr>
                 <tr>
-                  <td id="linkRow" rowspan="5">线路KM</td>
+                  <td id="linkRow" rowspan="4">线路KM</td>
                 </tr>
                 <tr id="insulationLink">
                   <td >绝缘线</td>
-                  <td></td>
+                  <td>{{ elementCounts.link.insulation }}</td>
                 </tr>
                 <tr id="uninsulationLink">
                   <td>非绝缘线</td>
-                  <td></td>
+                  <td>{{ elementCounts.link.uninsulation }}</td>
                 </tr>
                 <tr>
                   <td>总长</td>
-                  <td colspan="2">{{ elementCounts.link.total }}</td>
+                  <td colspan="2">{{ elementCounts.link.linkTotal }}</td>
                 </tr>
                 <tr>
                   <td rowspan="3">电缆KM</td>
@@ -193,8 +197,9 @@ export default {
           //   }
           // },
           {
-            type: 'undo',
-            name: '撤销',
+            type: 'button',
+            name: 'undo',
+            text: '撤销',
             attrs: {
               button: {
                 'data-tooltip': '撤销',
@@ -204,8 +209,9 @@ export default {
             }
           },
           {
-            type: 'redo',
-            name: '前进',
+            type: 'button',
+            name: 'redo',
+            text: '前进',
             attrs: {
               button: {
                 'data-tooltip': '前进',
@@ -275,7 +281,7 @@ export default {
             type: 'checkbox',
             name: 'snapline',
             group: 'snapline',
-            label: 'Snaplines:',
+            label: '对齐线:',
             value: true,
             attrs: {
               input: {
@@ -659,10 +665,27 @@ export default {
     })
     // 监听元素点击事件
     paper.on('element:pointerup link:options', cellView => {
-      // console.log(cellView)
       let cell = cellView.model
       _this.cellPulgin(cellView)
       _this.createInspector(cell)
+      if (cell.get('type') === 'basic.TextBox') {
+        cell.attr('rect/stroke-opacity', '0.5')
+      }
+    })
+    paper.on('element:pointerdown', cellView => {
+      let cell = cellView.model
+      if (cell.get('type') === 'basic.TextBox') {
+        cell.attr('rect/stroke-opacity', '0.5')
+      }
+    })
+    paper.on('blank:pointerclick', (evt, x, y) => {
+      let elements = graph.getElements()
+      elements.map(element => {
+        let t = element.get('type')
+        if (t === 'basic.TextBox' && element.attributes.targetElement && element.attributes.targetElement !== '') {
+          element.attr('rect/stroke-opacity', '0')
+        }
+      })
     })
     // 工具栏
     let toolbar = new joint.ui.Toolbar({
@@ -708,13 +731,19 @@ export default {
     $('#toolbar').append(toolbar.el)
     toolbar.render()
 
-    graph.on('add change:devsInfomation remove', cell => {
+    // 统计
+    graph.on('add change:devsInfomation change:attrs remove', (cell, change) => {
       this.count(cell)
     })
     graph.on('add', cell => {
       if (cell.isLink()) return
       cell.attr('.label/text', '')
-      // cell.attr('circle/magnet', true)
+    })
+    graph.on('remove', cell => {
+      if (cell.labelId && cell.labelId !== '') {
+        let label = graph.getCell(cell.labelId)
+        graph.removeCells(label)
+      }
     })
   },
   methods: {
@@ -728,8 +757,8 @@ export default {
         cellView: cellView
       }
       let halo = new joint.ui.Halo(options)
-      if (cell.get('type') !== 'basic.textBox' && cell.get('type') !== 'basic.cabinet') {
-        // halo.removeHandle('resize')
+      if (cell.get('type') !== 'basic.TextBox' && cell.get('type') !== 'basic.cabinet') {
+        halo.removeHandle('resize')
       }
       halo.render()
     },
@@ -788,21 +817,22 @@ export default {
           this.elementCounts[type].PD.user += 1
           this.elementCounts[type].PD.power += devsInfomation.power ? parseInt(devsInfomation.power)
             : 0
-          return
-        }
-        if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'XB') {
+        } else if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'XB') {
           this.elementCounts[type].XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
             : 0
           this.elementCounts[type].XB.user += 1
           this.elementCounts[type].XB.power += devsInfomation.power ? parseInt(devsInfomation.power)
             : 0
-          return
+        } else {
+          this.elementCounts[type].num += devsInfomation.num ? parseInt(devsInfomation.num)
+            : 0
+          this.elementCounts[type].user += 1
+          this.elementCounts[type].power += devsInfomation.power ? parseInt(devsInfomation.power)
+            : 0
         }
-        this.elementCounts[type].num += devsInfomation.num ? parseInt(devsInfomation.num)
-          : 0
-        this.elementCounts[type].user += 1
-        this.elementCounts[type].power += devsInfomation.power ? parseInt(devsInfomation.power)
-          : 0
+        this.elementCounts.stationTotal.num += devsInfomation.num ? parseInt(devsInfomation.num) : 0
+        this.elementCounts.stationTotal.user += 1
+        this.elementCounts.stationTotal.power += devsInfomation.power ? parseInt(devsInfomation.power) : 0
       })
       let links = this.graph.getLinks()
       if (links.length <= 0) return
@@ -813,11 +843,11 @@ export default {
         if (link.attributes.attrs['.connection'].strokeDasharray === '0') {
           // 判断是否绝缘线
           if (linkInfo.insulation) {
-            if (!this.elementCounts.link.insulation[linkInfo.type]) this.elementCounts.link.insulation[linkInfo.type] = 0
-            this.elementCounts.link.insulation[linkInfo.type] += linkLength
+            // if (!this.elementCounts.link.insulation[linkInfo.type]) this.elementCounts.link.insulation[linkInfo.type] = 0
+            this.elementCounts.link.insulation += linkLength
           } else {
-            if (!this.elementCounts.link.uninsulation[linkInfo.type]) this.elementCounts.link.uninsulation[linkInfo.type] = 0
-            this.elementCounts.link.uninsulation[linkInfo.type] += linkLength
+            // if (!this.elementCounts.link.uninsulation[linkInfo.type]) this.elementCounts.link.uninsulation[linkInfo.type] = 0
+            this.elementCounts.link.uninsulation += linkLength
           }
         } else {
           if (linkInfo.main) {
@@ -827,11 +857,7 @@ export default {
           }
         }
         if ((index + 1) === links.length) {
-          let insulationLength = this.elementCounts.link.insulation.length === 0 ? 1 : this.elementCounts.link.insulation.length
-          let uninsulationLength = this.elementCounts.link.uninsulation.length === 0 ? 1 : this.elementCounts.link.insulation.length
-          $('linkRow').attr('rowspan', (uninsulationLength + insulationLength + 2))
-          for (let key in this.elementCounts.link.insulation) {
-          }
+          this.elementCounts.link.linkTotal = this.elementCounts.link.insulation + this.elementCounts.link.uninsulation
         }
       })
     },
@@ -870,7 +896,7 @@ export default {
   position: absolute;
   right: 0;
   left: 300px;
-  top: 188px;
+  top: 168px;
   bottom: 0;
   border: 1px solid rgb(240, 240, 240);
 }
@@ -913,7 +939,7 @@ table.altrowstable td {
 
 .list {
   width: 100%;
-  height: 30px;
+  height: 25px;
 }
 
 .list ul {
@@ -921,9 +947,10 @@ table.altrowstable td {
   margin: 0;
   width: 100%;
   height: 100%;
-  background-color: white;
-  border-bottom: 1px solid #37accb;
+  background-color: #f0f0f0;
   user-select: none;
+  /* box-shadow: 0 2px 2px 2px #fefefe; */
+  border-top:1px solid #fff;
 }
 
 .list ul li {
@@ -931,8 +958,8 @@ table.altrowstable td {
   float: left;
   position: relative;
   /* padding: 0px 10px; */
-  background-color: #37accb;
-  border-right: 1px solid #37accb;
+  background-color: #f0f0f0;
+  border-right: 1px solid #f0f0f0;
   width: 100px;
   text-align: center;
 }
@@ -943,13 +970,14 @@ table.altrowstable td {
 
 .list ul li img {
   width: 20px;
+  height: 20px;
   vertical-align: middle;
   margin-bottom: 3px;
 }
 
 .list ul li span {
   font-size: 12px;
-  line-height: 30px;
+  line-height: 25px;
 }
 
 .list-content {
@@ -990,4 +1018,5 @@ table.altrowstable td {
 /* .joint-paper-scroller.joint-theme-default .joint-paper {
   box-shadow: 0 0 2px #000
 } */
+
 </style>

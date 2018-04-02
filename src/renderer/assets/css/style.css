@@ -251,7 +251,7 @@ a {
   /* height: 100%; */
   bottom: 0px;
   left: 0;
-  top: 188px;
+  top: 168px;
   /* border-right: 1px solid #37ACCB; */
 }
 
@@ -267,7 +267,7 @@ a {
 .attrSettingHead,
 .deviceStatisticsHead {
   padding: 5px;
-  background-color: #37ACCB;
+  background-color: #1296db;
   margin-bottom: 20px;
 }
 .attrSetting {
@@ -285,12 +285,16 @@ a {
   height: 300px;
   /* padding: 20px; */
   border-top: #333333 solid 1px;
-  background-color: rgb(240, 240, 240);
+  /* background-color: rgb(240, 240, 240); */
   overflow: scroll;
   overflow-x: hidden;
+  user-select:none;
 }
 .attrSettingContent {
-
+  position: absolute;
+  top: 25px;
+  bottom: 0px;
+  width: 300px;
 }
 .deviceStatisticsContent {
 
@@ -316,15 +320,15 @@ a {
 }
 
 .CR_deviceTab {
-  border-bottom: 1px solid #37ACCB;
+  border-bottom: 1px solid #1296db;
 }
 
 .CR_deviceTab li {
   float: left;
   position: relative;
   padding: 5px 10px;
-  background-color: #37ACCB;
-  border-right: 1px solid #37ACCB;
+  background-color: #1296db;
+  border-right: 1px solid #1296db;
 }
 
 .CR_deviceTab .select:after {

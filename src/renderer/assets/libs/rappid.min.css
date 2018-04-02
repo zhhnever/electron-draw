@@ -3347,7 +3347,7 @@ joint-halo.joint-theme-material.surrounding.tiny .handle.w {
 }
 
 .joint-inspector.joint-theme-default .group>.group-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase
 }

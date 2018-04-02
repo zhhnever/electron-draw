@@ -101,7 +101,7 @@ import _ from 'lodash'
 
         if (!modal.labelId || modal.labelId === '') {
           textLabel = new joint.shapes.basic.TextBox({
-            position: {x: aRect.x, y: aRect.y + aRect.height + 5},
+            position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
             attrs: { rect: { 'stroke-opacity': 0 } },
             content: '',
             size: { width: 70, height: 30 },
@@ -774,7 +774,8 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     }
   },
   content: '',
-  fontSize: '12px'
+  fontSize: '12px',
+  targetElement: '' // 目标元素的id,这个标签属于这个id指向的元素
 }, {
   markup: [
     '<g class="rotatable">',
@@ -788,20 +789,20 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.listenTo(this, 'change:size', this.updateSize)
     this.listenTo(this, 'change:content', this.updateContent)
     this.listenTo(this, 'change:fontSize', this.updateFontSize)
-    this.listenTo(this, '', this.updateContent)
     this.updateSize(this, this.get('size'))
     this.updateContent(this, this.get('content'))
     this.updateFontSize(this, this.get('fontSize'))
+    // console.log(this)
   },
 
   updateSize: function (cell, size) {
     // Selector `foreignObject' doesn't work accross all browsers, we'r using class selector instead.
     // We have to clone size as we don't want attributes.div.style to be same object as attributes.size.
-
     this.attr({
+      // '.fobj': style,
       '.fobj': joint.util.assign({}, size),
       p: {
-        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;word-wrap:break-word;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;word-break: break-all;height:${size.height}px;width:${size.width}px`
       }
     })
   },
@@ -811,7 +812,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.attr({
       fontSize: fontSize,
       p: {
-        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;word-wrap:break-word;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;word-break: break-all;height:${size.height}px;width:${size.width}px`
       }
     })
   },
@@ -861,8 +862,7 @@ joint.shapes.basic.TextLabel = joint.shapes.basic.Generic.extend({
         'font-size': 14,
         fill: '#000000'
       }
-    },
-    targetElement: '' // 目标元素的id,这个标签属于这个id指向的元素
+    }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 
