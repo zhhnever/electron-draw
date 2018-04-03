@@ -52,7 +52,7 @@
                   <td colspan="2">XXX线路</td>
                 </tr>
                 <tr>
-                  <td rowspan="7">户台KVA</td>
+                  <td rowspan="7">户台(kVA)</td>
                 </tr>
                 <tr>
                   <td>杆上公变</td>
@@ -906,6 +906,7 @@ table.altrowstable {
   border-width: 1px;
   border-color: #a9c6c9;
   border-collapse: collapse;
+  width: 100%
 }
 
 table.altrowstable th {
@@ -1008,7 +1009,7 @@ table.altrowstable td {
 }
 
 .deviceStatisticsContent {
-  padding-left: 20px;
+  /* padding-left: 20px; */
 }
 /* .joint-theme-default .joint-paper{
   box-shadow: 0 0 2px #000  

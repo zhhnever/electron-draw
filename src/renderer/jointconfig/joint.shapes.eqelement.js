@@ -139,6 +139,14 @@ import _ from 'lodash'
           textLabel = graph.getCell(modal.labelId)
         }
         Object.keys(change).forEach(function (key) {
+          if (key === 'name') {
+            labelText += change[key] + '-'
+            return
+          }
+          if (key === 'code') {
+            labelText += change[key] + '<br/>'
+            return
+          }
           if (change[key] && change[key] !== '') labelText += change[key] + '/'
         })
         setTimeout(() => {
@@ -893,7 +901,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
       // '.fobj': style,
       '.fobj': joint.util.assign({}, size),
       p: {
-        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;word-break: break-all;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${this.get('fontSize')};margin:0;color:#000000;text-align:center;word-break: break-all;height:${size.height}px;width:${size.width}px;display:inline-block`
       }
     })
   },
@@ -903,7 +911,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
     this.attr({
       fontSize: fontSize,
       p: {
-        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;word-break: break-all;height:${size.height}px;width:${size.width}px`
+        style: `font-size:${fontSize};margin:0;text-align:center;color:#000000;word-break: break-all;height:${size.height}px;width:${size.width}px;display:inline-block`
       }
     })
   },
