@@ -1,6 +1,6 @@
 {
   "name": "electron-draw",
-  "version": "v0.1.3",
+  "version": "v0.1.4",
   "author": "Dahai",
   "description": "An electron-vue project",
   "license": "Copyright © 2017 ${author}",

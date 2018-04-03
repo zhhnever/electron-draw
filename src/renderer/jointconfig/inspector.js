@@ -823,15 +823,15 @@ App.config = App.config || {};
           }
         },
         devsInfomation: {
-          type: {
-            type: 'text',
-            label: '型号',
-            group: 'attribute',
-            index: 1
-          },
           name: {
             type: 'text',
             label: '名称',
+            group: 'attribute',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
             group: 'attribute',
             index: 2
           },
@@ -952,15 +952,15 @@ App.config = App.config || {};
           }
         },
         devsInfomation: {
-          type: {
-            type: 'text',
-            label: '型号',
-            group: 'attribute',
-            index: 1
-          },
           name: {
             type: 'text',
             label: '名称',
+            group: 'attribute',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
             group: 'attribute',
             index: 2
           },
@@ -1106,15 +1106,15 @@ App.config = App.config || {};
           }
         },
         devsInfomation: {
-          type: {
-            type: 'text',
-            label: '型号',
-            group: 'attribute',
-            index: 1
-          },
           name: {
             type: 'text',
             label: '名称',
+            group: 'attribute',
+            index: 1
+          },
+          type: {
+            type: 'text',
+            label: '型号',
             group: 'attribute',
             index: 2
           },
@@ -1280,8 +1280,8 @@ App.config = App.config || {};
           index: 1
         },
         property: {
-          label: '状态',
-          index: 1
+          label: '属性',
+          index: 2
         }
       }
     },

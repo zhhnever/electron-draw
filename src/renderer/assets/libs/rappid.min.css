@@ -191,7 +191,7 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
 .joint-link.joint-theme-default .connection-wrap {
   stroke: #000;
   stroke-width: 15;
-  stroke-linecap: round;
+  /* stroke-linecap: round; */
   stroke-linejoin: round;
   opacity: 0;
   cursor: move
@@ -353,9 +353,9 @@ file, You can obtain one at http://jointjs.com/license/rappid_v2.txt
 
 .joint-paper-scroller>.paper-scroller-background {
   margin: 0;
-  position: relative;
+  /* position: relative; */
   display: inline-block;
-  background-color: #f6f6f6
+  background-color: #fff
 }
 
 .joint-paper-scroller .joint-paper {

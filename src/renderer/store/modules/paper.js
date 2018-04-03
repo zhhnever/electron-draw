@@ -72,8 +72,8 @@ const mutations = {
 
     let paperScroller = state.paperScroller = new joint.ui.PaperScroller({
       paper: paper,
-      autoResizePaper: true,
-      padding: 50
+      autoResizePaper: false,
+      padding: 0
     })
     dom.append(paperScroller.el)
     let snaplines = new joint.ui.Snaplines({

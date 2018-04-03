@@ -7,11 +7,15 @@ import _ from 'lodash'
 // 状态改变之后 改变线路颜色
   'use strict'
   joint.shapes.basic.Generic.define('devs.Switch', {
-    devsInfomation: {},
+    devsInfomation: {
+      code: '',
+      type: ''
+    },
     state: 0 // 开关状态,0是关,1是开
   }, {
     initialize: function () {
       joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
+      this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
       this.on('change:state', this.updateSwitchState, this)// 添加 监听状态改变的方法
     },
     changeLinkColor: function (graph, element, color) {
@@ -22,6 +26,35 @@ import _ from 'lodash'
           link.attr({'.connection': {stroke: color}})
         })
       })
+    },
+    updateDevsInfomation: (modal, change, opt) => {
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = modal.getBBox()
+      let labelText = ''
+
+      if (!modal.labelId || modal.labelId === '') {
+        textLabel = new joint.shapes.basic.TextBox({
+          position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
+          attrs: { rect: { 'stroke-opacity': 0 } },
+          content: '',
+          size: { width: 50, height: 30 },
+          targetElement: modal.id
+        })
+      } else {
+        textLabel = graph.getCell(modal.labelId)
+      }
+      // console.log(change)
+      Object.keys(change).forEach(function (key) {
+        if (change[key] && change[key] !== '') labelText += change[key] + '/'
+      })
+      // labelText = `${change.name}/${change.code}/${change.type}/${change.num}/${change.power}`
+      setTimeout(() => {
+        modal.labelId = textLabel.id
+        textLabel.setDivContent(this, labelText)
+        graph.addCell(textLabel)
+        modal.embed(textLabel)
+      }, 20)
     }
   })
   // 定义设备基类
@@ -41,14 +74,6 @@ import _ from 'lodash'
         joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
         this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
         this.on('change:lablePostion', this.changeLabelPosition, this) // 添加 监听文本位置改变的方法
-        this.on('change:position', this.changePositon, this) // 移动的时候标签跟着一起移动
-      },
-      changePositon: (modal, change, opt) => {
-        if (modal.labelId && modal.labelId !== '') {
-          let textBox = modal.graph.getCell(modal.labelId)
-
-          textBox.translate(opt.tx, opt.ty)
-        }
       },
       changeLabelPosition: (modal, change, opt) => {
         switch (change) {
@@ -101,24 +126,26 @@ import _ from 'lodash'
 
         if (!modal.labelId || modal.labelId === '') {
           textLabel = new joint.shapes.basic.TextBox({
-            position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
             attrs: { rect: { 'stroke-opacity': 0 } },
             content: '',
             size: { width: 70, height: 30 },
             targetElement: modal.id
           })
+          console.log(textLabel)
+          // position: {x: aRect.x - (aRect.x - this.size.width) / 2, y: aRect.y + aRect.height + 5},
+          console.log()
+          textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
         } else {
           textLabel = graph.getCell(modal.labelId)
         }
-        // console.log(change)
         Object.keys(change).forEach(function (key) {
           if (change[key] && change[key] !== '') labelText += change[key] + '/'
         })
-        // labelText = `${change.name}/${change.code}/${change.type}/${change.num}/${change.power}`
         setTimeout(() => {
           modal.labelId = textLabel.id
           textLabel.setDivContent(this, labelText)
           graph.addCell(textLabel)
+          modal.embed(textLabel)
         }, 20)
       }
     })
@@ -172,6 +199,70 @@ import _ from 'lodash'
       name: '',
       code: '',
       type: 1
+    }
+  }, {
+    initialize: function () {
+      joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
+      this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
+      this.on('change:switch', this.updateSwitch, this) // 添加
+    },
+    updateDevsInfomation: (modal, change, opt) => {
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = modal.getBBox()
+      let labelText = ''
+
+      if (!modal.labelId || modal.labelId === '') {
+        textLabel = new joint.shapes.basic.TextBox({
+          position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
+          attrs: { rect: { 'stroke-opacity': 0 } },
+          content: '',
+          size: { width: 180, height: 30 },
+          targetElement: modal.id
+        })
+      } else {
+        textLabel = graph.getCell(modal.labelId)
+      }
+      // console.log(change)
+      Object.keys(change).forEach(function (key) {
+        if (change[key] && change[key] !== '') labelText += change[key] + '/'
+      })
+      // labelText = `${change.name}/${change.code}/${change.type}/${change.num}/${change.power}`
+      setTimeout(() => {
+        modal.labelId = textLabel.id
+        textLabel.setDivContent(this, labelText)
+        graph.addCell(textLabel)
+        modal.embed(textLabel)
+      }, 20)
+    },
+    updateSwitch: (modal, change, opt) => {
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = modal.getBBox()
+      let labelText = ''
+      let path = opt.propertyPath // [switch,A,change]
+      let p = path.split('/')[2]
+      let sIndex = path.split('/')[1]
+      if (p !== 'code') return
+      let s = modal.attributes.switch[sIndex]
+      if (!s || s.labelId === '') {
+        textLabel = new joint.shapes.basic.TextLabel({
+          position: {x: aRect.x + s.lablePostion.x, y: aRect.y + s.lablePostion.y},
+          attrs: { text: { 'text': '' } },
+          size: { width: 12, height: 12 },
+          targetElement: modal.id + '&' + sIndex
+        })
+      } else {
+        textLabel = graph.getCell(s.labelId)
+      }
+      labelText = opt.propertyValue
+      // labelText = `${change.name}/${change.code}/${change.type}/${change.num}/${change.power}`
+      setTimeout(() => {
+        modal.attributes.switch[sIndex].labelId = textLabel.id
+        textLabel.attr('text/text', labelText)
+        graph.addCell(textLabel)
+        modal.embed(textLabel)
+      }, 20)
     }
   })
 
@@ -584,7 +675,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 // 柱上变压器(公)
-joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.devs.Equipment.extend({
   // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
   markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
@@ -651,7 +742,7 @@ joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.basic.Generic.extend
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
 // 柱上变压器(专)
-joint.shapes.basic.poleTypeTransformer = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.poleTypeTransformer = joint.shapes.devs.Equipment.extend({
   // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
   markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text class="label"/></g>',
   defaults: _.defaultsDeep({
@@ -1071,22 +1162,34 @@ joint.shapes.basic.HWCabinetA = joint.shapes.devs.HWCabinet.extend({
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port1'
-
+        portIndex: 'port1',
+        labelId: '',
+        lablePostion: {
+          x: 30,
+          y: 48
+        }
       },
       circuitBreaker: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port2'
-
+        portIndex: 'port2',
+        labelId: '',
+        lablePostion: {
+          x: 80,
+          y: 48
+        }
       },
       loadSwitchB: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port3'
-
+        portIndex: 'port3',
+        labelId: '',
+        lablePostion: {
+          x: 130,
+          y: 48
+        }
       }
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
@@ -1304,25 +1407,45 @@ joint.shapes.basic.HWCabinetB = joint.shapes.devs.HWCabinet.extend({
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port1'
+        portIndex: 'port1',
+        labelId: '',
+        lablePostion: {
+          x: 25,
+          y: 48
+        }
       },
       circuitBreakerA: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port2'
+        portIndex: 'port2',
+        labelId: '',
+        lablePostion: {
+          x: 65,
+          y: 48
+        }
       },
       circuitBreakerB: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port3'
+        portIndex: 'port3',
+        labelId: '',
+        lablePostion: {
+          x: 105,
+          y: 48
+        }
       },
       loadSwitchB: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port4'
+        portIndex: 'port4',
+        labelId: '',
+        lablePostion: {
+          x: 132,
+          y: 48
+        }
       }
     }
 
@@ -1546,31 +1669,56 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port1'
+        portIndex: 'port1',
+        labelId: '',
+        lablePostion: {
+          x: 20,
+          y: 48
+        }
       },
       circuitBreakerA: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port2'
+        portIndex: 'port2',
+        labelId: '',
+        lablePostion: {
+          x: 50,
+          y: 48
+        }
       },
       circuitBreakerB: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port3'
+        portIndex: 'port3',
+        labelId: '',
+        lablePostion: {
+          x: 75,
+          y: 48
+        }
       },
       circuitBreakerC: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port4'
+        portIndex: 'port4',
+        labelId: '',
+        lablePostion: {
+          x: 110,
+          y: 48
+        }
       },
       loadSwitchB: {
         type: '',
         code: '',
         state: '1',
-        portIndex: 'port5'
+        portIndex: 'port5',
+        labelId: '',
+        lablePostion: {
+          x: 133,
+          y: 48
+        }
       }
     }
 

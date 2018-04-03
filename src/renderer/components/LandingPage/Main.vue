@@ -739,12 +739,6 @@ export default {
       if (cell.isLink()) return
       cell.attr('.label/text', '')
     })
-    graph.on('remove', cell => {
-      if (cell.labelId && cell.labelId !== '') {
-        let label = graph.getCell(cell.labelId)
-        graph.removeCells(label)
-      }
-    })
   },
   methods: {
     // 打开halo
@@ -889,14 +883,18 @@ export default {
 }
 .main {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  position: absolute;
+  top: 163px;
+  bottom: 0;
+  
 }
 
 #paperScroller {
   position: absolute;
   right: 0;
   left: 300px;
-  top: 168px;
+  top: 0;
   bottom: 0;
   border: 1px solid rgb(240, 240, 240);
 }
