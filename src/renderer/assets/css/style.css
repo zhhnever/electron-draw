@@ -283,10 +283,11 @@ a {
   bottom: 0px;
   left: 0;
   height: 300px;
-  /* padding: 20px; */
+  padding: 10px;
   border-top: #333333 solid 1px;
   /* background-color: rgb(240, 240, 240); */
-  overflow: scroll;
+  background-color: #f1f1f1;
+  overflow: auto;
   overflow-x: hidden;
   user-select:none;
 }
@@ -296,8 +297,10 @@ a {
   bottom: 0px;
   width: 300px;
 }
-.deviceStatisticsContent {
 
+.deviceStatisticsContent {
+  box-shadow:0px 0px 1px 1px #6b6b6b inset;           /* For Chrome5+, Safari5+ */
+  padding: 2px;
 }
 
 /* deviceTab style

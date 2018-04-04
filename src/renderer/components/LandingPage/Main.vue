@@ -35,15 +35,18 @@
       <div id="configuration" class="contentLeft">
         <div class="attrSetting">
           <div class="attrSettingHead">
-            属性设置
+            设置
           </div>
           <div id="config" class="attrSettingContent">
           </div>
         </div>
         <div class="deviceStatistics">
-          <div class="deviceStatisticsHead">
+          <!-- <div class="deviceStatisticsHead">
             设备统计
           </div>
+          <div> -->
+
+          <!-- </div> -->
           <div id="table" class="deviceStatisticsContent">
             <table class="altrowstable">
               <tbody>
@@ -903,24 +906,26 @@ table.altrowstable {
   /* font-family: verdana, arial, sans-serif; */
   font-size: 11px;
   color: #333333;
-  border-width: 1px;
-  border-color: #a9c6c9;
+  /* border-width: 1px;
+  border-color: #000; */
+  border-color:#dfdfdd;
   border-collapse: collapse;
-  width: 100%
+  width: 100%;
+  background-color: #fff;
 }
 
 table.altrowstable th {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
-  border-color: #a9c6c9;
+  border-color:#dfdfdd;
 }
 
 table.altrowstable td {
   border-width: 1px;
-  padding: 8px;
+  padding: 4px;
   border-style: solid;
-  border-color: #a9c6c9;
+  border-color:#dfdfdd;
 }
 
 .oddrowcolor {
@@ -1008,9 +1013,6 @@ table.altrowstable td {
   background-image: url("data:image/svg+xml;charset=utf8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2218.75px%22%20height%3D%2218.75px%22%20viewBox%3D%220%200%2018.75%2018.75%22%20enable-background%3D%22new%200%200%2018.75%2018.75%22%20xml%3Aspace%3D%22preserve%22%3E%3Cg%3E%3Cpath%20fill%3D%22%236A6C8A%22%20d%3D%22M12.852%2C0.875h-9.27c-0.853%2C0-1.547%2C0.694-1.547%2C1.547v10.816h1.547V2.422h9.27V0.875z%20M15.172%2C3.965h-8.5%20c-0.849%2C0-1.547%2C0.698-1.547%2C1.547v10.816c0%2C0.849%2C0.698%2C1.547%2C1.547%2C1.547h8.5c0.85%2C0%2C1.543-0.698%2C1.543-1.547V5.512%20C16.715%2C4.663%2C16.021%2C3.965%2C15.172%2C3.965L15.172%2C3.965z%20M15.172%2C16.328h-8.5V5.512h8.5V16.328z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E%20");
 }
 
-.deviceStatisticsContent {
-  /* padding-left: 20px; */
-}
 /* .joint-theme-default .joint-paper{
   box-shadow: 0 0 2px #000  
 } */
