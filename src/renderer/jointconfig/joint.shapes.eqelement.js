@@ -3,8 +3,8 @@
 import joint from '../assets/libs/rappid.min.js'
 import _ from 'lodash'
 (function (joint) {
-// 定义开关基类,初始化监听状态改变,
-// 状态改变之后 改变线路颜色
+  // 定义开关基类,初始化监听状态改变,
+  // 状态改变之后 改变线路颜色
   'use strict'
   joint.shapes.basic.Generic.define('devs.Switch', {
     devsInfomation: {
@@ -16,14 +16,20 @@ import _ from 'lodash'
     initialize: function () {
       joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
       this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
-      this.on('change:state', this.updateSwitchState, this)// 添加 监听状态改变的方法
+      this.on('change:state', this.updateSwitchState, this) // 添加 监听状态改变的方法
     },
     changeLinkColor: function (graph, element, color) {
       let childCells = graph.getSuccessors(element)
       childCells.map(child => {
-        let links = graph.getConnectedLinks(child, {inbound: true})
+        let links = graph.getConnectedLinks(child, {
+          inbound: true
+        })
         links.map(link => {
-          link.attr({'.connection': {stroke: color}})
+          link.attr({
+            '.connection': {
+              stroke: color
+            }
+          })
         })
       })
     },
@@ -35,10 +41,20 @@ import _ from 'lodash'
 
       if (!modal.labelId || modal.labelId === '') {
         textLabel = new joint.shapes.basic.TextBox({
-          position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
-          attrs: { rect: { 'stroke-opacity': 0 } },
+          position: {
+            x: aRect.x - 13,
+            y: aRect.y + aRect.height + 5
+          },
+          attrs: {
+            rect: {
+              'stroke-opacity': 0
+            }
+          },
           content: '',
-          size: { width: 50, height: 30 },
+          size: {
+            width: 50,
+            height: 30
+          },
           targetElement: modal.id
         })
       } else {
@@ -58,104 +74,111 @@ import _ from 'lodash'
     }
   })
   // 定义设备基类
-  joint.shapes.basic.Generic.define('devs.Equipment',
-    {
-      devsInfomation: {
-        name: '',
-        code: '', // 编码
-        type: '0', // 型号
-        num: 1,
-        power: ''
-      },
-      lablePostion: 'bottom',
-      labelId: '' // 文本标签的id
-    }, {
-      initialize: function () {
-        joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
-        this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
-        this.on('change:lablePostion', this.changeLabelPosition, this) // 添加 监听文本位置改变的方法
-      },
-      changeLabelPosition: (modal, change, opt) => {
-        switch (change) {
-          case 'bottom':
-            modal.attr({
-              '.label': {
-                'refY2': 35,
-                'refX2': 0,
-                transform: 'rotate(0)'
-              }
-            })
-            break
-          case 'top':
-            modal.attr({
-              '.label': {
-                'refY2': -35,
-                'refX2': 0,
-                transform: 'rotate(0)'
-              }
-            })
-            break
-          case 'left':
-            modal.attr({
-              '.label': {
-                'refY2': 0,
-                'refX2': -35,
-                transform: 'rotate(90)'
-              }
-            })
-            break
-          case 'right':
-            modal.attr({
-              '.label': {
-                'refY2': 0,
-                'refX2': 35,
-                transform: 'rotate(90)'
-              }
-            })
-            break
-
-          default:
-            break
-        }
-      },
-      updateDevsInfomation: (modal, change, opt) => {
-        let graph = modal.graph
-        let textLabel = null
-        let aRect = modal.getBBox()
-        let labelText = ''
-
-        if (!modal.labelId || modal.labelId === '') {
-          textLabel = new joint.shapes.basic.TextBox({
-            attrs: { rect: { 'stroke-opacity': 0 } },
-            content: '',
-            size: { width: 70, height: 30 },
-            targetElement: modal.id
+  joint.shapes.basic.Generic.define('devs.Equipment', {
+    devsInfomation: {
+      name: '',
+      code: '', // 编码
+      type: '0', // 型号
+      num: 1,
+      power: ''
+    },
+    lablePostion: 'bottom',
+    labelId: '' // 文本标签的id
+  }, {
+    initialize: function () {
+      joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
+      this.on('change:devsInfomation', this.updateDevsInfomation, this) // 添加 监听信息改变的方法
+      this.on('change:lablePostion', this.changeLabelPosition, this) // 添加 监听文本位置改变的方法
+    },
+    changeLabelPosition: (modal, change, opt) => {
+      switch (change) {
+        case 'bottom':
+          modal.attr({
+            '.label': {
+              'refY2': 35,
+              'refX2': 0,
+              transform: 'rotate(0)'
+            }
           })
-          textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
-        } else {
-          textLabel = graph.getCell(modal.labelId)
-        }
-        Object.keys(change).forEach(function (key) {
-          if (key === 'name') {
-            labelText += change[key] + '-'
-            return
-          }
-          if (key === 'code') {
-            labelText += change[key] + '<br/>'
-            return
-          }
-          if (change[key] && change[key] !== '') labelText += change[key] + '/'
-        })
-        setTimeout(() => {
-          modal.labelId = textLabel.id
-          textLabel.setDivContent(this, labelText)
-          graph.addCell(textLabel)
-          modal.embed(textLabel)
-        }, 20)
+          break
+        case 'top':
+          modal.attr({
+            '.label': {
+              'refY2': -35,
+              'refX2': 0,
+              transform: 'rotate(0)'
+            }
+          })
+          break
+        case 'left':
+          modal.attr({
+            '.label': {
+              'refY2': 0,
+              'refX2': -35,
+              transform: 'rotate(90)'
+            }
+          })
+          break
+        case 'right':
+          modal.attr({
+            '.label': {
+              'refY2': 0,
+              'refX2': 35,
+              transform: 'rotate(90)'
+            }
+          })
+          break
+
+        default:
+          break
       }
-    })
+    },
+    updateDevsInfomation: (modal, change, opt) => {
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = modal.getBBox()
+      let labelText = ''
+
+      if (!modal.labelId || modal.labelId === '') {
+        textLabel = new joint.shapes.basic.TextBox({
+          attrs: {
+            rect: {
+              'stroke-opacity': 0
+            }
+          },
+          content: '',
+          size: {
+            width: 70,
+            height: 30
+          },
+          targetElement: modal.id
+        })
+        textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
+      } else {
+        textLabel = graph.getCell(modal.labelId)
+      }
+      Object.keys(change).forEach(function (key) {
+        if (key === 'name') {
+          labelText += change[key] + '-'
+          return
+        }
+        if (key === 'code') {
+          labelText += change[key] + '<br/>'
+          return
+        }
+        if (change[key] && change[key] !== '') labelText += change[key] + '/'
+      })
+      setTimeout(() => {
+        modal.labelId = textLabel.id
+        textLabel.setDivContent(this, labelText)
+        graph.addCell(textLabel)
+        modal.embed(textLabel)
+      }, 20)
+    }
+  })
 
   joint.dia.Link.define('app.Link', {
+
     devsInfomation: {
       name: '', // 名称
       length: '', // 长度
@@ -170,11 +193,6 @@ import _ from 'lodash'
       name: 'normal'
     },
     attrs: {
-      '.tool-options': {
-        'data-tooltip-class-name': 'small',
-        'data-tooltip': '点击设置线路属性',
-        'data-tooltip-position': 'left'
-      },
       '.marker-source': {
         d: 'M 10 5 L 0 10 L 0 0 z',
         stroke: '#000000',
@@ -182,7 +200,7 @@ import _ from 'lodash'
         transform: 'scale(0.001)'
       },
       '.marker-target': {
-        d: 'M 10 5 L 0 10 L 0 0 z',
+        d: 'M 10 10 L 0 15 L 0 5 z',
         stroke: '#000000',
         fill: 'transparent',
         transform: 'scale(0.001)'
@@ -198,15 +216,87 @@ import _ from 'lodash'
       }
     }
   }, {
+    toolMarkup: ['<g class="link-tool">',
+      '</g>'
+    ].join(''),
     initialize: function () {
       // joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
       joint.dia.Link.prototype.initialize.apply(this, arguments)
-      this.on('change:attrs', this.updateStrokeStyle, this)
+      // this.on('change:attrs', this.updateStrokeStyle, this)
+      this.on('change:devsInfomation', this.updateDevsInfomation, this)
     },
-    updateStrokeStyle: function (cell, change, path) {
-      if (path.propertyPath === 'attrs/.connection/strokeDasharray') {
-
+    updateStrokeStyle: function (cell, change, opt) {
+      if (opt.propertyPath === 'attrs/.connection/strokeDasharray') {
+        if (opt.propertyValue !== '0') {
+          if (!cell.attributes.source.selector) {
+            cell.attr({
+              '.marker-source': {
+                transform: 'scale(1)'
+              }
+            })
+          }
+          if (!cell.attributes.target.selector) {
+            cell.attr({
+              '.marker-target': {
+                transform: 'scale(1)'
+              }
+            })
+          }
+        } else {
+          cell.attr({
+            '.marker-target': {
+              transform: 'scale(0.0001)'
+            },
+            '.marker-source': {
+              transform: 'scale(0.0001)'
+            }
+          })
+        }
       }
+    },
+    updateDevsInfomation: (modal, change, opt) => {
+      console.log(modal)
+      let graph = modal.graph
+      let textLabel = null
+      let aRect = graph.getBBox([modal])
+      console.log(aRect)
+      let labelText = ''
+
+      if (!modal.labelId || modal.labelId === '') {
+        textLabel = new joint.shapes.basic.TextBox({
+          attrs: {
+            rect: {
+              'stroke-opacity': 0
+            }
+          },
+          content: '',
+          size: {
+            width: 70,
+            height: 30
+          },
+          targetElement: modal.id
+        })
+        textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
+      } else {
+        textLabel = graph.getCell(modal.labelId)
+      }
+      Object.keys(change).forEach(function (key) {
+        if (key === 'name') {
+          labelText += change[key] + '-'
+          return
+        }
+        if (key === 'code') {
+          labelText += change[key] + '<br/>'
+          return
+        }
+        if (change[key] && change[key] !== '') labelText += change[key] + '/'
+      })
+      setTimeout(() => {
+        modal.labelId = textLabel.id
+        textLabel.setDivContent(this, labelText)
+        graph.addCell(textLabel)
+        modal.embed(textLabel)
+      }, 20)
     }
   })
 
@@ -230,10 +320,20 @@ import _ from 'lodash'
 
       if (!modal.labelId || modal.labelId === '') {
         textLabel = new joint.shapes.basic.TextBox({
-          position: {x: aRect.x - 13, y: aRect.y + aRect.height + 5},
-          attrs: { rect: { 'stroke-opacity': 0 } },
+          position: {
+            x: aRect.x - 13,
+            y: aRect.y + aRect.height + 5
+          },
+          attrs: {
+            rect: {
+              'stroke-opacity': 0
+            }
+          },
           content: '',
-          size: { width: 180, height: 30 },
+          size: {
+            width: 180,
+            height: 30
+          },
           targetElement: modal.id
         })
       } else {
@@ -263,9 +363,19 @@ import _ from 'lodash'
       let s = modal.attributes.switch[sIndex]
       if (!s || s.labelId === '') {
         textLabel = new joint.shapes.basic.TextLabel({
-          position: {x: aRect.x + s.lablePostion.x, y: aRect.y + s.lablePostion.y},
-          attrs: { text: { 'text': '' } },
-          size: { width: 12, height: 12 },
+          position: {
+            x: aRect.x + s.lablePostion.x,
+            y: aRect.y + s.lablePostion.y
+          },
+          attrs: {
+            text: {
+              'text': ''
+            }
+          },
+          size: {
+            width: 12,
+            height: 12
+          },
           targetElement: modal.id + '&' + sIndex
         })
       } else {
@@ -639,8 +749,9 @@ joint.shapes.basic.circuitBreakerSwitch = joint.shapes.devs.Switch.extend({
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
+// 配电室
 joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
-  markup: '<g class="rotatable"><g class="scalable"><rect/><text/></g><g><text class="label"/></g></g>',
+  markup: '<g class="rotatable"><g class="scalable"><rect/><text class="text"/><text class="type"/></g><g><text class="label"/></g></g>',
   defaults: _.defaultsDeep({
     type: 'basic.KGStation',
     size: {
@@ -654,7 +765,19 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
         height: 40,
         fill: 'transparent'
       },
-      text: {
+      '.type': {
+        width: 8,
+        height: 8,
+        text: '',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        'ref': 'text',
+        'refX': 0.5,
+        'refY': 20,
+        style: 'font-size:10px'
+      },
+      '.text': {
         'font-size': 14,
         text: 'KG',
         'y-alignment': 'middle',
@@ -684,6 +807,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })
+
 // 柱上变压器(公)
 joint.shapes.basic.poleTypeTransformerPublic = joint.shapes.devs.Equipment.extend({
   // markup: '<g class="rotatable"><g class="scalable"><path class="p1"/><line class="l1"/><line class="l2"/><path class="p2"/><path class="p3"/></g><text/></g>',
@@ -1468,7 +1592,7 @@ joint.shapes.basic.HWCabinetC = joint.shapes.devs.HWCabinet.extend({
     '<g class="rotatable"><g class="scalable"><rect class="rect"/><line class="line"/>',
     '<g class="inPorts" >',
     '<g class="port1"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
-    '<g class="port2" transform=""><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',
+    '<g class="port2"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',
     '<g class="port3"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',
     '<g class="port4"><rect class="rect1"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l4"/><line class="l5"/><line class="l6"/><path class="p5"/></g>',
     '<g class="port5"><line class="line1"/><line class="line2"/><line class="line3"/><line class="line4"/><ellipse class="ell1"/><ellipse class="ell2"/><path class="p4"/></g>',
@@ -1830,7 +1954,7 @@ joint.shapes.basic.FDCabinet = joint.shapes.devs.PortCabinet.extend({
 })
 
 // 杆塔/连接点
-joint.shapes.basic.Tower = joint.shapes.basic.Generic.extend({
+joint.shapes.basic.Tower = joint.shapes.devs.Equipment.extend({
   markup: [
     '<g class="rotatable"><g class="scalable"><circle /></g>',
     '<text class="label" />',
@@ -1861,7 +1985,97 @@ joint.shapes.basic.Tower = joint.shapes.basic.Generic.extend({
       }
     },
     devsInfomation: {
+      name: '',
       code: ''
+    }
+  }, joint.shapes.basic.Generic.prototype.defaults)
+})
+// 变电站
+
+joint.shapes.devs.BDStation = joint.shapes.devs.Equipment.extend({
+  markup: [
+    '<g class="rotatable"><g class="scalable"><rect class="rect"/>',
+    '<g class="port2"><rect class="rect1"/><line class="l0"/><line class="l1"/><line class="l2"/><line class="l3"/><line class="l6"/><path class="p5"/></g>',
+    '</g>',
+    '<text class="label" />',
+    '</g>'
+  ].join(''),
+  defaults: _.defaultsDeep({
+    type: 'devs.BDStation',
+    size: {
+      width: 104,
+      height: 64
+    },
+    attrs: {
+      '.rect': {
+        width: 104,
+        height: 64,
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.rect1': {
+        width: '22.41',
+        height: '8',
+        x: '29.34',
+        y: '28',
+        fill: '#8c8c8c',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.l0': {
+        x1: '12',
+        x2: '12',
+        y1: '4',
+        y2: '60',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '2px'
+      },
+      '.l1': {
+        x1: '12.38',
+        x2: '29.38',
+        y1: '32',
+        y2: '32',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.l2': {
+        x1: '51.88',
+        x2: '56.38',
+        y1: '32',
+        y2: '32',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.l3': {
+        x1: '57.38',
+        x2: '86.38',
+        y1: '32',
+        y2: '32',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px'
+      },
+      '.p5': {
+        d: 'M86.38 27.4 V36.6  L91.38 32 L86.38 27.4Z',
+        fill: 'transparent',
+        stroke: 'black',
+        'stroke-width': '1px',
+        magnet: true
+      },
+      '.label': {
+        'font-size': 12,
+        text: '变电站',
+        'y-alignment': 'middle',
+        'x-alignment': 'middle',
+        fill: 'black',
+        ref: '.rect',
+        'refX': 0.5,
+        'refY': 54
+      }
     }
   }, joint.shapes.basic.Generic.prototype.defaults)
 })

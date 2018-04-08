@@ -326,7 +326,7 @@ export default {
                 'data-tooltip-position': 'bottom',
                 'data-tooltip-position-selector': '.joint-stencil'
               },
-              text: {
+              '.text': {
                 text: 'PD'
               },
               '.label': {
@@ -356,11 +356,77 @@ export default {
                 'data-tooltip-position': 'bottom',
                 'data-tooltip-position-selector': '.joint-stencil'
               },
-              text: {
+              '.text': {
                 text: 'XB'
               },
               '.label': {
                 text: '箱式变'
+              }
+            },
+            devsInfomation: {
+              name: '',
+              code: '',
+              num: 1,
+              power: ''
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 470,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '配电站',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              },
+              '.text': {
+                text: 'PD'
+              },
+              '.type': {
+                text: '专'
+              },
+              '.label': {
+                text: '配电站(专)'
+              }
+            },
+            devsInfomation: {
+              name: '',
+              code: '',
+              num: 1,
+              power: ''
+            }
+          },
+          {
+            type: 'basic.KGStation',
+            size: {
+              width: 44,
+              height: 44
+            },
+            position: {
+              x: 570,
+              y: 20
+            },
+            attrs: {
+              '.': {
+                'data-tooltip': '箱式变',
+                'data-tooltip-position': 'bottom',
+                'data-tooltip-position-selector': '.joint-stencil'
+              },
+              '.text': {
+                text: 'XB'
+              },
+              '.type': {
+                text: '专'
+              },
+              '.label': {
+                text: '箱式变(专)'
               }
             },
             devsInfomation: {
@@ -410,6 +476,20 @@ export default {
                 'data-tooltip-position': 'bottom',
                 'data-tooltip-position-selector': '.joint-stencil'
               }
+            }
+          },
+          {
+            type: 'devs.BDStation',
+            size: {
+              width: 84,
+              height: 44
+            },
+            position: {
+              x: 670,
+              y: 20
+            },
+            attrs: {
+
             }
           }
         ],
@@ -806,15 +886,25 @@ export default {
       let elements = this.graph.getElements()
       elements.map(element => {
         let type = element.attributes.type.split('.')[1]
+        if (type === 'BDStation') return
         if (type.toLowerCase().indexOf('switch') !== -1 || type === 'TextBox' || type === 'TextLabel' || type === 'Tower' || type.toLowerCase().indexOf('cabinet') !== -1) return // 开关类/标签文本框不统计
         let devsInfomation = element.attributes.devsInfomation
-        if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'PD') {
+        let attrText = element.attributes.attrs['.text']
+        let typeText = element.attributes.attrs['.type']
+        if (typeText && typeText.text === '专') {
+          this.elementCounts['poleTypeTransformer'].num += devsInfomation.num ? parseInt(devsInfomation.num)
+            : 0
+          this.elementCounts['poleTypeTransformer'].user += 1
+          this.elementCounts['poleTypeTransformer'].power += devsInfomation.power ? parseInt(devsInfomation.power)
+            : 0
+        } else if (attrText && attrText.text === 'PD') {
+          // if(attrText)
           this.elementCounts[type].PD.num += devsInfomation.num ? parseInt(devsInfomation.num)
             : 0
           this.elementCounts[type].PD.user += 1
           this.elementCounts[type].PD.power += devsInfomation.power ? parseInt(devsInfomation.power)
             : 0
-        } else if (element.attributes.attrs.text && element.attributes.attrs.text.text === 'XB') {
+        } else if (attrText && attrText.text === 'XB') {
           this.elementCounts[type].XB.num += devsInfomation.num ? parseInt(devsInfomation.num)
             : 0
           this.elementCounts[type].XB.user += 1

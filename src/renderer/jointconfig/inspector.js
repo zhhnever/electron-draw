@@ -439,7 +439,6 @@ App.config = App.config || {};
                     'attrs/.connection/strokeDasharray': '0'
                   }
                 }
-                // not: { eq: { 'attrs/.connection/strokeDasharray': '0' }}
               }
             },
             fill: {
@@ -1357,6 +1356,60 @@ App.config = App.config || {};
         },
         property: {
           label: '状态',
+          index: 1
+        }
+      }
+    },
+    'devs.BDStation': {
+      inputs: {
+        devsInfomation: {
+          name: {
+            type: 'text',
+            label: '名称',
+            group: 'property',
+            index: 1
+          },
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'property',
+            index: 1
+          },
+          power: {
+            type: 'text',
+            label: '功率',
+            group: 'property',
+            index: 2
+          }
+        }
+      },
+      groups: {
+        presentation: {
+          label: '状态',
+          index: 1
+        }
+      }
+    },
+    'basic.Tower': {
+      inputs: {
+        devsInfomation: {
+          name: {
+            type: 'text',
+            label: '名称',
+            group: 'presentation',
+            index: 1
+          },
+          code: {
+            type: 'text',
+            label: '编号',
+            group: 'presentation',
+            index: 1
+          }
+        }
+      },
+      groups: {
+        presentation: {
+          label: '属性',
           index: 1
         }
       }
