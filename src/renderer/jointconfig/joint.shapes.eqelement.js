@@ -131,9 +131,6 @@ import _ from 'lodash'
             size: { width: 70, height: 30 },
             targetElement: modal.id
           })
-          console.log(textLabel)
-          // position: {x: aRect.x - (aRect.x - this.size.width) / 2, y: aRect.y + aRect.height + 5},
-          console.log()
           textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
         } else {
           textLabel = graph.getCell(modal.labelId)
@@ -198,6 +195,17 @@ import _ from 'lodash'
       },
       '.connection-wrap': {
         fill: 'transparent'
+      }
+    }
+  }, {
+    initialize: function () {
+      // joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
+      joint.dia.Link.prototype.initialize.apply(this, arguments)
+      this.on('change:attrs', this.updateStrokeStyle, this)
+    },
+    updateStrokeStyle: function (cell, change, path) {
+      if (path.propertyPath === 'attrs/.connection/strokeDasharray') {
+
       }
     }
   })
@@ -284,13 +292,7 @@ import _ from 'lodash'
     initialize: function () {
       joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
       this.on('change:inPorts change:outPorts', this.updatePortItems, this)
-      this.on('change:size', this.changeSize, this)
       this.updatePortItems()
-    },
-    changeSize: function (model, changed, opt) {
-      console.log(model)
-      if (model.attributes.ports.items.length > 0) {
-      }
     },
     updatePortItems: function (model, changed, opt) {
       // Make sure all ports are unique.

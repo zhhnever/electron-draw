@@ -62,9 +62,15 @@ const mutations = {
           }
         }
         return true
-      }
+      },
+      elementView: joint.dia.ElementView.extend({
+        contextmenu: function (evt, x, y) {
+          console.log(evt, x, y)
+        }
+      })
     })
     paper.drawGrid()
+
     state.paper = paper
     let commandManager = state.commandManager = new joint.dia.CommandManager({
       graph: graph
@@ -73,7 +79,7 @@ const mutations = {
     let paperScroller = state.paperScroller = new joint.ui.PaperScroller({
       paper: paper,
       autoResizePaper: false,
-      padding: 0
+      padding: 20
     })
     dom.append(paperScroller.el)
     let snaplines = new joint.ui.Snaplines({
