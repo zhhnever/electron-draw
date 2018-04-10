@@ -176,7 +176,116 @@ import _ from 'lodash'
       }, 20)
     }
   })
+  joint.dia.LinkView.prototype.initialize = function (options) {
+    joint.dia.CellView.prototype.initialize.apply(this, arguments)
 
+    // create methods in prototype, so they can be accessed from any instance and
+    // don't need to be create over and over
+    if (typeof this.constructor.prototype.watchSource !== 'function') {
+      this.constructor.prototype.watchSource = this.createWatcher('source')
+      this.constructor.prototype.watchTarget = this.createWatcher('target')
+    }
+
+    // `_.labelCache` is a mapping of indexes of labels in the `this.get('labels')` array to
+    // `<g class="label">` nodes wrapped by Vectorizer. This allows for quick access to the
+    // nodes in `updateLabelPosition()` in order to update the label positions.
+    this._labelCache = {}
+
+    // keeps markers bboxes and positions again for quicker access
+    this._markerCache = {}
+
+    // bind events
+    this.startListening()
+    this.listenTo(this.model, 'change:devsInfomation', this.updateDevsInfomation)
+    // this.listenTo(this.model, 'transition:start', this.tarnslateStart)
+    // this.listenTo(this.model, 'change:smooth', this.tarnslateStart)
+    // this.listenTo(this.model, 'change:manhattan', this.tarnslateStart)
+  }
+  joint.dia.LinkView.prototype.updateDevsInfomation = function (modal, change, opt) {
+    let graph = modal.graph
+    let textLabel = null
+    let aRect = this.getBBox()
+    let labelText = ''
+
+    if (!modal.labelId || modal.labelId === '') {
+      textLabel = new joint.shapes.basic.TextBox({
+        attrs: {
+          rect: {
+            'stroke-opacity': 0
+          }
+        },
+        content: '',
+        size: {
+          width: 70,
+          height: 30
+        },
+        targetElement: modal.id
+      })
+      textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
+    } else {
+      textLabel = graph.getCell(modal.labelId)
+    }
+    Object.keys(change).forEach(function (key) {
+      if (key === 'name') {
+        labelText += change[key] + '-'
+        return
+      }
+      if (key === 'code') {
+        labelText += change[key] + '<br/>'
+        return
+      }
+      if (change[key] && change[key] !== '') labelText += change[key] + '/'
+    })
+    setTimeout(() => {
+      modal.labelId = textLabel.id
+      textLabel.setDivContent(this, labelText)
+      graph.addCell(textLabel)
+      modal.embed(textLabel)
+    }, 20)
+  }
+  joint.dia.LinkView.prototype.updateConnection = function (opt) {
+    opt = opt || {}
+
+    let model = this.model
+    let route
+    console.log(model)
+
+    if (opt.translateBy && model.isRelationshipEmbeddedIn(opt.translateBy)) {
+      // The link is being translated by an ancestor that will
+      // shift source point, target point and all vertices
+      // by an equal distance.
+      let tx = opt.tx || 0
+      let ty = opt.ty || 0
+
+      route = this.route = joint.util.toArray(this.route).map(function (point) {
+        // translate point by point by delta translation
+        return g.point(point).offset(tx, ty)
+      })
+
+      // translate source and target connection and marker points.
+      this._translateConnectionPoints(tx, ty)
+    } else {
+      // Necessary path finding
+      route = this.route = this.findRoute(model.get('vertices') || [], opt)
+      if (model.labelId && model.graph.getCell(model.labelId)) {
+        let label = model.graph.getCell(model.labelId)
+        let rectBox = this.getBBox()
+        label.position(rectBox.x + rectBox.width / 2, rectBox.y + rectBox.height + 12)
+        console.log(rectBox)
+        // label.translate(rectBox.x, rectBox.y)
+      }
+      // finds all the connection points taking new vertices into account
+      this._findConnectionPoints(route)
+    }
+
+    let pathData = this.getPathData(route)
+
+    // The markup needs to contain a `.connection`
+    this._V.connection.attr('d', pathData)
+    this._V.connectionWrap && this._V.connectionWrap.attr('d', pathData)
+
+    this._translateAndAutoOrientArrows(this._V.markerSource, this._V.markerTarget)
+  }
   joint.dia.Link.define('app.Link', {
 
     devsInfomation: {
@@ -220,10 +329,8 @@ import _ from 'lodash'
       '</g>'
     ].join(''),
     initialize: function () {
-      // joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments)
       joint.dia.Link.prototype.initialize.apply(this, arguments)
       // this.on('change:attrs', this.updateStrokeStyle, this)
-      this.on('change:devsInfomation', this.updateDevsInfomation, this)
     },
     updateStrokeStyle: function (cell, change, opt) {
       if (opt.propertyPath === 'attrs/.connection/strokeDasharray') {
@@ -254,49 +361,8 @@ import _ from 'lodash'
         }
       }
     },
-    updateDevsInfomation: (modal, change, opt) => {
-      console.log(modal)
-      let graph = modal.graph
-      let textLabel = null
-      let aRect = graph.getBBox([modal])
-      console.log(aRect)
-      let labelText = ''
+    positionChange: function (cell, change, opt) {
 
-      if (!modal.labelId || modal.labelId === '') {
-        textLabel = new joint.shapes.basic.TextBox({
-          attrs: {
-            rect: {
-              'stroke-opacity': 0
-            }
-          },
-          content: '',
-          size: {
-            width: 70,
-            height: 30
-          },
-          targetElement: modal.id
-        })
-        textLabel.position(aRect.x - (textLabel.attributes.size.width - aRect.width) / 2, aRect.y + aRect.height + 5)
-      } else {
-        textLabel = graph.getCell(modal.labelId)
-      }
-      Object.keys(change).forEach(function (key) {
-        if (key === 'name') {
-          labelText += change[key] + '-'
-          return
-        }
-        if (key === 'code') {
-          labelText += change[key] + '<br/>'
-          return
-        }
-        if (change[key] && change[key] !== '') labelText += change[key] + '/'
-      })
-      setTimeout(() => {
-        modal.labelId = textLabel.id
-        textLabel.setDivContent(this, labelText)
-        graph.addCell(textLabel)
-        modal.embed(textLabel)
-      }, 20)
     }
   })
 
@@ -789,6 +855,7 @@ joint.shapes.basic.KGStation = joint.shapes.devs.Equipment.extend({
       },
       '.label': {
         'font-size': 14,
+        fill: 'black',
         text: '开关站',
         'y-alignment': 'middle',
         'x-alignment': 'middle',
@@ -996,6 +1063,17 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
       stroke: '#000000',
       width: 80,
       height: 100
+    },
+    '.label': {
+      'font-size': 14,
+      fill: 'black',
+      text: '文本框',
+      'y-alignment': 'middle',
+      'x-alignment': 'middle',
+      'ref': 'rect',
+      'refX': 0.5,
+      'refY': 0.5,
+      'refY2': 35
     }
   },
   content: '',
@@ -1005,6 +1083,7 @@ joint.shapes.basic.Generic.define('basic.TextBox', {
   markup: [
     '<g class="rotatable">',
     '<g class="scalable"><rect/></g>',
+    '<text class="label"/>',
     '<foreignObject class="fobj"><body xmlns="http://www.w3.org/1999/xhtml"><p class="content"/></body></foreignObject>',
     '</g>'
   ].join(''),
@@ -1981,7 +2060,7 @@ joint.shapes.basic.Tower = joint.shapes.devs.Equipment.extend({
         fill: 'black',
         ref: 'circle',
         'refX': 0.5,
-        'refY': 26
+        'refY': 32
       }
     },
     devsInfomation: {

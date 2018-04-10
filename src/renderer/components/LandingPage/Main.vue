@@ -15,12 +15,13 @@
           <img src="../../assets/images/入墙开关.png" alt="">      
           <span>开断设备</span>
         </li>
-        <li name='tower'>
+        <!-- <li name='tower'>
           <img src="../../assets/images/电塔.png"  alt="">
           <span>杆塔/连接点</span>
-        </li>
+        </li> -->
         <li name='others'>
-          <span>其他</span>
+          <img src="../../assets/images/电塔.png"  alt="">
+          <span>杆塔/其他</span>
         </li>
       </ul>
     </div>
@@ -640,17 +641,7 @@ export default {
           }
         }
         ],
-        tower: [{
-          type: 'basic.Tower',
-          size: {
-            width: 10,
-            height: 10
-          },
-          position: {
-            x: 70,
-            y: 50
-          }
-        }],
+        tower: [],
         others: [{
           type: 'basic.TextBox',
           size: {
@@ -661,7 +652,7 @@ export default {
             x: 70,
             y: 20
           },
-          content: '文本框'
+          content: ''
         },
         {
           type: 'basic.TextLabel',
@@ -670,14 +661,25 @@ export default {
             height: 24
           },
           position: {
-            x: 170,
-            y: 30
+            x: 270,
+            y: 35
           },
           attrs: {
             text: {
               text: '标签',
               'font-size': 40
             }
+          }
+        },
+        {
+          type: 'basic.Tower',
+          size: {
+            width: 10,
+            height: 10
+          },
+          position: {
+            x: 170,
+            y: 50
           }
         }
         ]
